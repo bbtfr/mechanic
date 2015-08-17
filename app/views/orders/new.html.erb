@@ -1,0 +1,24 @@
+<%= content_for :title do %>
+  预约技师
+<% end %>
+
+<%= simple_form_for(@order) do |f| %>
+  <%= f.error_messages %>
+
+  <div class="content-padded">
+    <div class="input">
+      <%= f.label :client %>
+      <span class="info"><%= current_user.nickname %>（<%= current_user.mobile %>）</span>
+    </div>
+
+    <%= f.input :address %>
+    <%= f.input :appointment %>
+    <%= f.association :order_type %>
+    <%= f.association :brand %>
+    <%= f.association :series %>
+    <%= f.input :quoted_price %>
+    <%= f.input :remark, input_html: { rows: 4 } %>
+
+    <%= f.button :submit, "确定", class: "btn-block btn-positive" %>
+  </div>
+<% end %>

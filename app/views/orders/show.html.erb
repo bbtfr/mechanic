@@ -1,0 +1,34 @@
+<%= content_for :title do %>
+  订单详情
+<% end %>
+
+<div class="content-padded">
+  <%= show_for @order do |s| %>
+    <%= s.attribute :address %>
+    <%= s.attribute :appointment, format: :long %>
+    <%= s.attribute :order_type %>
+    <%= s.attribute :brand %>
+    <%= s.attribute :series %>
+    <%= s.attribute :quoted_price %>
+    <%= s.attribute :remark %>
+  <% end %>
+</div>
+<ul class="table-view">
+  <li class="table-view-cell media">
+    <img class="media-object pull-left" src="http://placehold.it/60x60">
+    <div class="media-body">
+      <div class="media-block">
+        <p class="pull-right">加价XX元</p>
+        名称
+      </div>
+      <div class="media-block">
+        <p class="pull-right">接单XX次</p>
+        <p>专业5分 守时5分</p>
+      </div>
+    </div>
+  </li>
+</ul>
+<div class="content-padded">
+  个人简介：
+
+</div>

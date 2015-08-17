@@ -1,0 +1,99 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ */
+
+@import "ratchet";
+.content-padded {
+  margin: 11px 15px;
+}
+
+@import "bootstrap/variables";
+@import "bootstrap/mixins";
+@import "alert";
+@import "text";
+@import "form";
+@import "table";
+
+// Rounded corners
+.img-rounded {
+  border-radius: $border-radius-large;
+}
+// Perfect circle
+.img-circle {
+  border-radius: 50%; // set radius in percents
+}
+
+.segmented-items {
+  position: relative;
+  display: table;
+  overflow: hidden;
+
+  .item {
+    display: table-cell;
+    width: 1%;
+    // padding-top: 6px;
+    // padding-bottom: 7px;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+  }
+
+  &.segmented-items-bordered .item {
+    border-right: solid 1px #eee;
+  }
+}
+
+.jumbotron {
+  min-height: 200px;
+  width: 100%;
+  background: #eee;
+}
+
+.hero {
+  margin: 15px 0 10px;
+}
+
+// Horizontal description lists
+//
+// Defaults to being stacked without any of the below styles applied, until the
+// grid breakpoint is reached (default of ~768px).
+dl {
+  dt {
+    float: left;
+    height: 25px;
+    line-height: 25px;
+    width: 33%;
+    clear: left;
+    @include text-overflow;
+  }
+  dd {
+    @include clearfix; // Clear the floated `dt` if an empty `dd` is present
+    margin-left: 33%;
+    line-height: 25px;
+  }
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 0;
+  padding: 0;
+}
+
+@import "user_sessions";
+
+::-webkit-scrollbar {
+  display: none;
+}

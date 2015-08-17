@@ -1,0 +1,37 @@
+<%= content_for :title do %>
+  设置
+<% end %>
+
+<% if current_user.user_group %>
+  <h2 class="text-center">分堂</h2>
+
+  <div class="hero segmented-items segmented-items-bordered text-center">
+    <div class="item">
+      <h2>100</h2>
+      <p>用人次数</p>
+    </div>
+    <div class="item">
+      <h2>1,000</h2>
+      <p>用人次数</p>
+    </div>
+  </div>
+
+  <ul class="table-view">
+    <li class="table-view-cell">
+      <a class="navigate-right" href="">分享二维码</a>
+    </li>
+    <li class="table-view-cell">
+      <a class="navigate-right" href="">分堂成员</a>
+    </li>
+  </ul>
+<% else %>
+  <ul class="table-view">
+    <li class="table-view-cell">
+      <a class="navigate-right" href="">申请堂主</a>
+    </li>
+  </ul>
+<% end %>
+
+<div class="content-padded">
+  <a href="" class="btn btn-block btn-negative">退出登录</a>
+</div>

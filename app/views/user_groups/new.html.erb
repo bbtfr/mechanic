@@ -1,0 +1,14 @@
+<%= content_for :title do %>
+  申请堂主
+<% end %>
+
+<%= simple_form_for(@user_group, url: user_session_path) do |f| %>
+  <%= f.error_messages %>
+
+  <div class="content-padded">
+    <%= f.input :nickname %>
+    <%= f.input :description, input_html: { rows: 4 } %>
+
+    <%= f.button :submit, "提交申请", class: "btn-block btn-positive" %>
+  </div>
+<% end %>

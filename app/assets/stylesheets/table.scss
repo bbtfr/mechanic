@@ -1,0 +1,11 @@
+@import "bootstrap/tables";
+
+.table {
+  > thead, > tbody, > tfoot {
+    > tr {
+      > td, > th {
+        padding: 0;
+      }
+    }
+  }
+}

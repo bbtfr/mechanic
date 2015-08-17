@@ -1,0 +1,22 @@
+<%= content_for :title do %>
+  我的信息
+<% end %>
+
+<div class="jumbotron vertical-parent">
+  <div class="text-center vertical-middle">
+    <img src="http://placehold.it/100x100" alt="" class="img-circle">
+  </div>
+</div>
+
+<%= simple_form_for(@user, url: user_path) do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field :mobile_confirmed, value: true %>
+
+  <div class="content-padded">
+    <%= f.input :nickname %>
+    <%= f.input :gender, collection: enum_option_pairs(User, :gender) %>
+    <%= f.input :address %>
+
+    <%= f.button :submit, "确定", class: "btn-block btn-positive" %>
+  </div>
+<% end %>

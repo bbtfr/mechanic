@@ -1,0 +1,44 @@
+zh-CN:
+  authlogic:
+    error_messages:
+      login_blank: 不能为空
+      login_not_found: 验证失败
+      verification_code_blank: 不能为空
+      verification_code_invalid: 错误
+      not_confirmed: 您的帐号还未验证通过
+      no_authentication_details: 您没用提供登录所需的信息
+      general_credentials_error: 手机号码/验证码 错误
+    attributes:
+      user_session:
+        mobile: 手机号码
+        verification_code: 验证码
+        is_mechanic: 我是技师
+        remember_me: 记住我
+  enums:
+    gender:
+      male: 男
+      female: 女
+  activerecord:
+    attributes:
+      user:
+        nickname: 姓名
+        gender: 性别
+        address: 地址
+        mobile: 手机号码
+      user_group:
+        nickname: 分堂昵称
+        description: 申请简介
+      order:
+        user: 发布人
+        mechanic: 技师
+        address: 地址
+        appointment: 预约时间
+        order_type: 类型
+        brand: 车型
+        series: 车系
+        quoted_price: 我出价
+        remark: 备注
+        price: 价格
+        professionality: 专业
+        timeliness: 守时
+        review: 评论
