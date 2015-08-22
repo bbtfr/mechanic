@@ -9,13 +9,25 @@ class User < ActiveRecord::Base
     self.verification_code = "%06d" % SecureRandom.random_number(1000000)
   end
 
+  def update_weixin_openid openid
+    return unless openid.present?
+    self.update_attribute(:weixin_openid, openid)
+  end
+
+  as_enum :gender, male: 0, female: 1
+
+  has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }
+  validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
+
+  has_many :orders
+  belongs_to :user_group
+  belongs_to :mechanic, autosave: true
+
   validates_presence_of :mobile
   validates_presence_of :nickname, :gender, :address, if: :mobile_confirmed
   validates_uniqueness_of :mobile
 
-  as_enum :gender, male: 0, female: 1
-
-  has_many :orders
-  has_one :user_group
+  delegate :province_id, :city_id, :district_id, :skill_ids, :description,
+    to: :mechanic, allow_nil: true
 
 end

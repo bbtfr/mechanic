@@ -1,0 +1,29 @@
+<%= content_for :title do %>
+  新订单
+<% end %>
+
+<div class="jumbotron mini vertical-parent">
+  <div class="image vertical-middle"><img src="http://placehold.it/100x100" alt="" class="img-circle"></div>
+  <div class="vertical-bottom">
+    <div class="btn btn-mini btn-primary">老用户</div>
+  </div>
+</div>
+
+<div class="content-padded">
+  <%= show_for @order do |i| %>
+    <%= i.attribute :appointment, format: :short %>
+    <%= i.attribute :skill, with: :name %>
+    <%= i.attribute :quoted_price %>
+    <%= i.attribute :remark %>
+  <% end %>
+</div>
+
+<%= simple_form_for([:order, @bid]) do |f| %>
+  <%= f.error_messages %>
+
+  <div class="content-padded">
+    <%= f.input :markup_price %>
+
+    <%= f.button :submit, "确定", class: "btn-block btn-positive" %>
+  </div>
+<% end %>

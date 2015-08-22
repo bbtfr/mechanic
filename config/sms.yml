@@ -1,0 +1,12 @@
+default: &default
+  account: <%= ENV["IHUYI_ACCOUNT"] %>
+  password: <%= ENV["IHUYI_PASSWORD"] %>
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

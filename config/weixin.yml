@@ -1,0 +1,13 @@
+default: &default
+  appid: wx46c1198fe2a43173
+  appsecret: 459f6ee22762db6455023a7ad52c3c20
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  appid: <%= ENV["WEIXIN_APP_ID"] %>
+  appsecret: <%= ENV["WEIXIN_APP_SECRET"] %>

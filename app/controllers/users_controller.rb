@@ -1,10 +1,23 @@
 class UsersController < ApplicationController
-  skip_before_filter :authenticate!, except: :show
-  before_filter :find_user, only: [ :new, :edit, :update ]
+  before_filter :validate!, except: [ :new, :create ]
+  before_filter :find_user, only: [ :new, :create, :edit, :update ]
+
+  def create
+    @user.assign_attributes(user_params)
+    @user.build_mechanic(mechanic_params) if @user.is_mechanic
+    if @user.save
+      redirect_to session[:original_url] || root_path
+    else
+      render :new
+    end
+  end
 
   def update
-    if @user.update_attributes(user_params)
-      redirect_to session[:original_url] || root_path
+    @user.assign_attributes(user_params)
+    @user.build_mechanic unless @user.mechanic
+    @user.mechanic.assign_attributes(mechanic_params) if @user.is_mechanic
+    if @user.save
+      redirect_to user_path
     else
       render :edit
     end
@@ -17,6 +30,29 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:mobile, :nickname, :gender, :address, :mobile_confirmed)
+      params.require(:user).permit(:mobile, :nickname, :gender, :address, :mobile_confirmed, :avatar,
+        :is_mechanic)
+    end
+
+    def mechanic_params
+      params.require(:user).permit(:province_id, :city_id, :district_id, :description, skill_ids: [])
+    end
+
+    def authenticate!
+      if !current_user_session
+        session[:original_url] = request.original_url
+        redirect_to new_user_session_path
+      else
+        session[:original_url] = nil if session[:original_url]
+      end
+    end
+
+    def validate!
+      if !current_user.mobile_confirmed
+        session[:original_url] = request.original_url
+        redirect_to new_user_path
+      else
+        session[:original_url] = nil if session[:original_url]
+      end
     end
 end

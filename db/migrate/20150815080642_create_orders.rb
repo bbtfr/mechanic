@@ -5,7 +5,7 @@ class CreateOrders < ActiveRecord::Migration
       t.integer   :mechanic_id
       t.string    :address
       t.datetime  :appointment
-      t.integer   :order_type_id
+      t.integer   :skill_id
       t.integer   :brand_id
       t.integer   :series_id
       t.integer   :quoted_price
@@ -15,6 +15,9 @@ class CreateOrders < ActiveRecord::Migration
       t.integer   :professionality
       t.integer   :timeliness
       t.text      :review
+
+      t.integer   :state_cd
+      t.index     :state_cd
 
       t.timestamps null: false
     end

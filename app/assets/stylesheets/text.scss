@@ -10,6 +10,9 @@
 .vertical-middle     { display: table-cell; vertical-align: middle; }
 .vertical-bottom     { display: table-cell; vertical-align: bottom; }
 
+.float-left          { float: left; }
+.float-right         { float: right; }
+
 // Transformation
 .text-lowercase      { text-transform: lowercase; }
 .text-uppercase      { text-transform: uppercase; }

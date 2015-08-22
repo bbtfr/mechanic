@@ -6,9 +6,9 @@
   <%= show_for @order do |s| %>
     <%= s.attribute :address %>
     <%= s.attribute :appointment, format: :long %>
-    <%= s.attribute :order_type %>
-    <%= s.attribute :brand %>
-    <%= s.attribute :series %>
+    <%= s.attribute :skill, with: :name %>
+    <%= s.attribute :brand, with: :name %>
+    <%= s.attribute :series, with: :name %>
     <%= s.attribute :quoted_price %>
     <%= s.attribute :remark %>
   <% end %>

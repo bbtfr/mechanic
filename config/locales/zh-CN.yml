@@ -12,7 +12,6 @@ zh-CN:
       user_session:
         mobile: 手机号码
         verification_code: 验证码
-        is_mechanic: 我是技师
         remember_me: 记住我
   enums:
     gender:
@@ -25,6 +24,13 @@ zh-CN:
         gender: 性别
         address: 地址
         mobile: 手机号码
+        balance: 余额
+        is_mechanic: 我是技师
+        skill_ids: 擅长技能
+        province_id: 省份
+        city_id: 城市
+        district_id: 区县
+        description: 个人简介
       user_group:
         nickname: 分堂昵称
         description: 申请简介
@@ -33,7 +39,7 @@ zh-CN:
         mechanic: 技师
         address: 地址
         appointment: 预约时间
-        order_type: 类型
+        skill: 类型
         brand: 车型
         series: 车系
         quoted_price: 我出价
@@ -42,3 +48,5 @@ zh-CN:
         professionality: 专业
         timeliness: 守时
         review: 评论
+      bid:
+        markup_price: 加价

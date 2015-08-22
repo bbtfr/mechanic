@@ -4,6 +4,15 @@ class UserGroupsController < ApplicationController
     @user_group = user_group_klass.new
   end
 
+  def create
+    @user_group = user_group_klass.new(user_group_params)
+    if @user_group.save
+      redirect_to settings_user_path
+    else
+      render :new
+    end
+  end
+
   private
 
     def user_group_klass

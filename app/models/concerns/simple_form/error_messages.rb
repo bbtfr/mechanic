@@ -63,19 +63,3 @@ module SimpleForm
     end
   end
 end
-
-module SimpleForm
-
-  mattr_accessor :error_messages_list_tag
-  @@error_messages_list_tag = :ul
-
-  mattr_accessor :error_messages_item_tag
-  @@error_messages_item_tag = :li
-
-  class FormBuilder
-    def error_messages(options = {})
-      SimpleForm::ErrorMessages.new(self, options).render
-    end
-  end
-end
-

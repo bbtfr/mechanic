@@ -1,5 +1,5 @@
-source 'https://rubygems.org'
-# source 'http://ruby.taobao.org'
+# source 'https://rubygems.org'
+source 'http://ruby.taobao.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
@@ -14,6 +14,13 @@ gem 'authlogic', '~> 3.4.6'
 gem 'simple_enum'
 gem 'simple_form'
 gem 'index_for'
+
+gem 'dotenv'
+
+gem 'paperclip'
+gem 'rest-client'
+gem 'weixin_authorize'
+gem 'weixin_rails_middleware'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'

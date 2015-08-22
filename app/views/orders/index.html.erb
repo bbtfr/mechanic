@@ -10,10 +10,10 @@
   </div>
 </nav>
 
-<div class="content content-padded">
+<div class="content-padded content-with-bar">
   <%= index_for @orders, class: "table" do |i| %>
     <%= i.attribute :appointment, format: :short %>
-    <%= i.attribute :order_type %>
+    <%= i.attribute :skill, with: :name %>
     <%= i.attribute :price %>
     <%= i.attribute :mechanic %>
     <%= i.actions :show do |act| %>

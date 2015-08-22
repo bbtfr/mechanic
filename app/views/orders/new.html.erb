@@ -7,18 +7,52 @@
 
   <div class="content-padded">
     <div class="input">
-      <%= f.label :client %>
+      <%= f.label :user %>
       <span class="info"><%= current_user.nickname %>（<%= current_user.mobile %>）</span>
     </div>
 
-    <%= f.input :address %>
+    <%= f.input :address, input_html: { value: current_user.address } %>
     <%= f.input :appointment %>
-    <%= f.association :order_type %>
+    <%= f.association :skill %>
     <%= f.association :brand %>
-    <%= f.association :series %>
+
+    <%= f.input :series do %>
+      <%= f.select :series_id do %>
+        <option value=""></option>
+      <% end %>
+    <% end %>
+
     <%= f.input :quoted_price %>
     <%= f.input :remark, input_html: { rows: 4 } %>
 
     <%= f.button :submit, "确定", class: "btn-block btn-positive" %>
   </div>
 <% end %>
+
+<script type="text/javascript">
+  <%= cache :location do %>
+    var seriesMap = <%= raw Series.all.to_a.
+      group_by(&:brand_id).
+      map {|key, value|[key, value.map {|obj| [ obj.id, obj.name ]}]}.
+      to_h.to_json %>
+  <% end %>
+
+  var brand = document.querySelector("#order_brand_id");
+  var series = document.querySelector("#order_series_id");
+  var brandCallback = function() {
+    var seriesOptions = series.querySelectorAll("option");
+    for (var i = seriesOptions.length - 1; i > 0; i--) seriesOptions[i].remove();
+
+    var shownSeriesValues = seriesMap[brand.value];
+    if (!shownSeriesValues) return;
+    for (var i = 0; i < shownSeriesValues.length; i++) {
+      var option = document.createElement("option");
+      option.value = shownSeriesValues[i][0];
+      option.innerText = shownSeriesValues[i][1];
+      series.appendChild(option);
+    }
+  };
+
+  brand.addEventListener("change", brandCallback);
+  brandCallback();
+</script>

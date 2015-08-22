@@ -1,0 +1,11 @@
+default: &default
+  key: <%= ENV["LBS_KEY"] %>
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

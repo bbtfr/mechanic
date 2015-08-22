@@ -4,36 +4,72 @@
 
 <div class="jumbotron vertical-parent">
   <div class="text-center vertical-middle">
-    <img src="http://placehold.it/100x100" alt="" class="img-circle">
+    <%= link_to edit_user_path do %>
+      <%= image_tag current_user.avatar.url(:thumb), class: "img-circle" %>
+    <% end %>
   </div>
 </div>
 
-<div class="hero segmented-items segmented-items-bordered text-center">
-  <div class="item">
-    <h2>100</h2>
-    <p>用人次数</p>
+<% if current_user.is_mechanic %>
+  <div class="hero segmented-items segmented-items-bordered text-center">
+    <div class="item">
+      专业5分<br><br>
+
+      <h2>100</h2>
+      <p>预约次数</p>
+    </div>
+    <div class="item">
+      守时5分<br><br>
+
+      <h2>1,000</h2>
+      <p>总收入</p>
+    </div>
   </div>
-  <div class="item">
-    <h2>1,000</h2>
-    <p>用人次数</p>
+
+<% else %>
+  <div class="hero segmented-items segmented-items-bordered text-center">
+    <div class="item">
+      <h2>100</h2>
+      <p>用人次数</p>
+    </div>
+    <div class="item">
+      <h2>1,000</h2>
+      <p>用人次数</p>
+    </div>
   </div>
-</div>
+
+<% end %>
 
 <ul class="table-view">
   <li class="table-view-cell">
-    联系地址
+    账户余额：<%= number_with_delimiter(current_user.balance || 0) %> 元
   </li>
+  <% if current_user.is_mechanic %>
+    <li class="table-view-cell">
+      <%= link_to "擅长技能：#{current_user.mechanic.skills.map(&:name).join("、")}", edit_user_path, class: "navigate-right" %>
+    </li>
+    <li class="table-view-cell">
+      <%= link_to "地区：#{current_user.mechanic.province.try :name} #{current_user.mechanic.city.try :name} #{current_user.mechanic.district.try :name}", edit_user_path, class: "navigate-right" %>
+    </li>
+  <% end %>
   <li class="table-view-cell">
-    账户余额
+    <%= link_to "联系地址：#{current_user.address}", edit_user_path, class: "navigate-right" %>
   </li>
+  <% if current_user.is_mechanic %>
+    <li class="table-view-cell">
+      <%= link_to "个人简介：#{current_user.mechanic.description}", edit_user_path, class: "navigate-right" %>
+    </li>
+  <% end %>
   <li class="table-view-cell">
-    <a class="navigate-right" href="">订单</a>
+    <%= link_to "订单管理", orders_path, class: "navigate-right" %>
   </li>
+  <% unless current_user.is_mechanic %>
+    <li class="table-view-cell">
+      <%= link_to "收藏技师", mechanics_path, class: "navigate-right" %>
+    </li>
+  <% end %>
   <li class="table-view-cell">
-    <a class="navigate-right" href="">收藏技师</a>
-  </li>
-  <li class="table-view-cell">
-    <a class="navigate-right" href="">设置</a>
+    <%= link_to "设置", settings_user_path, class: "navigate-right" %>
   </li>
 </ul>
 

@@ -4,6 +4,7 @@
 
 <%= simple_form_for(@user_session, url: user_session_path) do |f| %>
   <%= f.error_messages %>
+  <%= f.hidden_field :weixin_openid, value: @openid %>
 
   <div class="content-padded">
     <%= f.input :mobile %>
@@ -11,7 +12,6 @@
       <%= f.text_field :verification_code %>
       <%= f.submit "获取验证码", name: "verification_code", id: "user_session_verification_code_button",class: "btn btn-positive" %>
     <% end %>
-    <%= f.input :is_mechanic, as: :boolean %>
 
     <%= f.button :submit, "确定", class: "btn-block btn-positive" %>
   </div>

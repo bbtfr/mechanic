@@ -24,6 +24,6 @@ EXPOSE 80
 
 ENV RAILS_ENV production
 
-RUN bundle exec rake db:create db:migrate
+RUN bundle exec rake db:create db:migrate db:seed
 RUN bundle exec rake assets:precompile
 CMD foreman start -f Procfile

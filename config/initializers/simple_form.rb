@@ -1,5 +1,3 @@
-SimpleForm::ErrorMessages
-
 # Use this setup block to configure all options available in SimpleForm.
 SimpleForm.setup do |config|
   # Wrappers are used by the form builder to generate a
@@ -165,4 +163,19 @@ SimpleForm.setup do |config|
 
   # Defines which i18n scope will be used in Simple Form.
   # config.i18n_scope = 'simple_form'
+end
+
+module SimpleForm
+
+  mattr_accessor :error_messages_list_tag
+  @@error_messages_list_tag = :ul
+
+  mattr_accessor :error_messages_item_tag
+  @@error_messages_item_tag = :li
+
+  FormBuilder.class_eval do
+    def error_messages(options = {})
+      SimpleForm::ErrorMessages.new(self, options).render
+    end
+  end
 end
