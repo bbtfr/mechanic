@@ -12,6 +12,7 @@ class OrdersController < ApplicationController
   def create
     @order = order_klass.new(order_params)
     if @order.save
+      SendOrderTemplateMessageJob.perform_later @order
       redirect_to order_bids_path(@order.id)
     else
       render :new
@@ -24,6 +25,10 @@ class OrdersController < ApplicationController
     else
       render :new
     end
+  end
+
+  def pay
+    @order_params = Weixin.payment current_user, @order, request
   end
 
   private

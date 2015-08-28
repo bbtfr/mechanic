@@ -1,12 +1,13 @@
 # source 'https://rubygems.org'
 source 'http://ruby.taobao.org'
 
+gem 'dotenv-rails'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
 # gem 'rails-i18n'
 
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+gem 'sidekiq'
 
 # Use authlogic for authentication
 gem 'authlogic', '~> 3.4.6'
@@ -15,12 +16,11 @@ gem 'simple_enum'
 gem 'simple_form'
 gem 'index_for'
 
-gem 'dotenv'
-
 gem 'paperclip'
 gem 'rest-client'
 gem 'weixin_authorize'
 gem 'weixin_rails_middleware'
+gem 'wx_pay'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
@@ -53,6 +53,9 @@ gem 'unicorn'
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
+  # Use sqlite3 as the database for Active Record
+  gem 'sqlite3'
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 
@@ -63,3 +66,6 @@ group :development, :test do
   gem 'spring'
 end
 
+group :production do
+  gem 'pg'
+end

@@ -2,6 +2,17 @@
   我的信息
 <% end %>
 
+<%
+city_map = City.all.to_a.
+  group_by(&:province_id).
+  map {|key, value|[key, value.map {|obj| [ obj.name, obj.id ]}]}.
+  to_h
+district_map = District.all.to_a.
+  group_by(&:city_id).
+  map {|key, value|[key, value.map {|obj| [ obj.name, obj.id ]}]}.
+  to_h
+%>
+
 <%= simple_form_for(@user, url: user_path) do |f| %>
   <%= f.error_messages %>
   <%= f.hidden_field :mobile_confirmed, value: true %>
@@ -24,17 +35,8 @@
       <%= f.input :skill_ids, as: :check_boxes, collection: Skill.all %>
 
       <%= f.input :province_id, collection: Province.all %>
-      <%= f.input :city_id do %>
-        <%= f.select :city_id do %>
-          <option value=""></option>
-        <% end %>
-      <% end %>
-
-      <%= f.input :district_id do %>
-        <%= f.select :district_id do %>
-          <option value=""></option>
-        <% end %>
-      <% end %>
+      <%= f.input :city_id, collection: city_map[@user.province_id] || [] %>
+      <%= f.input :district_id, collection: district_map[@user.city_id] || [] %>
 
       <%= f.input :description, as: :text, input_html: { rows: 4 } %>
     <% end %>
@@ -44,56 +46,29 @@
 <% end %>
 
 <script type="text/javascript">
-  <%= cache :location do %>
-    var cityMap = <%= raw City.all.to_a.
-      group_by(&:province_id).
-      map {|key, value|[key, value.map {|obj| [ obj.id, obj.name ]}]}.
-      to_h.to_json %>
-    var districtMap = <%= raw District.all.to_a.
-      group_by(&:city_id).
-      map {|key, value|[key, value.map {|obj| [ obj.id, obj.name ]}]}.
-      to_h.to_json %>
-  <% end %>
+  var cityMap = <%= raw city_map.to_json %>
+  var districtMap = <%= raw district_map.to_json %>
 
-  var province = document.querySelector("#user_province_id");
-  var city = document.querySelector("#user_city_id");
-  var district = document.querySelector("#user_district_id");
+  var province = user_province_id;
+  var city = user_city_id;
+  var district = user_district_id;
+
   var provinceCallback = function() {
-    var cityOptions = city.querySelectorAll("option");
-    var districtOptions = district.querySelectorAll("option");
-    for (var i = cityOptions.length - 1; i > 0; i--) cityOptions[i].remove();
-    for (var i = districtOptions.length - 1; i > 0; i--) districtOptions[i].remove();
-
-    var shownCityValues = cityMap[province.value];
-    if (!shownCityValues) return;
-    for (var i = 0; i < shownCityValues.length; i++) {
-      var option = document.createElement("option");
-      option.value = shownCityValues[i][0];
-      option.innerText = shownCityValues[i][1];
-      city.appendChild(option);
-    }
+    removeOptions(city.querySelectorAll("option"));
+    removeOptions(district.querySelectorAll("option"));
+    appendOptions(city, cityMap[province.value]);
   };
-  var cityCallback = function() {
-    var districtOptions = district.querySelectorAll("option");
-    for (var i = districtOptions.length - 1; i > 0; i--) districtOptions[i].remove();
 
-    var shownDistrictValues = districtMap[city.value];
-    if (!shownDistrictValues) return;
-    for (var i = 0; i < shownDistrictValues.length; i++) {
-      var option = document.createElement("option");
-      option.value = shownDistrictValues[i][0];
-      option.innerText = shownDistrictValues[i][1];
-      district.appendChild(option);
-    }
+  var cityCallback = function() {
+    removeOptions(district.querySelectorAll("option"));
+    appendOptions(district, districtMap[city.value]);
   };
 
   province.addEventListener("change", provinceCallback);
   city.addEventListener("change", cityCallback);
-  provinceCallback();
-  cityCallback();
 
-  var input = document.getElementById('user_avatar');
-  var preview = document.getElementById('user_avatar_preview');
+  var input = user_avatar;
+  var preview = user_avatar_preview;
 
   input.addEventListener("change", function() {
     URL = window.URL || window.webkitURL;

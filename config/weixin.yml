@@ -1,13 +1,19 @@
 default: &default
-  appid: wx46c1198fe2a43173
-  appsecret: 459f6ee22762db6455023a7ad52c3c20
+  app_id: wx46c1198fe2a43173
+  app_secret: 459f6ee22762db6455023a7ad52c3c20
 
 development:
   <<: *default
+  pay_key: <%= ENV["WEIXIN_PAY_KEY"] %>
+  mch_id: <%= ENV["WEIXIN_MCH_ID"] %>
 
 test:
   <<: *default
+  pay_key: <%= ENV["WEIXIN_PAY_KEY"] %>
+  mch_id: <%= ENV["WEIXIN_MCH_ID"] %>
 
 production:
-  appid: <%= ENV["WEIXIN_APP_ID"] %>
-  appsecret: <%= ENV["WEIXIN_APP_SECRET"] %>
+  app_id: <%= ENV["WEIXIN_APP_ID"] %>
+  app_secret: <%= ENV["WEIXIN_APP_SECRET"] %>
+  pay_key: <%= ENV["WEIXIN_PAY_KEY"] %>
+  mch_id: <%= ENV["WEIXIN_MCH_ID"] %>

@@ -1,7 +1,6 @@
-class SmsMailer < ActionSms::Base
-  def confirmation_instructions user, token, opts={}
+class SMSMailer < ActionSMS::Base
+  def confirmation user
     @user = user
-    @token = token
     sms to: user.mobile
   end
 

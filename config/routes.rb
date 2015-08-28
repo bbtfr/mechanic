@@ -12,7 +12,11 @@ Rails.application.routes.draw do
 
   resources :orders do
     resources :bids
-    get :review, on: :member
+
+    member do
+      get :review
+      get :pay
+    end
   end
 
   root to: "users#show"

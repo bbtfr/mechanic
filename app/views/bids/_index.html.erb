@@ -1,0 +1,20 @@
+<span class="alert alert-block alert-success">正在向 <%= @order.mechanic_sent_count %> 位技师发送用人信息...</span>
+<ul class="table-view">
+  <% @order.bids.each do |bid| %>
+    <li class="table-view-cell media">
+      <a class="navigate-right">
+        <img class="media-object pull-left" src="http://placehold.it/60x60">
+        <div class="media-body">
+          <div class="media-block">
+            <p class="pull-right">加价 <%= bid.markup_price %> 元</p>
+            <%= bid.mechanic.user_nickname %>
+          </div>
+          <div class="media-block">
+            <p class="pull-right">接单 <%= bid.mechanic.orders_count %> 次</p>
+            <p>专业 <%= bid.mechanic.professionality_average %> 分 守时 <%= bid.mechanic.timeliness_average %> 分</p>
+          </div>
+        </div>
+      </a>
+    </li>
+  <% end %>
+</ul>

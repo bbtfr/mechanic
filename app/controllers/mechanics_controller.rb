@@ -2,6 +2,7 @@ class MechanicsController < ApplicationController
   def index
     @mechanics = mechanic_klass.all
   end
+
   private
 
     def find_mechanic

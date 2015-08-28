@@ -5,7 +5,7 @@ class CreateBids < ActiveRecord::Migration
       t.index     :mechanic_id
       t.integer   :order_id
       t.index     :order_id
-      t.integer   :markup_price
+      t.integer   :markup_price, default: 0
 
       t.timestamps null: false
     end

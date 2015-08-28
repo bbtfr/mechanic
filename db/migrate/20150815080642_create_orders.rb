@@ -16,8 +16,10 @@ class CreateOrders < ActiveRecord::Migration
       t.integer   :timeliness
       t.text      :review
 
-      t.integer   :state_cd
+      t.integer   :state_cd, default: 0
       t.index     :state_cd
+
+      t.integer   :mechanic_sent_count, default: 0
 
       t.timestamps null: false
     end

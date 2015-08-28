@@ -15,3 +15,17 @@
 // require turbolinks
 // require ratchet
 //= require_tree .
+
+var removeOptions = function(options) {
+  for (var i = options.length - 1; i > 0; i--) options[i].remove();
+}
+
+var appendOptions = function(parent, values) {
+  if (!values) return;
+  for (var i = 0; i < values.length; i++) {
+    var option = document.createElement("option");
+    option.innerText = values[i][0];
+    option.value = values[i][1];
+    parent.appendChild(option);
+  }
+}

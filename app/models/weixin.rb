@@ -1,8 +1,12 @@
-BASE_URL = ENV["BASE_URL"] || "http://192.168.31.150:3000"
+BASE_URL = ENV["BASE_URL"] || "http://mechanic.dev.com"
 
 module Weixin
   Config = YAML.load(ERB.new(File.read("#{Rails.root}/config/weixin.yml")).result)[Rails.env]
-  Client = WeixinAuthorize::Client.new(Config["appid"], Config["appsecret"])
+  Client = WeixinAuthorize::Client.new(Config["app_id"], Config["app_secret"])
+
+  WxPay.appid = Config["app_id"]
+  WxPay.key = Config["pay_key"]
+  WxPay.mch_id = Config["mch_id"]
 
   OrderTemplate = "-sUkkh2_UVAsIyNTMjlbijfHV2D66H0MGJ2E-eZ6m48"
   TemplateTopColor = "#FF0000"
@@ -55,8 +59,8 @@ module Weixin
         TemplateTopColor,
         {
           "Appointment": format_template_data(I18n.l(order.appointment, format: :long)),
-          "OrderType": format_template_data(order.skill.name),
-          "Brand": format_template_data("#{order.brand.name} #{order.series.name}"),
+          "OrderType": format_template_data(order.skill.try :name),
+          "Brand": format_template_data("#{order.brand.try :name} #{order.series.try :name}"),
           "QuotedPrice": format_template_data(order.quoted_price),
           "Remark": format_template_data("#{order.remark.presence || "无"}\r\n\r\n点击详情去接单！", false)
         }
@@ -66,6 +70,23 @@ module Weixin
       value = value.to_s
       value << "\r\n" if newline
       { value: value, color: TemplateDataColor }
+    end
+
+    def payment user, order, request
+      access_token = Rails.cache.fetch(:wechat_pay_access_token, expires_in: 7200.seconds, raw: true) do
+        WechatPay::AccessToken.generate[:access_token]
+      end
+
+      params = {
+        body:             'body',
+        traceid:          user.id.to_s,      # Your user id
+        out_trade_no:     order.id.to_s,     # Your order id
+        total_fee:        order.price.to_s,  # 注意：单位是分，不是元
+        notify_url:       'http://your_domain.com/notify',
+        spbill_create_ip: request.host_ip
+      }
+
+      WechatPay::App.payment(access_token, params)
     end
 
     def method_missing method, *args

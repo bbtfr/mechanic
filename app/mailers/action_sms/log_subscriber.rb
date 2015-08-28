@@ -1,4 +1,4 @@
-module ActionSms
+module ActionSMS
   class LogSubscriber < ActiveSupport::LogSubscriber
     def deliver(event)
       p 'logger'
@@ -9,9 +9,9 @@ module ActionSms
     end
 
     def logger
-      ActionSms::Base.logger
+      ActionSMS::Base.logger
     end
   end
 end
 
-ActionSms::LogSubscriber.attach_to :action_sms
+ActionSMS::LogSubscriber.attach_to :action_sms

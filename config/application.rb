@@ -37,5 +37,6 @@ module MechanicApp
     config.assets.precompile += %w( *.svg *.eot *.woff *.ttf )
 
     config.action_view.field_error_proc = proc do |html_tag, instance| html_tag end
+    config.active_job.queue_adapter = :sidekiq
   end
 end

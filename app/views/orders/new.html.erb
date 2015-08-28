@@ -2,6 +2,13 @@
   预约技师
 <% end %>
 
+<%
+series_map = Series.all.to_a.
+  group_by(&:brand_id).
+  map {|key, value|[key, value.map {|obj| [ obj.name, obj.id ]}]}.
+  to_h
+%>
+
 <%= simple_form_for(@order) do |f| %>
   <%= f.error_messages %>
 
@@ -30,27 +37,13 @@
 <% end %>
 
 <script type="text/javascript">
-  <%= cache :location do %>
-    var seriesMap = <%= raw Series.all.to_a.
-      group_by(&:brand_id).
-      map {|key, value|[key, value.map {|obj| [ obj.id, obj.name ]}]}.
-      to_h.to_json %>
-  <% end %>
+  var seriesMap = <%= raw series_map.to_json %>
 
-  var brand = document.querySelector("#order_brand_id");
-  var series = document.querySelector("#order_series_id");
+  var brand = order_brand_id;
+  var series = order_series_id;
   var brandCallback = function() {
-    var seriesOptions = series.querySelectorAll("option");
-    for (var i = seriesOptions.length - 1; i > 0; i--) seriesOptions[i].remove();
-
-    var shownSeriesValues = seriesMap[brand.value];
-    if (!shownSeriesValues) return;
-    for (var i = 0; i < shownSeriesValues.length; i++) {
-      var option = document.createElement("option");
-      option.value = shownSeriesValues[i][0];
-      option.innerText = shownSeriesValues[i][1];
-      series.appendChild(option);
-    }
+    removeOptions(series.querySelectorAll("option"));
+    appendOptions(series, seriesMap[brand.value]);
   };
 
   brand.addEventListener("change", brandCallback);

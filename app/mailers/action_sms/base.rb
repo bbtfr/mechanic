@@ -1,17 +1,17 @@
 require_relative 'log_subscriber'
 
-module ActionSms
+module ActionSMS
   class Base < AbstractController::Base
     abstract!
     private_class_method :new #:nodoc:
 
     include AbstractController::Logger
     include AbstractController::Rendering
-    include AbstractController::Layouts
     include AbstractController::Helpers
     include AbstractController::Translation
     include AbstractController::AssetPaths
     include AbstractController::Callbacks
+    include ActionView::Layouts
 
     class << self
       def respond_to?(method, include_private = false) #:nodoc:
@@ -26,7 +26,7 @@ module ActionSms
         end
       end
     end
-    
+
     attr_internal :message
 
     self.view_paths = ActionController::Base.view_paths

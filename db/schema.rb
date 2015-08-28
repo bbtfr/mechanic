@@ -13,16 +13,19 @@
 
 ActiveRecord::Schema.define(version: 20150822040527) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
     t.integer  "order_id"
-    t.integer  "markup_price"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.integer  "markup_price", default: 0
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
-  add_index "bids", ["mechanic_id"], name: "index_bids_on_mechanic_id"
-  add_index "bids", ["order_id"], name: "index_bids_on_order_id"
+  add_index "bids", ["mechanic_id"], name: "index_bids_on_mechanic_id", using: :btree
+  add_index "bids", ["order_id"], name: "index_bids_on_order_id", using: :btree
 
   create_table "brands", force: :cascade do |t|
     t.string "name"
@@ -34,8 +37,8 @@ ActiveRecord::Schema.define(version: 20150822040527) do
     t.integer "lbs_id"
   end
 
-  add_index "cities", ["lbs_id"], name: "index_cities_on_lbs_id"
-  add_index "cities", ["province_id"], name: "index_cities_on_province_id"
+  add_index "cities", ["lbs_id"], name: "index_cities_on_lbs_id", using: :btree
+  add_index "cities", ["province_id"], name: "index_cities_on_province_id", using: :btree
 
   create_table "districts", force: :cascade do |t|
     t.string  "name"
@@ -43,8 +46,8 @@ ActiveRecord::Schema.define(version: 20150822040527) do
     t.integer "lbs_id"
   end
 
-  add_index "districts", ["city_id"], name: "index_districts_on_city_id"
-  add_index "districts", ["lbs_id"], name: "index_districts_on_lbs_id"
+  add_index "districts", ["city_id"], name: "index_districts_on_city_id", using: :btree
+  add_index "districts", ["lbs_id"], name: "index_districts_on_lbs_id", using: :btree
 
   create_table "mechanics", force: :cascade do |t|
     t.integer  "province_id"
@@ -55,9 +58,9 @@ ActiveRecord::Schema.define(version: 20150822040527) do
     t.datetime "updated_at",  null: false
   end
 
-  add_index "mechanics", ["city_id"], name: "index_mechanics_on_city_id"
-  add_index "mechanics", ["district_id"], name: "index_mechanics_on_district_id"
-  add_index "mechanics", ["province_id"], name: "index_mechanics_on_province_id"
+  add_index "mechanics", ["city_id"], name: "index_mechanics_on_city_id", using: :btree
+  add_index "mechanics", ["district_id"], name: "index_mechanics_on_district_id", using: :btree
+  add_index "mechanics", ["province_id"], name: "index_mechanics_on_province_id", using: :btree
 
   create_table "mechanics_skills", id: false, force: :cascade do |t|
     t.integer "mechanic_id", null: false
@@ -78,26 +81,27 @@ ActiveRecord::Schema.define(version: 20150822040527) do
     t.integer  "professionality"
     t.integer  "timeliness"
     t.text     "review"
-    t.integer  "state_cd"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.integer  "state_cd",            default: 0
+    t.integer  "mechanic_sent_count", default: 0
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
   end
 
-  add_index "orders", ["state_cd"], name: "index_orders_on_state_cd"
+  add_index "orders", ["state_cd"], name: "index_orders_on_state_cd", using: :btree
 
   create_table "provinces", force: :cascade do |t|
     t.string  "name"
     t.integer "lbs_id"
   end
 
-  add_index "provinces", ["lbs_id"], name: "index_provinces_on_lbs_id"
+  add_index "provinces", ["lbs_id"], name: "index_provinces_on_lbs_id", using: :btree
 
   create_table "series", force: :cascade do |t|
     t.string  "name"
     t.integer "brand_id"
   end
 
-  add_index "series", ["brand_id"], name: "index_series_on_brand_id"
+  add_index "series", ["brand_id"], name: "index_series_on_brand_id", using: :btree
 
   create_table "skills", force: :cascade do |t|
     t.string "name"
@@ -131,8 +135,8 @@ ActiveRecord::Schema.define(version: 20150822040527) do
     t.datetime "updated_at",                          null: false
   end
 
-  add_index "users", ["mechanic_id"], name: "index_users_on_mechanic_id"
-  add_index "users", ["mobile"], name: "index_users_on_mobile", unique: true
-  add_index "users", ["user_group_id"], name: "index_users_on_user_group_id"
+  add_index "users", ["mechanic_id"], name: "index_users_on_mechanic_id", using: :btree
+  add_index "users", ["mobile"], name: "index_users_on_mobile", unique: true, using: :btree
+  add_index "users", ["user_group_id"], name: "index_users_on_user_group_id", using: :btree
 
 end
