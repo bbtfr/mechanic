@@ -1,6 +1,6 @@
 <% if @order.canceled? %>
   clearInterval(interval);
-  alert("非常抱歉，订单超时，您没有选择技师\n本次服务取消\n点击确认再来一次");
+  alert("非常抱歉，订单超时，您没有选择技师\r\n本次服务取消\r\n点击确认再来一次");
   window.location.href = "/orders/new";
 <% else %>
   index = "<%= j render "index" %>";

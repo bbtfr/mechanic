@@ -39,7 +39,7 @@ class UsersController < ApplicationController
     end
 
     def authenticate!
-      if !current_user_session
+      if !current_user_session || !current_user || !current_user.mobile_confirmed
         session[:original_url] = request.original_url
         redirect_to new_user_session_path
       else
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
     end
 
     def validate!
-      if !current_user.mobile_confirmed
+      if current_user.invalid?
         session[:original_url] = request.original_url
         redirect_to new_user_path
       else

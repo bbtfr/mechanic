@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
   belongs_to :user_group
   belongs_to :mechanic, autosave: true
 
+  validates_format_of :mobile, :with => /\d{11}/
   validates_presence_of :mobile
   validates_presence_of :nickname, :gender, :address, if: :mobile_confirmed
   validates_uniqueness_of :mobile
@@ -30,4 +31,7 @@ class User < ActiveRecord::Base
   delegate :province_id, :city_id, :district_id, :skill_ids, :description,
     to: :mechanic, allow_nil: true
 
+  def confirm_mobile!
+    update_attribute(:mobile_confirmed, true)
+  end
 end

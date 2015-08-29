@@ -4,18 +4,20 @@
 
 <nav class="bar bar-nav bar-standard">
   <div class="segmented-control">
-    <a class="control-item active">待服务</a>
-    <a class="control-item">服务中</a>
-    <a class="control-item">已结束</a>
+    <%= link_to "待服务", orders_path(state: :paids), class: "control-item#{" active" if @state == :paids}" %>
+    <%= link_to "服务中", orders_path(state: :workings), class: "control-item#{" active" if @state == :workings}" %>
+    <%= link_to "已结束", orders_path(state: :finisheds), class: "control-item#{" active" if @state == :finisheds}" %>
   </div>
 </nav>
+
+<% @orders = @orders.includes(:skill, :mechanic) %>
 
 <div class="content-padded content-with-bar">
   <%= index_for @orders, class: "table" do |i| %>
     <%= i.attribute :appointment, format: :short %>
     <%= i.attribute :skill, with: :name %>
     <%= i.attribute :price %>
-    <%= i.attribute :mechanic %>
+    <%= i.attribute :mechanic, value: :mechanic_nickname %>
     <%= i.actions :show do |act| %>
       <%= act.action_link :cancel do %>
       <% end %>

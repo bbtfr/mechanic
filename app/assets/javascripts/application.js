@@ -40,15 +40,15 @@ var ready = function(callback) {
   else callback();
 }
 
-var xhrRequest = function(method, url, success) {
+var xhrRequest = function(method, url, success, error) {
   var xhr = new XMLHttpRequest();
   xhr.open(method, url, true);
-  // xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   xhr.send();
   xhr.onreadystatechange = function() {
-    console.log(xhr);
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      callback(xhr);
+    if (xhr.readyState === 4) {
+      if (Math.floor(xhr.status / 100) === 2) success(xhr);
+      else error();
     }
   }
 }
@@ -63,6 +63,7 @@ function jsonp(url, callback) {
 
   var script = document.createElement('script');
   script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+  script.async = true;
   document.body.appendChild(script);
 }
 

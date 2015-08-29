@@ -21,6 +21,9 @@ class CreateOrders < ActiveRecord::Migration
 
       t.integer   :mechanic_sent_count, default: 0
 
+      t.integer   :bid_id
+      t.index     :bid_id
+
       t.timestamps null: false
     end
   end

@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   helper_method :current_user_session, :current_user, :weixin?
+  before_filter :ensure_weixin_openid!
   before_filter :authenticate!
 
   private
@@ -23,14 +24,25 @@ class ApplicationController < ActionController::Base
     end
 
     def authenticate!
-      if !current_user_session || !current_user
+      if !current_user_session || !current_user || !current_user.mobile_confirmed
         session[:original_url] = request.original_url
         redirect_to new_user_session_path
-      elsif !current_user.mobile_confirmed
+      elsif current_user.invalid?
         session[:original_url] = request.original_url
         redirect_to new_user_path
       else
         session[:original_url] = nil if session[:original_url]
+      end
+    end
+
+    def ensure_weixin_openid!
+      if request.get? && weixin? && current_user && !current_user.weixin_openid
+        if params.key? "code"
+          @openid = Weixin.get_oauth_access_token(params["code"]).result["openid"]
+          current_user.update_weixin_openid @openid
+        else
+          redirect_to Weixin.authorize_url(request.url)
+        end
       end
     end
 end

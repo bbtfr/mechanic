@@ -24,11 +24,7 @@ series_map = Series.all.to_a.
     <%= f.association :skill %>
     <%= f.association :brand %>
 
-    <%= f.input :series do %>
-      <%= f.select :series_id do %>
-        <option value=""></option>
-      <% end %>
-    <% end %>
+    <%= f.input :series_id, collection: series_map[@order.brand_id] || [] %>
 
     <%= f.input :quoted_price %>
     <%= f.input :remark, input_html: { rows: 4 } %>
@@ -48,7 +44,6 @@ series_map = Series.all.to_a.
   };
 
   brand.addEventListener("change", brandCallback);
-  brandCallback();
 
   var getLocationCallback = function(res) {
     console.log(res);

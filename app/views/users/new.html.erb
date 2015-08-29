@@ -15,7 +15,6 @@ district_map = District.all.to_a.
 
 <%= simple_form_for(@user, url: user_path, method: :post) do |f| %>
   <%= f.error_messages %>
-  <%= f.hidden_field :mobile_confirmed, value: true %>
 
   <div class="content-padded">
     <%= f.input :nickname %>

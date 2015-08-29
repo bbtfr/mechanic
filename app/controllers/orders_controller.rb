@@ -1,8 +1,14 @@
 class OrdersController < ApplicationController
   before_filter :find_order, only: [ :show, :review, :update ]
+  before_filter :redirect_to_bids, only: [ :new, :create ]
 
   def index
-    @orders = order_klass.all
+    @state = if %w(pendings paids workings finisheds).include? params[:state]
+        params[:state].to_sym
+      else
+        :paids
+      end
+    @orders = order_klass.send(@state)
   end
 
   def new
@@ -33,6 +39,11 @@ class OrdersController < ApplicationController
   end
 
   private
+
+    def redirect_to_bids
+      order = order_klass.pendings.first
+      redirect_to order_bids_path(order) if order
+    end
 
     def find_order
       @order = order_klass.find(params[:id])

@@ -6,9 +6,6 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-User.create(mobile: "15901013540", verification_code: "000000",
-  nickname: "Li", gender_cd: 1, address: "Addr.", mobile_confirmed: true)
-
 %w(贴膜 安导航 等等).each do |skill|
   Skill.create(name: skill)
 end

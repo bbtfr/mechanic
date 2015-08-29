@@ -21,10 +21,7 @@ class BidsController < ApplicationController
   end
 
   def pick
-    @order.mechanic_id = @bid.mechanic_id
-    @order.price = @order.quoted_price + @bid.markup_price
-    @order.save
-    flash[:success] = "成功选中技师！"
+    flash[:success] = "成功选中技师！" if @order.pick @bid
     render :show
   end
 

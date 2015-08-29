@@ -43,8 +43,8 @@ module Weixin
 
   class << self
 
-    def authorize_url
-      Client.authorize_url "#{BaseURL}/session/new"
+    def authorize_url redirect_to = "#{BaseURL}/session/new"
+      Client.authorize_url redirect_to
     end
 
     def create_menu menu = Menu
@@ -57,17 +57,18 @@ module Weixin
         "#{BaseURL}/orders/#{order.id}/bids/new",
         TemplateTopColor,
         {
-          "Appointment": format_template_data(I18n.l(order.appointment, format: :long)),
-          "OrderType": format_template_data(order.skill.try :name),
-          "Brand": format_template_data("#{order.brand.try :name} #{order.series.try :name}"),
-          "QuotedPrice": format_template_data(order.quoted_price),
-          "Remark": format_template_data("#{order.remark.presence || "无"}\r\n\r\n点击详情去接单！", false)
+          first: format_template_data("新订单"),
+          keyword1: format_template_data(order.skill.try :name),
+          keyword2: format_template_data("担保交易 #{order.quoted_price} 元"),
+          keyword3: format_template_data(I18n.l(order.appointment, format: :long)),
+          keyword4: format_template_data(order.address),
+          keyword5: format_template_data("#{order.brand.try :name} #{order.series.try :name}"),
+          remark: format_template_data("#{order.remark.presence}\r\n点击详情去接单！")
         }
     end
 
-    def format_template_data value, newline = true
+    def format_template_data value
       value = value.to_s
-      value << "\r\n" if newline
       { value: value, color: TemplateDataColor }
     end
 

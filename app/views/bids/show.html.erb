@@ -6,7 +6,7 @@
 </span>
 <ul class="table-view">
   <li class="table-view-cell media">
-    <img class="media-object pull-left" src="http://placehold.it/60x60">
+    <%= image_tag @bid.mechanic.user.avatar.url(:thumb), class: "media-object pull-left" %>
     <div class="media-body">
       <div class="media-block">
         <p class="pull-right">加价 <%= @bid.markup_price %> 元</p>
