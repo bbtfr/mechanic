@@ -23,6 +23,9 @@ body {
   margin-top: 55px;
 }
 
+.margin-top-large { margin-top: 50px; }
+.margin-bottom-large { margin-top: 50px; }
+
 @import "bootstrap/variables";
 @import "bootstrap/mixins";
 @import "alert";
@@ -39,6 +42,11 @@ body {
   border-radius: 50%; // set radius in percents
 }
 
+.btn-positive:visited,
+.btn-negative:visited,
+.btn-primary:visited {
+  color: #fff;
+}
 .btn-mini {
   padding: 3px 4px 4px;
 }

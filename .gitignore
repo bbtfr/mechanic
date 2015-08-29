@@ -17,3 +17,6 @@
 /tmp
 
 .env
+
+# Ignore upload files
+public/system

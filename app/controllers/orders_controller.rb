@@ -7,6 +7,7 @@ class OrdersController < ApplicationController
 
   def new
     @order = order_klass.new
+    @order.address ||= current_user.address
   end
 
   def create
@@ -38,11 +39,15 @@ class OrdersController < ApplicationController
     end
 
     def order_klass
-      Order.where(user_id: current_user)
+      if current_user.is_mechanic
+        Order.where(mechanic_id: current_user.mechanic_id)
+      else
+        Order.where(user_id: current_user.id)
+      end
     end
 
     def order_params
       params.require(:order).permit(:user_id, :mechanic_id, :address, :appointment,
-        :skill_id, :brand_id, :series_id, :quoted_price, :remark)
+        :skill_id, :brand_id, :series_id, :quoted_price, :remark, :adcode)
     end
 end

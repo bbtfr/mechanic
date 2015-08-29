@@ -2,7 +2,7 @@
 <ul class="table-view">
   <% @order.bids.each do |bid| %>
     <li class="table-view-cell media">
-      <a class="navigate-right">
+      <%= link_to order_bid_path(@order, bid), class: "navigate-right" do %>
         <img class="media-object pull-left" src="http://placehold.it/60x60">
         <div class="media-body">
           <div class="media-block">
@@ -14,7 +14,7 @@
             <p>专业 <%= bid.mechanic.professionality_average %> 分 守时 <%= bid.mechanic.timeliness_average %> 分</p>
           </div>
         </div>
-      </a>
+      <% end %>
     </li>
   <% end %>
 </ul>

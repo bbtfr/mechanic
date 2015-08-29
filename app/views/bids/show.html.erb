@@ -1,8 +1,8 @@
+<% owner = @order.user_id == current_user.id %>
 <span class="alert alert-block segmented-items">
-  <span class="item"><%= l Time.now, format: :short %></span>
-  <span class="item"><%= @order.skill.name %></span>
-  <span class="item"><%= @order.quoted_price + @bid.markup_price %></span>
-  <a class="item text-right" href="">详情</a>
+  <span class="item"><%= raw l(@order.appointment, format: :short).sub(" ", "<br>") %></span>
+  <span class="item">类型：<br><%= @order.skill.name %></span>
+  <span class="item">价格：<br><%= @order.quoted_price + @bid.markup_price %></span>
 </span>
 <ul class="table-view">
   <li class="table-view-cell media">
@@ -24,6 +24,19 @@
 </ul>
 <div class="content-padded">
   个人简介：<%= @bid.mechanic.description %>
-
-  <a href="" class="btn btn-block btn-positive">选择此技师（倒数读秒）</a>
 </div>
+
+<div class="content-padded margin-top-large">
+  <% if owner %>
+    <%= link_to "选择此技师", pick_order_bid_path(@order, @bid), class: "btn btn-block btn-positive" %>
+    <%= link_to "返回竞价列表", order_bids_path(@order), class: "btn btn-block btn-negative" %>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  var interval = setInterval(function() {
+    xhrRequest("GET", window.location.href + ".js", function(xhr) {
+      eval(xhr.responseText);
+    });
+  }, 5000)
+</script>

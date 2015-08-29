@@ -11,6 +11,7 @@ series_map = Series.all.to_a.
 
 <%= simple_form_for(@order) do |f| %>
   <%= f.error_messages %>
+  <%= f.hidden_field :adcode %>
 
   <div class="content-padded">
     <div class="input">
@@ -18,7 +19,7 @@ series_map = Series.all.to_a.
       <span class="info"><%= current_user.nickname %>（<%= current_user.mobile %>）</span>
     </div>
 
-    <%= f.input :address, input_html: { value: current_user.address } %>
+    <%= f.input :address %>
     <%= f.input :appointment %>
     <%= f.association :skill %>
     <%= f.association :brand %>
@@ -48,4 +49,35 @@ series_map = Series.all.to_a.
 
   brand.addEventListener("change", brandCallback);
   brandCallback();
+
+  var getLocationCallback = function(res) {
+    console.log(res);
+
+    url = "http://apis.map.qq.com/ws/geocoder/v1";
+    url += "?location=" + encodeURI(res.latitude + "," + res.longitude);
+    url += "&coord_type=1"
+    url += "&output=jsonp";
+    url += "&key=<%= LBS::Key %>";
+
+    jsonp(url, function(res) {
+      address = res["result"]["formatted_addresses"]["recommend"];
+      order_adcode.value = res["result"]["ad_info"]["adcode"];
+      if (order_address.value !== address && confirm("使用定位地址：" + address)) {
+        order_address.value = address;
+      }
+    });
+  };
+
+  if (window.wx) {
+    wx.ready(function() {
+      wx.getLocation({
+        type: 'wgs84',
+        success: getLocationCallback
+      });
+    });
+  } else if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      getLocationCallback(position.coords);
+    });
+  }
 </script>

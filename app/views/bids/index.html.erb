@@ -4,14 +4,8 @@
 
 <script type="text/javascript">
   var interval = setInterval(function() {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", window.location.href + ".js", true);
-    xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
-    xhr.send();
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        eval(xhr.responseText);
-      }
-    }
+    xhrRequest("GET", window.location.href + ".js", function(xhr) {
+      eval(xhr.responseText);
+    });
   }, 5000)
 </script>

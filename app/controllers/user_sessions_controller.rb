@@ -7,7 +7,7 @@ class UserSessionsController < ApplicationController
   end
 
   def new_weixin
-    return unless request.user_agent.include? "MicroMessenger"
+    return unless weixin?
     if params.key? "code"
       @openid = Weixin.get_oauth_access_token(params["code"]).result["openid"]
     else

@@ -1,8 +1,7 @@
-BASE_URL = ENV["BASE_URL"] || "http://mechanic.dev.com"
-
 module Weixin
   Config = YAML.load(ERB.new(File.read("#{Rails.root}/config/weixin.yml")).result)[Rails.env]
   Client = WeixinAuthorize::Client.new(Config["app_id"], Config["app_secret"])
+  BaseURL = ENV["BASE_URL"] || "http://mechanic.dev.com"
 
   WxPay.appid = Config["app_id"]
   WxPay.key = Config["pay_key"]
@@ -16,7 +15,7 @@ module Weixin
     button: [{
       type: "view",
       name: "预约技师",
-      url: "#{BASE_URL}/orders/new"
+      url: "#{BaseURL}/orders/new"
     }, {
       name: "服务",
       sub_button: [
@@ -38,14 +37,14 @@ module Weixin
     }, {
       type: "view",
       name: "我的",
-      url: "#{BASE_URL}/user"
+      url: "#{BaseURL}/user"
     }]
   }
 
   class << self
 
     def authorize_url
-      Client.authorize_url "#{BASE_URL}/session/new"
+      Client.authorize_url "#{BaseURL}/session/new"
     end
 
     def create_menu menu = Menu
@@ -55,7 +54,7 @@ module Weixin
     def send_order_template_message user, order
       Client.send_template_msg user.weixin_openid,
         OrderTemplate,
-        "#{BASE_URL}/orders/#{order.id}/bids/new",
+        "#{BaseURL}/orders/#{order.id}/bids/new",
         TemplateTopColor,
         {
           "Appointment": format_template_data(I18n.l(order.appointment, format: :long)),

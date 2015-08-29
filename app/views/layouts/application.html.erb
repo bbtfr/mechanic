@@ -9,12 +9,16 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <!-- <script src="http://jsconsole.com/remote.js?bbtfr"></script> -->
+  <% if weixin? %>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script type="text/javascript"> wx.config(<%= raw Weixin.get_jssign_package(request.url).merge(jsApiList: %w(getLocation)).to_json %>); wx.error(function(res){ console.log(res) });</script>
+  <% end %>
 </head>
 <body>
 <% bootstrap_flash_class = { success: 'alert-success', error: 'alert-danger', alert: 'alert-warning', notice: 'alert-info'} %>
 <% flash.each do |type, message| %>
   <div class="alert alert-block <%= bootstrap_flash_class[type.to_sym] %>">
-    <%= message %>
+    <%= raw message %>
   </div>
 <% end %>
 

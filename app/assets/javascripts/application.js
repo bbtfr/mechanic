@@ -29,3 +29,40 @@ var appendOptions = function(parent, values) {
     parent.appendChild(option);
   }
 }
+
+var closeWindow = function() {
+  if (window.wx) wx.closeWindow();
+  else window.close();
+}
+
+var ready = function(callback) {
+  if (window.wx) wx.ready(callback);
+  else callback();
+}
+
+var xhrRequest = function(method, url, success) {
+  var xhr = new XMLHttpRequest();
+  xhr.open(method, url, true);
+  // xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  xhr.send();
+  xhr.onreadystatechange = function() {
+    console.log(xhr);
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      callback(xhr);
+    }
+  }
+}
+
+function jsonp(url, callback) {
+  var callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+  window[callbackName] = function(data) {
+    delete window[callbackName];
+    document.body.removeChild(script);
+    callback(data);
+  };
+
+  var script = document.createElement('script');
+  script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+  document.body.appendChild(script);
+}
+

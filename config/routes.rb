@@ -11,7 +11,11 @@ Rails.application.routes.draw do
   resources :mechanics
 
   resources :orders do
-    resources :bids
+    resources :bids do
+      member do
+        get :pick
+      end
+    end
 
     member do
       get :review
