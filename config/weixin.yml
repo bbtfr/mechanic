@@ -4,16 +4,18 @@ default: &default
 
 development:
   <<: *default
-  pay_key: <%= ENV["WEIXIN_PAY_KEY"] %>
   mch_id: <%= ENV["WEIXIN_MCH_ID"] %>
+  pay_key: <%= ENV["WEIXIN_PAY_KEY"] %>
+  order_template_id: "VscR6biHJXeZ97o1FL6bJWrhTsFWFvoPo6mneaQCzA4"
 
 test:
   <<: *default
-  pay_key: <%= ENV["WEIXIN_PAY_KEY"] %>
   mch_id: <%= ENV["WEIXIN_MCH_ID"] %>
+  pay_key: <%= ENV["WEIXIN_PAY_KEY"] %>
 
 production:
   app_id: <%= ENV["WEIXIN_APP_ID"] %>
   app_secret: <%= ENV["WEIXIN_APP_SECRET"] %>
-  pay_key: <%= ENV["WEIXIN_PAY_KEY"] %>
   mch_id: <%= ENV["WEIXIN_MCH_ID"] %>
+  pay_key: <%= ENV["WEIXIN_PAY_KEY"] %>
+  order_template_id: <%= ENV["ORDER_TEMPLATE_ID"] %>

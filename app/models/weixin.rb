@@ -7,7 +7,7 @@ module Weixin
   WxPay.key = Config["pay_key"]
   WxPay.mch_id = Config["mch_id"]
 
-  OrderTemplate = "-sUkkh2_UVAsIyNTMjlbijfHV2D66H0MGJ2E-eZ6m48"
+  OrderTemplate = Config["order_template_id"]
   TemplateTopColor = "#FF0000"
   TemplateDataColor = "#173177"
 
