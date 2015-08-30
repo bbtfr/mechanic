@@ -1,16 +1,21 @@
 class Mechanic < ActiveRecord::Base
+  has_one :user
+  has_many :orders
   has_and_belongs_to_many :skills
+
+  has_many :fellowships
+  has_many :users, through: :fellowships
+
   belongs_to :province
   belongs_to :city
   belongs_to :district
-  has_one :user
 
   def professionality_average
-    5
+    orders.average(:professionality).round(2)
   end
 
   def timeliness_average
-    5
+    orders.average(:timeliness).round(2)
   end
 
   def user_nickname
@@ -18,10 +23,10 @@ class Mechanic < ActiveRecord::Base
   end
 
   def total_income
-    0
+    orders.finisheds.sum(:price)
   end
 
   def orders_count
-    0
+    orders.count
   end
 end

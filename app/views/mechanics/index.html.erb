@@ -1,44 +1,20 @@
+<%= content_for :title do %>
+  收藏技师
+<% end %>
+
 <ul class="table-view">
-  <li class="table-view-cell media">
-    <a class="navigate-right">
-      <img class="media-object pull-left" src="http://placehold.it/60x60">
+  <% current_user.mechanics.each do |mechanic| %>
+    <li class="table-view-cell media">
+      <%= image_tag mechanic.user.avatar.url(:thumb), class: "media-object pull-left" %>
       <div class="media-body">
         <div class="media-block">
-          名称
+          <%= mechanic.user_nickname %>
         </div>
         <div class="media-block">
-          <p class="pull-right">接单XX次</p>
-          <p>专业5分 守时5分</p>
+          <p class="pull-right">接单 <%= mechanic.orders_count %> 次</p>
+          <p>专业 <%= mechanic.professionality_average %> 分 守时 <%= mechanic.timeliness_average %> 分</p>
         </div>
       </div>
-    </a>
-  </li>
-  <li class="table-view-cell media">
-    <a class="navigate-right">
-      <img class="media-object pull-left" src="http://placehold.it/60x60">
-      <div class="media-body">
-        <div class="media-block">
-          名称
-        </div>
-        <div class="media-block">
-          <p class="pull-right">接单XX次</p>
-          <p>专业5分 守时5分</p>
-        </div>
-      </div>
-    </a>
-  </li>
-  <li class="table-view-cell media">
-    <a class="navigate-right">
-      <img class="media-object pull-left" src="http://placehold.it/60x60">
-      <div class="media-body">
-        <div class="media-block">
-          名称
-        </div>
-        <div class="media-block">
-          <p class="pull-right">接单XX次</p>
-          <p>专业5分 守时5分</p>
-        </div>
-      </div>
-    </a>
-  </li>
+    </li>
+  <% end %>
 </ul>

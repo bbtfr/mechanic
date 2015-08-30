@@ -16,7 +16,7 @@ district_map = District.all.to_a.
 <%= simple_form_for(@user, url: user_path, method: :post) do |f| %>
   <%= f.error_messages %>
 
-  <div class="content-padded">
+  <div class="content-padded margin-top-large">
     <%= f.input :nickname %>
     <%= f.input :gender, collection: enum_option_pairs(User, :gender) %>
     <%= f.input :address %>

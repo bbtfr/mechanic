@@ -1,7 +1,6 @@
 module ActionSMS
   class LogSubscriber < ActiveSupport::LogSubscriber
     def deliver(event)
-      p 'logger'
       return unless logger.info?
       recipients = Array(event.payload[:to]).join(', ')
       info("\nSent SMS to #{recipients} (#{event.duration.round(1)}ms)")

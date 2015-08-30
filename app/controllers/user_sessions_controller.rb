@@ -25,12 +25,10 @@ class UserSessionsController < ApplicationController
     @user = User.where(mobile: user_session_params[:mobile]).first_or_initialize
 
     if params.key? "verification_code"
-      if @user.persisted? || @user.save
+      if @user.persisted? ? @user.reset_verification_code! : @user.save
         flash[:notice] = "验证码已发送，请稍等片刻..."
-        @user.reset_verification_code! unless @user.new_record?
-        SMSMailer.confirmation(@user).deliver
       else
-        @user_session.errors.add(:mobile, @user.errors[:mobile].last)
+        flash[:error] = @user.errors.full_messages.last
       end
       render :new
     else

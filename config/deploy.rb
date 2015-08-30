@@ -48,3 +48,10 @@ namespace :deploy do
   end
 
 end
+
+desc "tail log file"
+task :tail do
+  on roles(:app) do
+    execute "tail -f #{shared_path}/log/#{fetch(:rails_env)}.log"
+  end
+end

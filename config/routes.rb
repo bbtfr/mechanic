@@ -8,7 +8,12 @@ Rails.application.routes.draw do
     get :delete
   end
   resource :user_group
-  resources :mechanics
+  resources :mechanics do
+    member do
+      get :follow
+      get :unfollow
+    end
+  end
 
   resources :orders do
     resources :bids do
@@ -18,8 +23,15 @@ Rails.application.routes.draw do
     end
 
     member do
-      get :review
+      get :refund
       get :pay
+      get :result
+
+      get :work
+      patch :finish
+      get :confirm
+
+      get :review
     end
   end
 

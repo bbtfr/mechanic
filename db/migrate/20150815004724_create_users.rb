@@ -26,7 +26,7 @@ class CreateUsers < ActiveRecord::Migration
       t.integer    :gender_cd
       t.string     :address
 
-      t.integer    :balance
+      t.integer    :balance, default: 0
 
       t.attachment :avatar
 

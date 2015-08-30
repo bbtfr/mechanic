@@ -16,8 +16,7 @@ class UserGroupsController < ApplicationController
 
   def update
     @user_group = user_group_klass.first
-    @user_group.assign_attributes(user_group_params)
-    if @user_group.save
+    if @user_group.update_attributes(user_group_params)
       redirect_to settings_user_path
     else
       render :new

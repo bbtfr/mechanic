@@ -34,3 +34,56 @@
     个人简介：<%= @order.mechanic.description %>
   </div>
 <% end %>
+
+<div class="content-padded margin-top-large">
+  <% if current_user.is_mechanic %>
+    <% case @order.state %>
+    <% when :paid %>
+      <%= link_to "开始服务", work_order_path(@order), class: "btn btn-block btn-positive" %>
+    <% when :working %>
+
+      <%= simple_form_for(@order, url: finish_order_path(@order)) do |f| %>
+        <%= f.error_messages %>
+
+        <%= f.input :mechanic_attach_1 do %>
+          <input class="btn btn-block btn-positive" value="请选择文件" id="order_mechanic_attach_1_button" readonly></input>
+          <%= f.input_field :mechanic_attach_1 %>
+        <% end %>
+        <%= f.input :mechanic_attach_2 do %>
+          <input class="btn btn-block btn-positive" value="请选择文件" id="order_mechanic_attach_2_button" readonly></input>
+          <%= f.input_field :mechanic_attach_2 %>
+        <% end %>
+        <%= f.button :submit, "服务完工", class: "btn-block btn-positive" %>
+      <% end %>
+
+      <script type="text/javascript">
+        fakeFileInput(order_mechanic_attach_1, order_mechanic_attach_1_button);
+        fakeFileInput(order_mechanic_attach_2, order_mechanic_attach_2_button);
+      </script>
+
+    <% end %>
+  <% else %>
+    <% case @order.state %>
+    <% when :paid %>
+      <%= link_to "申请退款", refund_order_path(@order), class: "btn btn-block btn-negative" %>
+    <% when :confirming %>
+      <% if @order.mechanic_attach_1 || @order.mechanic_attach_2 %>
+        施工照片：点击查看大图<br>
+        <%= link_to @order.mechanic_attach_1.url(:original) do %>
+          <%= image_tag @order.mechanic_attach_1.url(:thumb) %>
+        <% end if @order.mechanic_attach_1.present? %>
+        <%= link_to @order.mechanic_attach_2.url(:original) do %>
+          <%= image_tag @order.mechanic_attach_2.url(:thumb) %>
+        <% end if @order.mechanic_attach_2.present? %>
+      <% end %>
+      <%= link_to "确认完工", confirm_order_path(@order), class: "btn btn-block btn-positive" %>
+    <% when :finished %>
+      <% if current_user.follow? @order.mechanic %>
+        <%= link_to "取消收藏技师", unfollow_mechanic_path(@order.mechanic), class: "btn btn-block btn-negative" %>
+      <% else %>
+        <%= link_to "收藏技师", follow_mechanic_path(@order.mechanic), class: "btn btn-block btn-positive" %>
+      <% end %>
+      <%= link_to "点评技师", review_order_path(@order), class: "btn btn-block btn-positive" %>
+    <% end %>
+  <% end %>
+</div>

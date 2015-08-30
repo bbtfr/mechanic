@@ -9,14 +9,17 @@ module ActionSMS
         set_payload payload
 
         ihuyi_sms_service_url = "http://106.ihuyi.com/webservice/sms.php?method=Submit&account=#{Config["account"]}&password=#{Config["password"]}&mobile=#{to}&content=#{body}"
+        result = { success: true }
         begin
-          result = Hash.from_xml(open(URI::encode(ihuyi_sms_service_url)).read)
+          response = Hash.from_xml(open(URI::encode(ihuyi_sms_service_url)).read)
           Rails.logger.info("  Requested Ihuyi API #{ihuyi_sms_service_url}")
-          Rails.logger.info("  Result: #{result["SubmitResult"] rescue result}")
-          raise result["SubmitResult"]["msg"] unless result["SubmitResult"]["code"] == "2"
+          Rails.logger.info("  Result: #{response["SubmitResult"] rescue response}")
+          raise response["SubmitResult"]["msg"] unless response["SubmitResult"]["code"] == "2"
         rescue Exception => e
           Rails.logger.error("  Error occurred when delivering SMS: #{e}")
+          result = { success: false, error: e.message }
         end
+        result
       end
     end
 

@@ -12,8 +12,8 @@ class CreateOrders < ActiveRecord::Migration
       t.integer   :price
       t.text      :remark
 
-      t.integer   :professionality
-      t.integer   :timeliness
+      t.integer   :professionality, default: 4
+      t.integer   :timeliness, default: 4
       t.text      :review
 
       t.integer   :state_cd, default: 0
@@ -23,6 +23,12 @@ class CreateOrders < ActiveRecord::Migration
 
       t.integer   :bid_id
       t.index     :bid_id
+
+      t.attachment :mechanic_attach_1
+      t.attachment :mechanic_attach_2
+
+      t.attachment :user_attach_1
+      t.attachment :user_attach_2
 
       t.timestamps null: false
     end

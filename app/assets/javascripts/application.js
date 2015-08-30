@@ -18,7 +18,7 @@
 
 var removeOptions = function(options) {
   for (var i = options.length - 1; i > 0; i--) options[i].remove();
-}
+};
 
 var appendOptions = function(parent, values) {
   if (!values) return;
@@ -28,17 +28,28 @@ var appendOptions = function(parent, values) {
     option.value = values[i][1];
     parent.appendChild(option);
   }
-}
+};
+
+var fakeFileInput = function(fileInput, fakeInput) {
+  fileInput.style.display = "none";
+  fakeInput.addEventListener("click", function() {
+    fileInput.click();
+  });
+  fileInput.addEventListener("change", function() {
+    paths = this.value.split("\\");
+    order_mechanic_attach_1_button.value = paths[paths.length - 1];
+  });
+};
 
 var closeWindow = function() {
   if (window.wx) wx.closeWindow();
   else window.close();
-}
+};
 
 var ready = function(callback) {
   if (window.wx) wx.ready(callback);
   else callback();
-}
+};
 
 var xhrRequest = function(method, url, success, error) {
   var xhr = new XMLHttpRequest();
@@ -51,7 +62,7 @@ var xhrRequest = function(method, url, success, error) {
       else error();
     }
   }
-}
+};
 
 function jsonp(url, callback) {
   var callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
@@ -63,7 +74,6 @@ function jsonp(url, callback) {
 
   var script = document.createElement('script');
   script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
-  script.async = true;
   document.body.appendChild(script);
-}
+};
 

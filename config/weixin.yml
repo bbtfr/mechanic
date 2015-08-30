@@ -6,7 +6,7 @@ development:
   <<: *default
   mch_id: <%= ENV["WEIXIN_MCH_ID"] %>
   pay_key: <%= ENV["WEIXIN_PAY_KEY"] %>
-  order_template_id: "VscR6biHJXeZ97o1FL6bJWrhTsFWFvoPo6mneaQCzA4"
+  order_template_id: VscR6biHJXeZ97o1FL6bJWrhTsFWFvoPo6mneaQCzA4
 
 test:
   <<: *default

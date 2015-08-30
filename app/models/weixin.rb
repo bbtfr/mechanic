@@ -72,7 +72,7 @@ module Weixin
     def weixin_authorize_client_send method, *args
       Rails.logger.info "  Requested WeixinAuthorize API #{method} with params #{args.join(", ")}"
       response = Client.send method, *args
-      raise response if response.is_a?(WeixinAuthorize::ResultHandler) && response.code != 0
+      raise response.en_msg if response.is_a?(WeixinAuthorize::ResultHandler) && response.code != 0
       response
     rescue Exception => e
       Rails.logger.error "  Error occurred when requesting WeixinAuthorize API: #{e.message}"

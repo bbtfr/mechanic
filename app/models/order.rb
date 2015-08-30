@@ -13,7 +13,19 @@ class Order < ActiveRecord::Base
   belongs_to :bid
   has_many :bids
 
-  as_enum :state, pending: 0, canceled: 1, paid: 2, working: 3, finished: 4
+  as_enum :state, pending: 0, canceled: 1, paid: 2, working: 3,
+    confirming: 4, finished: 5
+
+  scope :available, proc { where("`orders`.`state_cd` > 1") }
+
+  has_attached_file :mechanic_attach_1, styles: { medium: "300x300>", thumb: "100x100#" }
+  validates_attachment_content_type :mechanic_attach_1, :content_type => /\Aimage\/.*\Z/
+  has_attached_file :mechanic_attach_2, styles: { medium: "300x300>", thumb: "100x100#" }
+  validates_attachment_content_type :mechanic_attach_1, :content_type => /\Aimage\/.*\Z/
+  has_attached_file :user_attach_1, styles: { medium: "300x300>", thumb: "100x100#" }
+  validates_attachment_content_type :user_attach_1, :content_type => /\Aimage\/.*\Z/
+  has_attached_file :user_attach_2, styles: { medium: "300x300>", thumb: "100x100#" }
+  validates_attachment_content_type :user_attach_1, :content_type => /\Aimage\/.*\Z/
 
   validates_presence_of :skill, :brand, :series, :quoted_price
 
@@ -26,11 +38,8 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def mechanic_nickname
-    mechanic && mechanic.user_nickname
-  end
-
   after_create do
+    SendOrderTemplateMessageJob.perform_later(self)
     UpdateOrderStateJob.set(wait: PendingTimeout).perform_later(self)
   end
 
@@ -41,6 +50,29 @@ class Order < ActiveRecord::Base
     self.mechanic_id = bid.mechanic_id
     self.price = quoted_price + bid.markup_price
     save
+  end
+
+  def pay
+    return false unless pending?
+    update_attribute(:state, Order.states[:paid])
+  end
+
+  def work
+    return false unless paid?
+    update_attribute(:state, Order.states[:working])
+  end
+
+  def finish
+    return false unless working?
+    update_attribute(:state, Order.states[:confirming])
+  end
+
+  def confirm
+    return false unless confirming?
+    user = mechanic.user
+    user.balance += price
+    user.save
+    update_attribute(:state, Order.states[:finished])
   end
 
   def title

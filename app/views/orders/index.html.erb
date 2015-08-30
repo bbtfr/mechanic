@@ -10,17 +10,19 @@
   </div>
 </nav>
 
-<% @orders = @orders.includes(:skill, :mechanic) %>
+<% @orders = @orders.includes(:skill, mechanic: :user) %>
 
-<div class="content-padded">
-  <%= index_for @orders, class: "table" do |i| %>
-    <%= i.attribute :appointment, format: :short %>
-    <%= i.attribute :skill, with: :name %>
-    <%= i.attribute :price %>
-    <%= i.attribute :mechanic, value: :mechanic_nickname %>
-    <%= i.actions :show do |act| %>
-      <%= act.action_link :cancel do %>
+<ul class="table-view">
+  <% @orders.each do |order| %>
+    <li class="table-view-cell media">
+      <%= link_to order_path(order), class: "navigate-right" do %>
+        <%= image_tag order.mechanic.user.avatar.url(:thumb), class: "media-object pull-left" %>
+        <div class="media-body">
+          <%= order.title %>
+          <p>预约时间：<%= l order.appointment, format: :short %></p>
+          <p>成交价格：<%= order.price %> 元</p>
+        </div>
       <% end %>
-    <% end %>
+    </li>
   <% end %>
-</div>
+</ul>

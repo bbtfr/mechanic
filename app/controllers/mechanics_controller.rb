@@ -1,20 +1,11 @@
 class MechanicsController < ApplicationController
-  def index
-    @mechanics = mechanic_klass.all
+  def follow
+    current_user.follow(params[:id])
+    redirect_to request.referer
   end
 
-  private
-
-    def find_mechanic
-      @order = order_klass.find(params[:id])
-    end
-
-    def mechanic_klass
-      Mechanic
-    end
-
-    def mechanic_params
-      params.require(:order).permit(:user_id, :mechanic_id, :address, :appointment,
-        :skill_id, :brand_id, :series_id, :quoted_price, :remark)
-    end
+  def unfollow
+    current_user.unfollow(params[:id])
+    redirect_to request.referer
+  end
 end

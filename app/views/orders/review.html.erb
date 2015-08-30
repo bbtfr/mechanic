@@ -7,20 +7,22 @@
 
   <div class="content-padded">
     <%= f.input :professionality do %>
-      <span class="icon icon-star-filled"></span>
-      <span class="icon icon-star-filled"></span>
-      <span class="icon icon-star-filled"></span>
-      <span class="icon icon-star-filled"></span>
-      <span class="icon icon-star-filled"></span>
-      <%= f.hidden_field :professionality, value: 5 %>
+      <% @order.professionality.times do %>
+        <span class="icon icon-star-filled"></span>
+      <% end %>
+      <% (5 - @order.professionality).times do %>
+        <span class="icon icon-star"></span>
+      <% end %>
+      <%= f.hidden_field :professionality %>
     <% end %>
     <%= f.input :timeliness do %>
-      <span class="icon icon-star-filled"></span>
-      <span class="icon icon-star-filled"></span>
-      <span class="icon icon-star-filled"></span>
-      <span class="icon icon-star-filled"></span>
-      <span class="icon icon-star-filled"></span>
-      <%= f.hidden_field :timeliness, value: 5 %>
+      <% @order.timeliness.times do %>
+        <span class="icon icon-star-filled"></span>
+      <% end %>
+      <% (5 - @order.timeliness).times do %>
+        <span class="icon icon-star"></span>
+      <% end %>
+      <%= f.hidden_field :timeliness %>
     <% end %>
     <%= f.input :review, input_html: { rows: 4 } %>
 
