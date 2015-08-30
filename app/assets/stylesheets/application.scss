@@ -13,14 +13,11 @@
  */
 
 @import "ratchet";
-body {
-  position: initial;
+body, .bar {
+  position: static;
 }
 .content-padded {
   margin: 11px 15px;
-}
-.content-with-bar {
-  margin-top: 55px;
 }
 
 .margin-top-large { margin-top: 50px; }
@@ -68,6 +65,12 @@ body {
 
   &.segmented-items-bordered .item {
     border-right: solid 1px #eee;
+  }
+}
+
+.media {
+  .media-object {
+    max-width: 60px;
   }
 }
 

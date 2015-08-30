@@ -12,7 +12,7 @@
 
 <% @orders = @orders.includes(:skill, :mechanic) %>
 
-<div class="content-padded content-with-bar">
+<div class="content-padded">
   <%= index_for @orders, class: "table" do |i| %>
     <%= i.attribute :appointment, format: :short %>
     <%= i.attribute :skill, with: :name %>

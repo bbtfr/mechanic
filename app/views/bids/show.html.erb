@@ -33,10 +33,12 @@
   <% end %>
 </div>
 
-<script type="text/javascript">
-  var interval = setInterval(function() {
-    xhrRequest("GET", window.location.href + ".js", function(xhr) {
-      eval(xhr.responseText);
-    });
-  }, 5000)
-</script>
+<% if current_user.is_mechanic %>
+  <script type="text/javascript">
+    var interval = setInterval(function() {
+      xhrRequest("GET", window.location.href + ".js", function(xhr) {
+        eval(xhr.responseText);
+      });
+    }, 5000)
+  </script>
+<% end %>

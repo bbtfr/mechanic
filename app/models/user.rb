@@ -34,4 +34,12 @@ class User < ActiveRecord::Base
   def confirm_mobile!
     update_attribute(:mobile_confirmed, true)
   end
+
+  def total_cost
+    0
+  end
+
+  def orders_count
+    0
+  end
 end

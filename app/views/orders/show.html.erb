@@ -20,17 +20,17 @@
       <%= image_tag @order.mechanic.user.avatar.url(:thumb), class: "media-object pull-left" %>
       <div class="media-body">
         <div class="media-block">
-          <p class="pull-right">加价 <%= @bid.markup_price %> 元</p>
-          <%= @bid.mechanic.user_nickname %>
+          <p class="pull-right">加价 <%= @order.bid.markup_price %> 元</p>
+          <%= @order.mechanic.user_nickname %>
         </div>
         <div class="media-block">
-          <p class="pull-right">接单 <%= @bid.mechanic.orders_count %> 次</p>
-          <p>专业 <%= @bid.mechanic.professionality_average %> 分 守时 <%= @bid.mechanic.timeliness_average %> 分</p>
+          <p class="pull-right">接单 <%= @order.mechanic.orders_count %> 次</p>
+          <p>专业 <%= @order.mechanic.professionality_average %> 分 守时 <%= @order.mechanic.timeliness_average %> 分</p>
         </div>
       </div>
     </li>
   </ul>
   <div class="content-padded">
-    个人简介：<%= @bid.mechanic.description %>
+    个人简介：<%= @order.mechanic.description %>
   </div>
 <% end %>

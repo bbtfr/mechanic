@@ -2,7 +2,22 @@ class UserSessionsController < ApplicationController
   skip_before_filter :authenticate!
 
   def new
+    new_weixin
     @user_session = UserSession.new
+  end
+
+  def new_weixin
+    return unless weixin?
+    if params.key? "code"
+      @openid = Weixin.get_oauth_access_token(params["code"]).result["openid"]
+      user = User.where(weixin_openid: @openid).first
+      if user && user.mobile_confirmed
+        UserSession.create(user)
+        redirect_to session[:original_url] || root_path
+      end
+    else
+      redirect_to Weixin.authorize_url(request.url)
+    end
   end
 
   def create

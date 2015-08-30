@@ -15,7 +15,7 @@ module ActionSMS
           Rails.logger.info("  Result: #{result["SubmitResult"] rescue result}")
           raise result["SubmitResult"]["msg"] unless result["SubmitResult"]["code"] == "2"
         rescue Exception => e
-          Rails.logger.info("  Error occurred when delivering SMS: #{e}")
+          Rails.logger.error("  Error occurred when delivering SMS: #{e}")
         end
       end
     end

@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
-  before_filter :find_order, only: [ :show, :review, :update ]
-  before_filter :redirect_to_bids, only: [ :new, :create ]
+  before_filter :find_order, only: [ :show, :review, :update, :pay ]
+  before_filter :redirect, only: [ :new, :create ]
 
   def index
     @state = if %w(pendings paids workings finisheds).include? params[:state]
@@ -20,7 +20,7 @@ class OrdersController < ApplicationController
     @order = order_klass.new(order_params)
     if @order.save
       SendOrderTemplateMessageJob.perform_later @order
-      redirect_to order_bids_path(@order.id)
+      redirect_to order_bids_path(@order)
     else
       render :new
     end
@@ -28,21 +28,31 @@ class OrdersController < ApplicationController
 
   def update
     if @order.update_attributes(order_params)
-      redirect_to order_path(@order.id)
+      redirect_to order_path(@order)
     else
       render :new
     end
   end
 
   def pay
-    @order_params = Weixin.payment current_user, @order, request
+    @order_params = Weixin.payment current_user, @order, request.remote_ip
+    if @order_params
+      flash[:notice] = "正在创建支付订单..."
+    else
+      flash[:error] = "支付订单创建失败，请稍后再试..."
+    end
   end
 
   private
 
-    def redirect_to_bids
-      order = order_klass.pendings.first
-      redirect_to order_bids_path(order) if order
+    def redirect
+      if current_user.is_mechanic
+        flash[:notice] = "技师无法创建预约订单..."
+        redirect_to orders_path
+      else
+        order = order_klass.pendings.first
+        redirect_to order_bids_path(order) if order
+      end
     end
 
     def find_order
@@ -53,7 +63,7 @@ class OrdersController < ApplicationController
       if current_user.is_mechanic
         Order.where(mechanic_id: current_user.mechanic_id)
       else
-        Order.where(user_id: current_user.id)
+        Order.where(user_id: current_user)
       end
     end
 

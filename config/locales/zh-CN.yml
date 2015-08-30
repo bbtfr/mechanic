@@ -27,9 +27,13 @@ zh-CN:
         balance: 余额
         is_mechanic: 我是技师
         skill_ids: 擅长技能
+        skills: 擅长技能
         province_id: 省份
+        province: 省份
         city_id: 城市
+        city: 城市
         district_id: 区县
+        district: 区县
         description: 个人简介
       user_group:
         nickname: 分堂昵称
@@ -39,8 +43,11 @@ zh-CN:
         mechanic: 技师
         address: 地址
         appointment: 预约时间
+        skill_id: 类型
         skill: 类型
+        brand_id: 车型
         brand: 车型
+        series_id: 车系
         series: 车系
         quoted_price: 出价
         remark: 备注

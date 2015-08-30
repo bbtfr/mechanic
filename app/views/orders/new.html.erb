@@ -22,8 +22,8 @@ series_map = Series.all.to_a.
     <%= f.input :address %>
     <%= f.input :appointment %>
     <%= f.association :skill %>
-    <%= f.association :brand %>
 
+    <%= f.input :brand_id, collection: Brand.all %>
     <%= f.input :series_id, collection: series_map[@order.brand_id] || [] %>
 
     <%= f.input :quoted_price %>
@@ -46,8 +46,6 @@ series_map = Series.all.to_a.
   brand.addEventListener("change", brandCallback);
 
   var getLocationCallback = function(res) {
-    console.log(res);
-
     url = "http://apis.map.qq.com/ws/geocoder/v1";
     url += "?location=" + encodeURI(res.latitude + "," + res.longitude);
     url += "&coord_type=1"
@@ -63,16 +61,20 @@ series_map = Series.all.to_a.
     });
   };
 
-  if (window.wx) {
+  <% if weixin? %>
+    wx.config(<%= raw Weixin.get_jssign_package(request.url).merge(jsApiList: %w(getLocation)).to_json %>);
+    wx.error(function(res){ console.log(res) });
     wx.ready(function() {
       wx.getLocation({
         type: 'wgs84',
         success: getLocationCallback
       });
     });
-  } else if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      getLocationCallback(position.coords);
-    });
-  }
+  <% else %>
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        getLocationCallback(position.coords);
+      });
+    }
+  <% end %>
 </script>

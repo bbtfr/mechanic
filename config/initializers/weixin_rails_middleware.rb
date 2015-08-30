@@ -1,6 +1,7 @@
 # encoding: utf-8
 # Use this hook to configure WeixinRailsMiddleware bahaviors.
 WeixinRailsMiddleware.configure do |config|
+  Config = YAML.load(ERB.new(File.read("#{Rails.root}/config/weixin.yml")).result)[Rails.env]
 
   ## NOTE:
   ## If you config all them, it will use `weixin_token_string` default
@@ -18,7 +19,7 @@ WeixinRailsMiddleware.configure do |config|
   config.weixin_secret_string = '2pNLlVETFlHyGlExgoH5h0daKIu_-iUv'
   # 加密配置，如果需要加密，配置以下参数
   # config.encoding_aes_key = 'dd837765fede73273b1e4cb3f846469abd3e08d6fed'
-  config.app_id = "wx46c1198fe2a43173"
+  config.app_id = Config["app_id"]
 
   ## You can custom your adapter to validate your weixin account ##
   # Wiki https://github.com/lanrion/weixin_rails_middleware/wiki/Custom-Adapter

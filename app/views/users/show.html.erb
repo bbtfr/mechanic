@@ -13,15 +13,15 @@
 <% if current_user.is_mechanic %>
   <div class="hero segmented-items segmented-items-bordered text-center">
     <div class="item">
-      专业5分<br><br>
+      专业 <%= current_user.mechanic.professionality_average %> 分<br><br>
 
-      <h2>100</h2>
+      <h2><%= number_with_delimiter(current_user.mechanic.orders_count) %></h2>
       <p>预约次数</p>
     </div>
     <div class="item">
-      守时5分<br><br>
+      守时 <%= current_user.mechanic.timeliness_average %> 分<br><br>
 
-      <h2>1,000</h2>
+      <h2><%= number_with_delimiter(current_user.mechanic.total_income) %></h2>
       <p>总收入</p>
     </div>
   </div>
@@ -29,12 +29,12 @@
 <% else %>
   <div class="hero segmented-items segmented-items-bordered text-center">
     <div class="item">
-      <h2>100</h2>
+      <h2><%= number_with_delimiter(current_user.orders_count) %></h2>
       <p>用人次数</p>
     </div>
     <div class="item">
-      <h2>1,000</h2>
-      <p>用人次数</p>
+      <h2><%= number_with_delimiter(current_user.total_cost) %></h2>
+      <p>总支出</p>
     </div>
   </div>
 

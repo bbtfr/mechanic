@@ -11,18 +11,23 @@ class BidsController < ApplicationController
     @bid = klass.first || klass.new(bid_params)
     if @bid.persisted?
       flash[:notice] = "已经参与过本次竞价，无法修改加价"
-      redirect_to order_bid_path(@order.id, @bid.id)
+      redirect_to order_bid_path(@order, @bid)
     elsif @bid.save
       flash[:success] = "竞价成功，顾客正在选人..."
-      redirect_to order_bid_path(@order.id, @bid.id)
+      redirect_to order_bid_path(@order, @bid)
     else
       render :new
     end
   end
 
   def pick
-    flash[:success] = "成功选中技师！" if @order.pick @bid
-    render :show
+    if @order.pick @bid
+      flash[:success] = "成功选中技师！"
+      redirect_to pay_order_path @order
+    else
+      flash[:error] = "订单已失效..."
+      render :show
+    end
   end
 
   private

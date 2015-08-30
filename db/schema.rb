@@ -80,10 +80,12 @@ ActiveRecord::Schema.define(version: 20150822040527) do
     t.text     "review"
     t.integer  "state_cd",            default: 0
     t.integer  "mechanic_sent_count", default: 0
+    t.integer  "bid_id"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
   end
 
+  add_index "orders", ["bid_id"], name: "index_orders_on_bid_id"
   add_index "orders", ["state_cd"], name: "index_orders_on_state_cd"
 
   create_table "provinces", force: :cascade do |t|
