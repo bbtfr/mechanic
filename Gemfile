@@ -41,6 +41,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'ratchet-sass'
 gem 'bootstrap-sass'
+gem 'datatables-rails-bs3'
 gem 'quiet_assets'
 
 # Use ActiveModel has_secure_password

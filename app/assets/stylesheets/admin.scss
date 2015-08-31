@@ -1,0 +1,26 @@
+@import "dataTables/jquery.dataTables.bootstrap";
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+.table {
+  > thead, > tbody, > tfoot {
+    > tr {
+      > th, > td {
+        vertical-align: middle;
+        text-align: center;
+      }
+    }
+  }
+
+  .action {
+    margin: 0 2.5px;
+  }
+
+  .attr_avatar img {
+    width: 60px;
+  }
+}
+
+.dataTables_length select {
+  vertical-align: text-bottom;
+}

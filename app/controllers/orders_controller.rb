@@ -41,7 +41,7 @@ class OrdersController < ApplicationController
     # else
     #   flash[:error] = "支付订单创建失败，请稍后再试..."
     # end
-    @order.pay
+    @order.pay!
     redirect_to result_order_path(@order)
   end
 
@@ -55,14 +55,14 @@ class OrdersController < ApplicationController
   end
 
   def work
-    @order.work
+    @order.work!
     render :show
   end
 
   def finish
     if @order.update_attributes(finish_order_params)
       flash[:success] = "成功提交完工信息！<br>等待用户确认..."
-      @order.finish
+      @order.finish!
       redirect_to order_path(@order)
     else
       render :show
@@ -70,7 +70,7 @@ class OrdersController < ApplicationController
   end
 
   def confirm
-    @order.confirm
+    @order.confirm!
     render :show
   end
 

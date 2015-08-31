@@ -46,19 +46,19 @@ class User < ActiveRecord::Base
   end
 
   def total_cost
-    orders.available.sum(:price)
+    orders.available.sum(:price) || 0
   end
 
   def orders_count
-    orders.available.count
+    orders.available.count || 0
   end
 
-  def follow mechanic
+  def follow! mechanic
     mechanic = mechanic.id if mechanic.is_a? Mechanic
     Fellowship.where(mechanic_id: mechanic, user: self).first_or_create
   end
 
-  def unfollow mechanic
+  def unfollow! mechanic
     mechanic = mechanic.id if mechanic.is_a? Mechanic
     Fellowship.where(mechanic_id: mechanic, user: self).destroy_all
   end

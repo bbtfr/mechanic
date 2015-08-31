@@ -90,6 +90,8 @@ GEM
     colorize (0.7.7)
     columnize (0.9.0)
     connection_pool (2.2.0)
+    datatables-rails-bs3 (0.0.6)
+      jquery-rails
     debug_inspector (0.0.2)
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
@@ -278,6 +280,7 @@ DEPENDENCIES
   capistrano-sidekiq
   capistrano-unicorn-nginx
   coffee-rails (~> 4.1.0)
+  datatables-rails-bs3
   dotenv-rails
   index_for
   jbuilder (~> 2.0)

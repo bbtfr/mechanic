@@ -1,0 +1,7 @@
+development:
+  username: admin
+  password: admin
+
+production:
+  username: <%= ENV["ADMIN_USERNAME"] %>
+  password: <%= ENV["ADMIN_PASSWORD"] %>

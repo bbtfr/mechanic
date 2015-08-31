@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     member do
       get :follow
       get :unfollow
+      get :reviews
     end
   end
 
@@ -33,6 +34,25 @@ Rails.application.routes.draw do
 
       get :review
     end
+  end
+
+  namespace :admin do
+    resources :users
+    resources :user_groups do
+      collection do
+        get :confirmed
+      end
+      member do
+        get :confirm
+      end
+    end
+    resources :mechanics
+    resources :orders
+    resource :setting do
+      get :series
+    end
+
+    root to: "users#index"
   end
 
   root to: "users#show"

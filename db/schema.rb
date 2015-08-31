@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150830100443) do
+ActiveRecord::Schema.define(version: 20150831134519) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -136,8 +136,9 @@ ActiveRecord::Schema.define(version: 20150830100443) do
     t.string   "nickname"
     t.text     "description"
     t.integer  "user_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "confirmed",   default: false
   end
 
   add_index "user_groups", ["user_id"], name: "index_user_groups_on_user_id"

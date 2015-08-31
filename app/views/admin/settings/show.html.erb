@@ -1,0 +1,7 @@
+<%= render "side_menu" %>
+
+<div class="col-md-10 col-xs-8" id="collapseExample">
+  <%= index_for @brands, class: "table table-hover data-tables" do |u| %>
+    <%= u.attribute :name %>
+  <% end %>
+</div>

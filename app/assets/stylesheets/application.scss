@@ -126,7 +126,25 @@ hr {
   padding: 0;
 }
 
-@import "user_sessions";
+// user sessions
+#user_session_verification_code {
+  max-width: 40%;
+  max-width: calc(75% - 125px);
+}
+
+#user_session_verification_code_button {
+  float: right;
+  width: 33%;
+  width: calc(115px);
+  font-size: 17px;
+  padding: 8px;
+}
+
+#new_session_desc {
+  padding-left: 20px;
+  font-size: 14px;
+  color: #777;
+}
 
 ::-webkit-scrollbar {
   display: none;

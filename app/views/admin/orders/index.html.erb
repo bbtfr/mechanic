@@ -1,0 +1,10 @@
+<h3 class="page-header">订单管理</h3>
+
+<%= index_for @orders, class: "table table-hover data-tables" do |u| %>
+  <%= u.attribute :user, with: :nickname %>
+  <%= u.attribute :mechanic, with: :"user.nickname" %>
+  <%= u.attribute :skill, with: :name %>
+  <%= u.attribute :price %>
+
+  <%= u.actions :admin %>
+<% end %>

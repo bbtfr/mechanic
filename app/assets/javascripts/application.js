@@ -14,7 +14,6 @@
 // require jquery_ujs
 // require turbolinks
 // require ratchet
-//= require_tree .
 
 var removeOptions = function(options) {
   for (var i = options.length - 1; i > 0; i--) options[i].remove();

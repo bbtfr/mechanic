@@ -1,6 +1,7 @@
 class Order < ActiveRecord::Base
   PendingTimeout = 5.minutes
   PayingTimeout = 5.minutes
+  ConfirmingTimeout = 5.minutes
 
   attr_accessor :adcode
 
@@ -16,7 +17,7 @@ class Order < ActiveRecord::Base
   as_enum :state, pending: 0, canceled: 1, paid: 2, working: 3,
     confirming: 4, finished: 5
 
-  scope :available, proc { where("`orders`.`state_cd` > 1") }
+  scope :available, proc { where('"orders"."state_cd" > 1') }
 
   has_attached_file :mechanic_attach_1, styles: { medium: "300x300>", thumb: "100x100#" }
   validates_attachment_content_type :mechanic_attach_1, :content_type => /\Aimage\/.*\Z/
@@ -30,10 +31,14 @@ class Order < ActiveRecord::Base
   validates_presence_of :skill, :brand, :series, :quoted_price
 
   after_initialize do
-    if persisted? && pending?
-      if (!mechanic_id && Time.now - created_at > PendingTimeout) ||
-        (mechanic_id && Time.now - updated_at > PayingTimeout)
-          update_attribute(:state_cd, Order.states[:canceled])
+    if persisted?
+      if pending?
+        if (!mechanic_id && Time.now - created_at > PendingTimeout) ||
+          (mechanic_id && Time.now - updated_at > PayingTimeout)
+            cancel!
+        end
+      elsif confirming? && Time.now - updated_at > ConfirmingTimeout
+        confirm!
       end
     end
   end
@@ -43,7 +48,7 @@ class Order < ActiveRecord::Base
     UpdateOrderStateJob.set(wait: PendingTimeout).perform_later(self)
   end
 
-  def pick bid
+  def pick! bid
     return false if canceled?
     UpdateOrderStateJob.set(wait: PayingTimeout).perform_later(self)
     self.bid_id = bid.id
@@ -52,22 +57,28 @@ class Order < ActiveRecord::Base
     save
   end
 
-  def pay
+  def cancel!
+    return false unless pending?
+    update_attribute(:state_cd, Order.states[:canceled])
+  end
+
+  def pay!
     return false unless pending?
     update_attribute(:state, Order.states[:paid])
   end
 
-  def work
+  def work!
     return false unless paid?
     update_attribute(:state, Order.states[:working])
   end
 
-  def finish
+  def finish!
     return false unless working?
     update_attribute(:state, Order.states[:confirming])
+    UpdateOrderStateJob.set(wait: ConfirmingTimeout).perform_later(self)
   end
 
-  def confirm
+  def confirm!
     return false unless confirming?
     user = mechanic.user
     user.balance += price
@@ -77,5 +88,9 @@ class Order < ActiveRecord::Base
 
   def title
     "#{mechanic.user.nickname} #{skill.name}"
+  end
+
+  def user_nickname
+    user.nickname
   end
 end

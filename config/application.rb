@@ -8,13 +8,6 @@ Bundler.require(*Rails.groups)
 
 module MechanicApp
   class Application < Rails::Application
-        config.to_prepare do
-      # Load application's model / class decorators
-      Dir.glob(File.join(File.dirname(__FILE__), "../app/**/*_decorator*.rb")) do |c|
-        Rails.configuration.cache_classes ? require(c) : load(c)
-      end
-    end
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -36,7 +29,13 @@ module MechanicApp
     # Precompile additional assets
     config.assets.precompile += %w( *.svg *.eot *.woff *.ttf )
 
-    config.action_view.field_error_proc = proc do |html_tag, instance| html_tag end
     config.active_job.queue_adapter = :sidekiq
+
+    config.to_prepare do
+      # Load application's model / class decorators
+      Dir.glob(File.join(File.dirname(__FILE__), "../app/**/*_decorator*.rb")) do |c|
+        Rails.configuration.cache_classes ? require(c) : load(c)
+      end
+    end
   end
 end

@@ -20,7 +20,9 @@ zh-CN:
   activerecord:
     attributes:
       user:
+        avatar: 头像
         nickname: 姓名
+        weixin_openid: 微信号
         gender: 性别
         address: 地址
         mobile: 手机号码
@@ -38,6 +40,7 @@ zh-CN:
       user_group:
         nickname: 分堂昵称
         description: 申请简介
+        user: 堂主
       order:
         user: 发布人
         mechanic: 技师
@@ -59,3 +62,8 @@ zh-CN:
         mechanic_attach_2: 施工照片
       bid:
         markup_price: 加价
+      brand:
+        name: 名称
+      series:
+        name: 名称
+        brand: 车型

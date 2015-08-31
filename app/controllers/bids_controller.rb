@@ -21,7 +21,7 @@ class BidsController < ApplicationController
   end
 
   def pick
-    if @order.pick @bid
+    if @order.pick!(@bid)
       flash[:success] = "成功选中技师！"
       redirect_to pay_order_path @order
     else

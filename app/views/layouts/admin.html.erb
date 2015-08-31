@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>后台管理</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <%= stylesheet_link_tag    'admin', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'admin', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <!-- <script src="http://jsconsole.com/remote.js?bbtfr"></script> -->
+
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <%= javascript_include_tag  "html5shiv.min" %>
+    <%= javascript_include_tag  "respond.min" %>
+  <![endif]-->
+</head>
+<body>
+<% bootstrap_flash_class = { success: 'alert-success', error: 'alert-danger', alert: 'alert-warning', notice: 'alert-info'} %>
+<% flash.each do |type, message| %>
+  <div class="alert alert-block <%= bootstrap_flash_class[type.to_sym] %>">
+    <%= raw message %>
+  </div>
+<% end %>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">后台管理</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="<%= "active" if controller_name == "users" %>"><%= link_to "商家", admin_users_path %></li>
+        <li class="<%= "active" if controller_name == "user_groups" %>"><%= link_to "堂主", admin_user_groups_path %></li>
+        <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "技师", admin_mechanics_path %></li>
+        <li class="<%= "active" if controller_name == "orders" %>"><%= link_to "订单", admin_orders_path %></li>
+        <li class="<%= "active" if controller_name == "books" %>"><%= link_to "账目提现", admin_users_path %></li>
+        <li class="<%= "active" if controller_name == "settings" %>"><%= link_to "设置", admin_setting_path %></li>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container">
+<%= yield %>
+</div>
+
+</body>
+</html>
