@@ -27,6 +27,6 @@ class Mechanic < ActiveRecord::Base
   end
 
   def orders_count
-    orders.count
+    orders.available.count || 0
   end
 end

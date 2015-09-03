@@ -54,7 +54,7 @@ series_map = Series.all.to_a.
 
     jsonp(url, function(res) {
       address = res["result"]["formatted_addresses"]["recommend"];
-      order_lbs_id.value = res["result"]["ad_info"]["lbs_id"];
+      order_lbs_id.value = res["result"]["ad_info"]["adcode"];
       if (order_address.value !== address && confirm("使用定位地址：" + address)) {
         order_address.value = address;
       }

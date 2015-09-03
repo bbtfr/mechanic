@@ -2,7 +2,7 @@ class UserGroupsController < ApplicationController
 
   def new
     @user_group = user_group_klass.first || user_group_klass.new
-    flash[:notice] = "堂主申请正在审核中..." if @user_group.persisted?
+    flash.now[:notice] = "堂主申请正在审核中..." if @user_group.persisted?
   end
 
   def create

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150830100443) do
+ActiveRecord::Schema.define(version: 20150903102920) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 20150830100443) do
     t.integer  "quoted_price"
     t.integer  "price"
     t.text     "remark"
+    t.boolean  "avaliable",                      default: false
     t.integer  "professionality",                default: 4
     t.integer  "timeliness",                     default: 4
     t.text     "review"
@@ -108,8 +109,8 @@ ActiveRecord::Schema.define(version: 20150830100443) do
     t.string   "user_attach_2_content_type"
     t.integer  "user_attach_2_file_size"
     t.datetime "user_attach_2_updated_at"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
   end
 
   add_index "orders", ["bid_id"], name: "index_orders_on_bid_id"
@@ -169,5 +170,16 @@ ActiveRecord::Schema.define(version: 20150830100443) do
   add_index "users", ["mechanic_id"], name: "index_users_on_mechanic_id"
   add_index "users", ["mobile"], name: "index_users_on_mobile", unique: true
   add_index "users", ["user_group_id"], name: "index_users_on_user_group_id"
+
+  create_table "withdrawals", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "amount"
+    t.integer  "state_cd",   default: 0
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "withdrawals", ["state_cd"], name: "index_withdrawals_on_state_cd"
+  add_index "withdrawals", ["user_id"], name: "index_withdrawals_on_user_id"
 
 end

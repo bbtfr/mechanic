@@ -23,9 +23,9 @@ class BidsController < ApplicationController
   def pick
     if @order.pick!(@bid)
       flash[:success] = "成功选中技师！"
-      redirect_to pay_order_path @order
+      redirect_to pay_orders_path @order
     else
-      flash[:error] = "订单已失效..."
+      flash.now[:error] = "订单已失效..."
       render :show
     end
   end

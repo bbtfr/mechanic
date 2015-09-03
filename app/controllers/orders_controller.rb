@@ -1,5 +1,6 @@
 class OrdersController < ApplicationController
-  before_filter :find_order, except: [ :index, :new, :create ]
+  skip_before_filter :verify_authenticity_token, :authenticate!, only: [ :notify ]
+  before_filter :find_order, except: [ :index, :new, :create, :notify ]
   before_filter :redirect_pending, only: [ :new, :create ]
   before_filter :redirect_owner, only: [ :update ]
 
@@ -35,11 +36,17 @@ class OrdersController < ApplicationController
   end
 
   def pay
-    @order_params = Weixin.payment current_user, @order, request.remote_ip
+    @order_params, response = Weixin.payment current_user, @order, request.remote_ip
     if @order_params
-      flash[:notice] = "正在创建支付订单..."
+      flash.now[:notice] = "正在创建支付订单..."
     else
-      flash[:error] = "支付订单创建失败，请稍后再试..."
+      if response["err_code"] == "ORDERPAID"
+        @order.pay!
+        flash[:error] = response["err_code_des"]
+        redirect_to order_path(@order)
+      else
+        flash.now[:error] = response["err_code_des"]
+      end
     end
   end
 
@@ -48,7 +55,7 @@ class OrdersController < ApplicationController
 
     if WxPay::Sign.verify?(result)
       # find your order and process the post-paid logic.
-      @order.pay!
+      Order.find(params[:id]).pay!
       render :xml => {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
     else
       render :xml => {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
@@ -60,7 +67,7 @@ class OrdersController < ApplicationController
       flash[:success] = "成功支付订单！"
       redirect_to order_path(@order)
     else
-      flash[:notice] = "正在查询订单支付结果..."
+      flash.now[:notice] = "正在查询订单支付结果..."
     end
   end
 
@@ -71,8 +78,8 @@ class OrdersController < ApplicationController
 
   def finish
     if @order.update_attributes(finish_order_params)
-      flash[:success] = "成功提交完工信息！<br>等待用户确认..."
       @order.finish!
+      flash[:success] = "成功提交完工信息！<br>等待用户确认..."
       redirect_to order_path(@order)
     else
       render :show

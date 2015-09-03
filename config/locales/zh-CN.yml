@@ -72,3 +72,5 @@ zh-CN:
       series:
         name: 名称
         brand: 车型
+      withdrawal:
+        amount: 金额

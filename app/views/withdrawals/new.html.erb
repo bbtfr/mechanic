@@ -1,0 +1,19 @@
+<%= content_for :title do %>
+  提现申请
+<% end %>
+
+
+<%= simple_form_for(@withdrawal) do |f| %>
+  <%= f.error_messages %>
+
+  <div class="content-padded margin-top-large">
+    <%= f.input :amount %>
+    <%= f.button :submit, "确定", class: "btn-block btn-positive" %>
+  </div>
+<% end %>
+
+<div class="content-padded margin-top-large">
+  <p>
+    备注：由于微信企业付款API的限制，每笔付款金额不能小于100元，给您带来的不便敬请谅解。
+  </p>
+</div>

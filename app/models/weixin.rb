@@ -1,10 +1,17 @@
 module Weixin
   Config = YAML.load(ERB.new(File.read("#{Rails.root}/config/weixin.yml")).result)[Rails.env]
   BaseURL = ENV["BASE_URL"] || "http://mechanic.dev.com"
+  LocalIP = ENV["LOCAL_IP"] || "127.0.0.1"
 
-  WxPay.appid = Config["app_id"]
-  WxPay.key = Config["pay_key"]
+  WxPay.appid = Config["app_id"].to_s
   WxPay.mch_id = Config["mch_id"].to_s
+  WxPay.key = Config["pay_key"]
+
+  if Config["p12_path"]
+    P12 = OpenSSL::PKCS12.new(File.read(Config["p12_path"]), WxPay.mch_id)
+    WxPay.client_key = P12.key
+    WxPay.client_cert = P12.certificate
+  end
 
   Client = WeixinAuthorize::Client.new(Config["app_id"], Config["app_secret"])
 
@@ -52,7 +59,7 @@ module Weixin
       weixin_authorize_client_send :create_menu, menu
     end
 
-    def send_order_template_message user, order
+    def send_create_order_message user, order
       weixin_authorize_client_send :send_template_msg,
         user.weixin_openid,
         OrderTemplate,
@@ -65,7 +72,41 @@ module Weixin
           keyword3: format_template_data("#{order.brand.try :name} #{order.series.try :name}"),
           keyword4: format_template_data("#{order.quoted_price} 元"),
           keyword5: format_template_data(order.remark.presence || "无"),
-          remark: format_template_data("\r\n点击详情去接单！")
+          remark: format_template_data("点击详情去接单！")
+        }
+    end
+
+    def send_paid_order_message order
+      weixin_authorize_client_send :send_template_msg,
+        order.user.weixin_openid,
+        OrderTemplate,
+        "#{BaseURL}/orders/#{order.id}",
+        TemplateTopColor,
+        {
+          first: format_template_data("恭喜您成功预约技师 #{order.mechanic.user_nickname} 为您 #{order.skill.try :name}"),
+          keyword1: format_template_data(I18n.l(order.appointment, format: :long)),
+          keyword2: format_template_data(order.skill.try :name),
+          keyword3: format_template_data("#{order.brand.try :name} #{order.series.try :name}"),
+          keyword4: format_template_data("#{order.price} 元"),
+          keyword5: format_template_data(order.remark.presence || "无"),
+          remark: format_template_data("\r\n点击查看订单详情！")
+        }
+    end
+
+    def send_confirm_order_message order
+      weixin_authorize_client_send :send_template_msg,
+        order.user.weixin_openid,
+        OrderTemplate,
+        "#{BaseURL}/orders/#{order.id}",
+        TemplateTopColor,
+        {
+          first: format_template_data("#{order.mechanic.user_nickname} 刚刚完成了施工"),
+          keyword1: format_template_data(I18n.l(order.appointment, format: :long)),
+          keyword2: format_template_data(order.skill.try :name),
+          keyword3: format_template_data("#{order.brand.try :name} #{order.series.try :name}"),
+          keyword4: format_template_data("#{order.price} 元"),
+          keyword5: format_template_data(order.remark.presence || "无"),
+          remark: format_template_data("\r\n点击详情去确认完工！")
         }
     end
 
@@ -96,7 +137,7 @@ module Weixin
       params = {
         body: order.title,
         out_trade_no: "order#{order.id}created_at#{order.created_at.to_i}",
-        total_fee: 1,
+        total_fee: order.price * 100,
         spbill_create_ip: remote_ip,
         notify_url: "#{BaseURL}/orders/#{order.id}/notify",
         trade_type: "JSAPI", # could be "JSAPI", "NATIVE" or "APP",
@@ -107,7 +148,7 @@ module Weixin
       response = WxPay::Service.invoke_unifiedorder params
       Rails.logger.info("  Result: #{response}")
 
-      return false unless response.success?
+      return false, response unless response.success?
 
       params = {
         appId: Config["app_id"],
@@ -122,9 +163,26 @@ module Weixin
       params.merge!(paySign: pay_sign)
       Rails.logger.info("  Result: #{params}")
 
-      params
+      return params, response
     rescue Exception => e
       Rails.logger.error("  Error occurred when requesting WxPay API: #{e.message}")
+    end
+
+    def withdrawal withdrawal
+      params = {
+        desc: withdrawal.title,
+        partner_trade_no: "withdrawal#{withdrawal.id}created_at#{withdrawal.created_at.to_i}",
+        amount: withdrawal.amount * 100,
+        check_name: "NO_CHECK",
+        spbill_create_ip: LocalIP,
+        openid: withdrawal.user.weixin_openid
+      }
+
+      Rails.logger.info("  Requested WxPay API invoke_transfer with params #{params}")
+      response = WxPay::Service.invoke_transfer params
+      Rails.logger.info("  Result: #{response}")
+
+      return response
     end
 
     def audit_subscribe_event keyword, weixin_openid

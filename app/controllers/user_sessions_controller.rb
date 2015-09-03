@@ -26,9 +26,9 @@ class UserSessionsController < ApplicationController
 
     if params.key? "verification_code"
       if @user.persisted? ? @user.reset_verification_code! : @user.save
-        flash[:notice] = "验证码已发送，请稍等片刻..."
+        flash.now[:notice] = "验证码已发送，请稍等片刻..."
       else
-        flash[:error] = @user.errors.full_messages.last
+        flash.now[:error] = @user.errors.full_messages.last
       end
       render :new
     else

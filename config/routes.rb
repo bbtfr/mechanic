@@ -26,9 +26,12 @@ Rails.application.routes.draw do
       end
     end
 
+    collection do
+      get :"pay/:id", action: :pay, as: :pay
+    end
+
     member do
       get :refund
-      get :pay
       post :notify
       get :result
 
@@ -39,6 +42,8 @@ Rails.application.routes.draw do
       get :review
     end
   end
+
+  resources :withdrawals
 
   namespace :admin do
     resources :users

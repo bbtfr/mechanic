@@ -2,7 +2,10 @@ class CreateOrders < ActiveRecord::Migration
   def change
     create_table :orders do |t|
       t.integer   :user_id
+      t.index     :user_id
       t.integer   :mechanic_id
+      t.index     :mechanic_id
+
       t.string    :address
       t.datetime  :appointment
       t.integer   :skill_id

@@ -1,7 +1,7 @@
 class Order < ActiveRecord::Base
   PendingTimeout = 5.minutes
-  PayingTimeout = 5.minutes
-  ConfirmingTimeout = 5.minutes
+  PayingTimeout = 60.minutes
+  ConfirmingTimeout = 60.minutes
 
   belongs_to :skill
   belongs_to :brand
@@ -12,10 +12,10 @@ class Order < ActiveRecord::Base
   belongs_to :bid
   has_many :bids
 
-  as_enum :state, pending: 0, canceled: 1, paid: 2, working: 3,
-    confirming: 4, finished: 5
+  as_enum :state, pending: 0, canceled: 1, refunded: 2, paid: 3, working: 4,
+    confirming: 5, finished: 6
 
-  scope :available, proc { where('"orders"."state_cd" > 1') }
+  scope :available, proc { where('"orders"."state_cd" > 2') }
 
   has_attached_file :mechanic_attach_1, styles: { medium: "300x300>", thumb: "100x100#" }
   validates_attachment_content_type :mechanic_attach_1, :content_type => /\Aimage\/.*\Z/
@@ -26,6 +26,7 @@ class Order < ActiveRecord::Base
   has_attached_file :user_attach_2, styles: { medium: "300x300>", thumb: "100x100#" }
   validates_attachment_content_type :user_attach_1, :content_type => /\Aimage\/.*\Z/
 
+  validates_numericality_of :quoted_price, greater_than: 0
   validates_presence_of :skill, :brand, :series, :quoted_price
 
   after_initialize do
@@ -42,7 +43,7 @@ class Order < ActiveRecord::Base
   end
 
   after_create do
-    SendOrderTemplateMessageJob.perform_later(self)
+    SendCreateOrderMessageJob.perform_later(self)
     UpdateOrderStateJob.set(wait: PendingTimeout).perform_later(self)
   end
 
@@ -63,6 +64,7 @@ class Order < ActiveRecord::Base
   def pay!
     return false unless pending?
     update_attribute(:state, Order.states[:paid])
+    Weixin.send_paid_order_message self
   end
 
   def work!
@@ -74,6 +76,7 @@ class Order < ActiveRecord::Base
     return false unless working?
     update_attribute(:state, Order.states[:confirming])
     UpdateOrderStateJob.set(wait: ConfirmingTimeout).perform_later(self)
+    Weixin.send_confirm_order_message self
   end
 
   def confirm!

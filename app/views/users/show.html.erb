@@ -42,7 +42,7 @@
 
 <ul class="table-view">
   <li class="table-view-cell">
-    账户余额：<%= number_with_delimiter(current_user.balance || 0) %> 元
+    <%= link_to "账户余额：#{number_with_delimiter(current_user.balance || 0)} 元", new_withdrawal_path, class: "navigate-right" %>
   </li>
   <% if current_user.is_mechanic %>
     <li class="table-view-cell">
