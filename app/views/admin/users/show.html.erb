@@ -1,0 +1,30 @@
+<div class="col-sm-3 text-right">
+  <%= image_tag(@user.avatar.url(:thumb)) %>
+</div>
+
+<div class="col-sm-9">
+  <%= show_for @user, class: "dl-horizontal" do |i| %>
+    <%= i.attribute :nickname %>
+    <%= i.attribute :mobile %>
+    <%= i.attribute :weixin_openid %>
+    <%= i.attribute :gender do |user| %>
+      <%= te user, :gender %>
+    <% end %>
+    <%= i.attribute :address %>
+    <%= i.attribute :balance %>
+
+    <% if @user.is_mechanic %>
+      <%= i.fields_for :mechanic do |ii| %>
+        <%= ii.attribute :skills do |mechanic| %>
+          <%= mechanic.skills.map(&:name).join("、") %>
+        <% end %>
+        <%= ii.attribute :province, with: :name, if_raise: nil %>
+        <%= ii.attribute :city, with: :name, if_raise: nil %>
+        <%= ii.attribute :district, with: :name, if_raise: nil %>
+      <% end %>
+    <% end %>
+
+    <%= i.actions :admin %>
+  <% end %>
+</div>
+

@@ -1,21 +1,12 @@
 <% if @order_params %>
   <script type="text/javascript">
-    var orderParams = {
-      appId:     "<%= @order_params[:app_id] %>",
-      timeStamp: "<%= @order_params[:timestamp] %>",
-      nonceStr:  "<%= @order_params[:nonce_str] %>",
-      package:   "<%= @order_params[:package] %>",
-      paySign:   "<%= @order_params[:pay_sign] %>",
-      signType:  "<%= @order_params[:sign_type] %>"
-    };
-    document.addEventListener('WeixinJSBridgeReady', function () {
-      WeixinJSBridge.invoke('getBrandWCPayRequest', orderParams, function(res) {
-        if (res.err_msg == "get_brand_wcpay_request:ok") {
-          alert('pay for success!');
-        } else {
-          alert(res.err_msg);
-        }
-      });
-    }, false);
+    wx.config(<%= raw Weixin.get_jssign_package(request.url).merge(debug: true, jsApiList: %w(chooseWXPay)).to_json %>);
+    wx.error(function(res){ console.log(res) });
+    wx.ready(function() {
+      alert("<%= raw @order_params.to_json %>");
+      params = <%= raw @order_params.to_json %>;
+      params["success"] = function (res) { window.location.href = "/orders/<%= @order.id %>/result"; }
+      wx.chooseWXPay(params);
+    });
   </script>
 <% end %>

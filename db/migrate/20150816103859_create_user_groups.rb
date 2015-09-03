@@ -8,6 +8,8 @@ class CreateUserGroups < ActiveRecord::Migration
       t.integer   :user_id
       t.index     :user_id
 
+      t.string :weixin_qr_code_ticket
+
       t.timestamps null: false
     end
   end

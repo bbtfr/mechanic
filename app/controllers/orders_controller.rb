@@ -35,14 +35,24 @@ class OrdersController < ApplicationController
   end
 
   def pay
-    # @order_params = Weixin.payment current_user, @order, request.remote_ip
-    # if @order_params
-    #   flash[:notice] = "正在创建支付订单..."
-    # else
-    #   flash[:error] = "支付订单创建失败，请稍后再试..."
-    # end
-    @order.pay!
-    redirect_to result_order_path(@order)
+    @order_params = Weixin.payment current_user, @order, request.remote_ip
+    if @order_params
+      flash[:notice] = "正在创建支付订单..."
+    else
+      flash[:error] = "支付订单创建失败，请稍后再试..."
+    end
+  end
+
+  def notify
+    result = Hash.from_xml(request.body.read)["xml"]
+
+    if WxPay::Sign.verify?(result)
+      # find your order and process the post-paid logic.
+      @order.pay!
+      render :xml => {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
+    else
+      render :xml => {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
+    end
   end
 
   def result
@@ -110,7 +120,7 @@ class OrdersController < ApplicationController
 
     def order_params
       params.require(:order).permit(:address, :appointment, :skill_id,
-        :brand_id, :series_id, :quoted_price, :remark, :adcode, :professionality,
+        :brand_id, :series_id, :quoted_price, :remark, :lbs_id, :professionality,
         :timeliness, :review)
     end
 

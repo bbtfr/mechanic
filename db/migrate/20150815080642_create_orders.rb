@@ -24,6 +24,8 @@ class CreateOrders < ActiveRecord::Migration
       t.integer   :bid_id
       t.index     :bid_id
 
+      t.integer :lbs_id
+
       t.attachment :mechanic_attach_1
       t.attachment :mechanic_attach_2
 

@@ -39,6 +39,7 @@ class ApplicationController < ActionController::Base
       if request.get? && weixin? && current_user && !current_user.weixin_openid
         if params.key? "code"
           @openid = Weixin.get_oauth_access_token(params["code"]).result["openid"]
+          Weixin.callback_signup_event current_user, @openid
           current_user.update_weixin_openid @openid
         else
           redirect_to Weixin.authorize_url(request.url)

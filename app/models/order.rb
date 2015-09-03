@@ -3,8 +3,6 @@ class Order < ActiveRecord::Base
   PayingTimeout = 5.minutes
   ConfirmingTimeout = 5.minutes
 
-  attr_accessor :adcode
-
   belongs_to :skill
   belongs_to :brand
   belongs_to :series

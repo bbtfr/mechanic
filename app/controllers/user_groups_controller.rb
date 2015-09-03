@@ -23,6 +23,11 @@ class UserGroupsController < ApplicationController
     end
   end
 
+  def users
+    @users = current_user.user_group.users.
+      where(is_mechanic: current_user.is_mechanic)
+  end
+
   private
 
     def user_group_klass

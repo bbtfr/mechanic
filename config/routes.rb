@@ -7,7 +7,10 @@ Rails.application.routes.draw do
     post :verification_code
     get :delete
   end
-  resource :user_group
+  resource :user_group do
+    get :weixin_qr_code
+    get :users
+  end
   resources :mechanics do
     member do
       get :follow
@@ -26,6 +29,7 @@ Rails.application.routes.draw do
     member do
       get :refund
       get :pay
+      post :notify
       get :result
 
       get :work
@@ -48,8 +52,9 @@ Rails.application.routes.draw do
     end
     resources :mechanics
     resources :orders
-    resource :setting do
-      get :series
+    namespace :setting do
+      resources :brands
+      resources :series, except: :show
     end
 
     root to: "users#index"

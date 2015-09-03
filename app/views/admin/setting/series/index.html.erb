@@ -1,0 +1,11 @@
+<%= render "admin/setting/side_menu" %>
+
+<% @series = @series.includes(:brand) %>
+
+<div class="col-md-10 col-xs-8" id="collapseExample">
+  <%= index_for [ :admin, :setting, @series ], class: "table table-hover data-tables" do |i| %>
+    <%= i.attribute :name %>
+    <%= i.attribute :brand, with: :name %>
+    <%= i.actions :edit, :destroy %>
+  <% end %>
+</div>

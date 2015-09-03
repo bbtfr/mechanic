@@ -6,7 +6,9 @@ development:
   <<: *default
   mch_id: <%= ENV["WEIXIN_MCH_ID"] %>
   pay_key: <%= ENV["WEIXIN_PAY_KEY"] %>
-  order_template_id: VscR6biHJXeZ97o1FL6bJWrhTsFWFvoPo6mneaQCzA4
+  order_template_id: QfYVgjqFRqy3iQx_UDDvgic0pUkGIkF2punq_XAI5zM
+  middleware_token: f65a8604c16605b39535ee04
+  middleware_secret: 2pNLlVETFlHyGlExgoH5h0daKIu_-iUv
 
 test:
   <<: *default
@@ -19,3 +21,5 @@ production:
   mch_id: <%= ENV["WEIXIN_MCH_ID"] %>
   pay_key: <%= ENV["WEIXIN_PAY_KEY"] %>
   order_template_id: <%= ENV["ORDER_TEMPLATE_ID"] %>
+  middleware_token: <%= ENV["WEIXIN_MIDDLEWARE_TOKEN"] %>
+  middleware_secret: <%= ENV["WEIXIN_MIDDLEWARE_SECRET"] %>

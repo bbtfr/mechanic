@@ -11,7 +11,7 @@ series_map = Series.all.to_a.
 
 <%= simple_form_for(@order) do |f| %>
   <%= f.error_messages %>
-  <%= f.hidden_field :adcode %>
+  <%= f.hidden_field :lbs_id %>
 
   <div class="content-padded">
     <div class="input">
@@ -54,7 +54,7 @@ series_map = Series.all.to_a.
 
     jsonp(url, function(res) {
       address = res["result"]["formatted_addresses"]["recommend"];
-      order_adcode.value = res["result"]["ad_info"]["adcode"];
+      order_lbs_id.value = res["result"]["ad_info"]["lbs_id"];
       if (order_address.value !== address && confirm("使用定位地址：" + address)) {
         order_address.value = address;
       }

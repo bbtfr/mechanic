@@ -44,7 +44,7 @@
         <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "技师", admin_mechanics_path %></li>
         <li class="<%= "active" if controller_name == "orders" %>"><%= link_to "订单", admin_orders_path %></li>
         <li class="<%= "active" if controller_name == "books" %>"><%= link_to "账目提现", admin_users_path %></li>
-        <li class="<%= "active" if controller_name == "settings" %>"><%= link_to "设置", admin_setting_path %></li>
+        <li class="<%= "active" if controller_path.start_with? "admin/setting/" %>"><%= link_to "设置", admin_setting_brands_path %></li>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>

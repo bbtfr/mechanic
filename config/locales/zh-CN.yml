@@ -37,6 +37,11 @@ zh-CN:
         district_id: 区县
         district: 区县
         description: 个人简介
+      mechanic:
+        skills: 擅长技能
+        province: 省份
+        city: 城市
+        district: 区县
       user_group:
         nickname: 分堂昵称
         description: 申请简介

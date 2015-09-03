@@ -8,15 +8,15 @@
 </div>
 
 <div class="col-md-10 col-xs-8" id="collapseExample">
-  <%= index_for @user_groups, class: "table table-hover data-tables" do |u| %>
-    <%= u.attribute :nickname %>
-    <%= u.attribute :user, with: :nickname %>
+  <%= index_for [ :admin, @user_groups ], class: "table table-hover data-tables" do |i| %>
+    <%= i.attribute :nickname %>
+    <%= i.attribute :user, with: :nickname %>
 
     <% if @confirmed %>
-      <%= u.actions :admin %>
+      <%= i.actions :show, :destroy %>
     <% else %>
-      <%= u.attribute :description %>
-      <%= u.actions :admin, :confirm_admin %>
+      <%= i.attribute :description %>
+      <%= i.actions :show, :confirm, :destroy %>
     <% end %>
   <% end %>
 </div>

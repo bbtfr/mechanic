@@ -30,7 +30,7 @@ class CreateUsers < ActiveRecord::Migration
 
       t.attachment :avatar
 
-      t.boolean    :is_mechanic
+      t.boolean    :is_mechanic, default: false
       t.integer    :mechanic_id
       t.index      :mechanic_id
 

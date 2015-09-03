@@ -2,26 +2,29 @@
   设置
 <% end %>
 
-<% if current_user.user_group_id %>
-  <h3 class="text-center">分堂</h3>
+<% if current_user.user_group %>
+  <% user_group = current_user.user_group %>
+  <div class="content-padded">
+    <h3 class="text-center"><%= user_group.nickname %></h3>
+  </div>
 
   <div class="hero segmented-items segmented-items-bordered text-center">
     <div class="item">
-      <h2>100</h2>
+      <h2><%= number_with_delimiter(user_group.orders_count) %></h2>
       <p>用人次数</p>
     </div>
     <div class="item">
-      <h2>1,000</h2>
-      <p>用人次数</p>
+      <h2><%= number_with_delimiter(user_group.total_cost) %></h2>
+      <p>总支出</p>
     </div>
   </div>
 
   <ul class="table-view">
     <li class="table-view-cell">
-      <a class="navigate-right" href="">分享二维码</a>
+      <%= link_to "分享二维码", weixin_qr_code_user_group_path, class: "navigate-right" %>
     </li>
     <li class="table-view-cell">
-      <a class="navigate-right" href="">分堂成员</a>
+      <%= link_to "分堂成员", users_user_group_path, class: "navigate-right" %>
     </li>
   </ul>
 <% else %>

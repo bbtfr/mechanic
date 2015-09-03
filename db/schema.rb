@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150831134519) do
+ActiveRecord::Schema.define(version: 20150830100443) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 20150831134519) do
     t.integer  "state_cd",                       default: 0
     t.integer  "mechanic_sent_count",            default: 0
     t.integer  "bid_id"
+    t.integer  "lbs_id"
     t.string   "mechanic_attach_1_file_name"
     t.string   "mechanic_attach_1_content_type"
     t.integer  "mechanic_attach_1_file_size"
@@ -135,10 +136,11 @@ ActiveRecord::Schema.define(version: 20150831134519) do
   create_table "user_groups", force: :cascade do |t|
     t.string   "nickname"
     t.text     "description"
+    t.boolean  "confirmed",             default: false
     t.integer  "user_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.boolean  "confirmed",   default: false
+    t.string   "weixin_qr_code_ticket"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
   end
 
   add_index "user_groups", ["user_id"], name: "index_user_groups_on_user_id"
@@ -157,7 +159,7 @@ ActiveRecord::Schema.define(version: 20150831134519) do
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
-    t.boolean  "is_mechanic"
+    t.boolean  "is_mechanic",         default: false
     t.integer  "mechanic_id"
     t.integer  "user_group_id"
     t.datetime "created_at",                          null: false

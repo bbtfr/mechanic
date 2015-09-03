@@ -5,13 +5,23 @@
 WeixinRailsMiddleware::WeixinController.class_eval do
 
   def reply
-    render xml: send("response_#{@weixin_message.MsgType}_message", {})
+    message = send("response_#{@weixin_message.MsgType}_message", {})
+    if message.kind_of? String
+      Rails.logger.info("  Render reply message: #{message}")
+      render xml: message
+    else
+      render nothing: true
+    end
+  end
+
+  def info message
+    Rails.logger.info("  WeixinRailsMiddleware: #{message}")
   end
 
   private
 
     def response_text_message(options={})
-      reply_text_message("Your Message: #{@keyword}")
+      info("Text message: #{@keyword}")
     end
 
     # <Location_X>23.134521</Location_X>
@@ -23,7 +33,7 @@ WeixinRailsMiddleware::WeixinController.class_eval do
       @ly    = @weixin_message.Location_Y
       @scale = @weixin_message.Scale
       @label = @weixin_message.Label
-      reply_text_message("Your Location: #{@lx}, #{@ly}, #{@scale}, #{@label}")
+      info("Location: #{@lx}, #{@ly}, #{@scale}, #{@label}")
     end
 
     # <PicUrl><![CDATA[this is a url]]></PicUrl>
@@ -31,7 +41,8 @@ WeixinRailsMiddleware::WeixinController.class_eval do
     def response_image_message(options={})
       @media_id = @weixin_message.MediaId # 可以调用多媒体文件下载接口拉取数据。
       @pic_url  = @weixin_message.PicUrl  # 也可以直接通过此链接下载图片, 建议使用carrierwave.
-      reply_image_message(generate_image(@media_id))
+      info("Image message: #{@keyword}")
+      # reply_image_message(generate_image(@media_id))
     end
 
     # <Title><![CDATA[公众平台官网链接]]></Title>
@@ -41,7 +52,7 @@ WeixinRailsMiddleware::WeixinController.class_eval do
       @title = @weixin_message.Title
       @desc  = @weixin_message.Description
       @url   = @weixin_message.Url
-      reply_text_message("回复链接信息")
+      info("Link message")
     end
 
     # <MediaId><![CDATA[media_id]]></MediaId>
@@ -50,8 +61,8 @@ WeixinRailsMiddleware::WeixinController.class_eval do
       @media_id = @weixin_message.MediaId # 可以调用多媒体文件下载接口拉取数据。
       @format   = @weixin_message.Format
       # 如果开启了语音翻译功能，@keyword则为翻译的结果
-      # reply_text_message("回复语音信息: #{@keyword}")
-      reply_voice_message(generate_voice(@media_id))
+      info("Voice message: #{@keyword}")
+      # reply_voice_message(generate_voice(@media_id))
     end
 
     # <MediaId><![CDATA[media_id]]></MediaId>
@@ -60,7 +71,7 @@ WeixinRailsMiddleware::WeixinController.class_eval do
       @media_id = @weixin_message.MediaId # 可以调用多媒体文件下载接口拉取数据。
       # 视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。
       @thumb_media_id = @weixin_message.ThumbMediaId
-      reply_text_message("回复视频信息")
+      info("Video message")
     end
 
     def response_event_message(options={})
@@ -72,36 +83,38 @@ WeixinRailsMiddleware::WeixinController.class_eval do
     def handle_subscribe_event
       if @keyword.present?
         # 扫描带参数二维码事件: 1. 用户未关注时，进行关注后的事件推送
-        return reply_text_message("扫描带参数二维码事件: 1. 用户未关注时，进行关注后的事件推送, keyword: #{@keyword}")
+        Weixin.audit_subscribe_event @keyword, @weixin_message["FromUserName"]
+        info("Subscribe event: 1. User unsubscribed, keyword: #{@keyword}")
+        return reply_text_message("感谢您的关注")
       end
-      reply_text_message("关注公众账号")
+      info("Subscribe")
     end
 
     # 取消关注
     def handle_unsubscribe_event
-      Rails.logger.info("取消关注")
+      info("Unsubscribe")
     end
 
     # 扫描带参数二维码事件: 2. 用户已关注时的事件推送
     def handle_scan_event
-      reply_text_message("扫描带参数二维码事件: 2. 用户已关注时的事件推送, keyword: #{@keyword}")
+      info("Scan event: 2. User subscribed, keyword: #{@keyword}")
     end
 
     def handle_location_event # 上报地理位置事件
       @lat = @weixin_message.Latitude
       @lgt = @weixin_message.Longitude
       @precision = @weixin_message.Precision
-      reply_text_message("Your Location: #{@lat}, #{@lgt}, #{@precision}")
+      info("Location: #{@lat}, #{@lgt}, #{@precision}")
     end
 
     # 点击菜单拉取消息时的事件推送
     def handle_click_event
-      reply_text_message("你点击了: #{@keyword}")
+      info("Click event: #{@keyword}")
     end
 
     # 点击菜单跳转链接时的事件推送
     def handle_view_event
-      Rails.logger.info("你点击了: #{@keyword}")
+      info("View event: #{@keyword}")
     end
 
     # 帮助文档: https://github.com/lanrion/weixin_authorize/issues/22
@@ -124,7 +137,10 @@ WeixinRailsMiddleware::WeixinController.class_eval do
     # <ErrorCount>5</ErrorCount>
     # </xml>
     def handle_masssendjobfinish_event
-      Rails.logger.info("回调事件处理")
+      info("Mass send job finish event")
     end
 
+    def handle_templatesendjobfinish_event
+      info("Template send job finish event")
+    end
 end

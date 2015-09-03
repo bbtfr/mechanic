@@ -8,9 +8,8 @@ zh-CN:
     actions:
       actions: 操作
       show: 详情
-      admin: 详情
       new: 新建
       edit: 编辑
       destroy: 删除
-      confirm_admin: 批准申请
+      confirm: 批准申请
       confirmation: "你确定要删除这条记录？"

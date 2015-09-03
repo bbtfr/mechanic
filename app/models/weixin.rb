@@ -59,13 +59,13 @@ module Weixin
         "#{BaseURL}/orders/#{order.id}/bids/new",
         TemplateTopColor,
         {
-          first: format_template_data("新订单"),
-          keyword1: format_template_data(order.skill.try :name),
-          keyword2: format_template_data("担保交易 #{order.quoted_price} 元"),
-          keyword3: format_template_data(I18n.l(order.appointment, format: :long)),
-          keyword4: format_template_data(order.address),
-          keyword5: format_template_data("#{order.brand.try :name} #{order.series.try :name}"),
-          remark: format_template_data("#{order.remark.presence}\r\n点击详情去接单！")
+          first: format_template_data("#{order.user.nickname} 刚刚发布了新订单"),
+          keyword1: format_template_data(I18n.l(order.appointment, format: :long)),
+          keyword2: format_template_data(order.skill.try :name),
+          keyword3: format_template_data("#{order.brand.try :name} #{order.series.try :name}"),
+          keyword4: format_template_data("#{order.quoted_price} 元"),
+          keyword5: format_template_data(order.remark.presence || "无"),
+          remark: format_template_data("\r\n点击详情去接单！")
         }
     end
 
@@ -98,7 +98,7 @@ module Weixin
         out_trade_no: "order#{order.id}created_at#{order.created_at.to_i}",
         total_fee: 1,
         spbill_create_ip: remote_ip,
-        notify_url: "#{BaseURL}/notify",
+        notify_url: "#{BaseURL}/orders/#{order.id}/notify",
         trade_type: "JSAPI", # could be "JSAPI", "NATIVE" or "APP",
         openid: user.weixin_openid # required when trade_type is `JSAPI`
       }
@@ -110,18 +110,38 @@ module Weixin
       return false unless response.success?
 
       params = {
-        # fetch by call invoke_unifiedorder with `trade_type` is `APP`
-        prepayid: response["prepay_id"],
-        # must same as given to invoke_unifiedorder
-        noncestr: response["nonce_str"]
+        appId: Config["app_id"],
+        timeStamp: Time.now.to_i.to_s,
+        nonceStr: SecureRandom.hex,
+        package: "prepay_id=#{response["prepay_id"]}",
+        signType: "MD5"
       }
-      Rails.logger.info("  Requested WxPay API generate_app_pay_req with params #{params}")
-      order_params = WxPay::Service::generate_app_pay_req params
-      Rails.logger.info("  Result: #{order_params}")
+      pay_sign = WxPay::Sign.generate(params)
 
-      order_params
+      Rails.logger.info("  Requested WxPay API generate with params #{params}")
+      params.merge!(paySign: pay_sign)
+      Rails.logger.info("  Result: #{params}")
+
+      params
     rescue Exception => e
       Rails.logger.error("  Error occurred when requesting WxPay API: #{e.message}")
     end
+
+    def audit_subscribe_event keyword, weixin_openid
+      if keyword =~ /(\w+)(\d+)/
+        type, id = $1.to_sym, $2.to_i
+        Rails.logger.info "  Audit: #{type}, #{weixin_openid}, #{id} "
+        WeixinAuthorize.weixin_redis.hset type, weixin_openid, id
+      end
+    end
+
+    def callback_signup_event user, weixin_openid
+      group_id = WeixinAuthorize.weixin_redis.hget "qrscene_user_groups", weixin_openid
+      return unless group_id
+      WeixinAuthorize.weixin_redis.hdel "qrscene_user_groups", weixin_openid
+      Rails.logger.info "  Audit: qrscene_user_groups, #{weixin_openid}, #{group_id} "
+      user.update_attribute(:user_group_id, group_id)
+    end
+
   end
 end
