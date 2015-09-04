@@ -1,0 +1,13 @@
+<h3 class="page-header">提现管理</h3>
+
+<%= index_for [ :admin, @withdrawals ], class: "table table-hover data-tables" do |i| %>
+  <%= i.attribute :user, with: :nickname %>
+  <%= i.attribute :amount %>
+
+  <% if i.object.paid? %>
+    <%= i.actions :show, :destroy %>
+  <% else %>
+    <%= i.actions :show, :confirm, :destroy %>
+  <% end %>
+
+<% end %>

@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   skip_before_filter :verify_authenticity_token, :authenticate!, only: [ :notify ]
   before_filter :find_order, except: [ :index, :new, :create, :notify ]
   before_filter :redirect_pending, only: [ :new, :create ]
-  before_filter :redirect_owner, only: [ :update ]
+  before_filter :redirect_mechanic, only: [ :update, :confirm ]
 
   def index
     @state = if %w(pendings paids workings finisheds).include? params[:state]
@@ -35,18 +35,20 @@ class OrdersController < ApplicationController
     end
   end
 
+  def cancel
+    @order.cancel!
+    flash[:notice] = "已取消订单！"
+    redirect_to new_order_path(@order)
+  end
+
   def pay
     @order_params, response = Weixin.payment current_user, @order, request.remote_ip
     if @order_params
       flash.now[:notice] = "正在创建支付订单..."
     else
-      if response["err_code"] == "ORDERPAID"
-        @order.pay!
-        flash[:error] = response["err_code_des"]
-        redirect_to order_path(@order)
-      else
-        flash.now[:error] = response["err_code_des"]
-      end
+      @order.pay! if response["err_code"] == "ORDERPAID"
+      flash[:error] = response["return_msg"]
+      redirect_to order_path(@order)
     end
   end
 
@@ -106,10 +108,17 @@ class OrdersController < ApplicationController
       end
     end
 
-    def redirect_owner
-      if current_user != @order.user
-        flash[:error] = "订单所有权错误！"
-        redirect_to order_path(@order)
+    def redirect_user
+      unless current_user.is_mechanic
+        flash[:error] = "商户无法进行此操作！"
+        redirect_to orders_path
+      end
+    end
+
+    def redirect_mechanic
+      if current_user.is_mechanic
+        flash[:error] = "技师无法进行此操作！"
+        redirect_to orders_path
       end
     end
 

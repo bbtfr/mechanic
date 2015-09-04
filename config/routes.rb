@@ -31,6 +31,8 @@ Rails.application.routes.draw do
     end
 
     member do
+      get :cancel
+
       get :refund
       post :notify
       get :result
@@ -52,11 +54,16 @@ Rails.application.routes.draw do
         get :confirmed
       end
       member do
-        get :confirm
+        post :confirm
       end
     end
     resources :mechanics
     resources :orders
+    resources :withdrawals do
+      member do
+        post :confirm
+      end
+    end
     namespace :setting do
       resources :brands
       resources :series, except: :show

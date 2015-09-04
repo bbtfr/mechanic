@@ -16,7 +16,9 @@
 // require ratchet
 
 var removeOptions = function(options) {
-  for (var i = options.length - 1; i > 0; i--) options[i].remove();
+  for (var i = options.length - 1; i > 0; i--) {
+    options[i].parentNode.removeChild(options[i]);
+  }
 };
 
 var appendOptions = function(parent, values) {
@@ -36,7 +38,7 @@ var fakeFileInput = function(fileInput, fakeInput) {
   });
   fileInput.addEventListener("change", function() {
     paths = this.value.split("\\");
-    order_mechanic_attach_1_button.value = paths[paths.length - 1];
+    fakeInput.value = paths[paths.length - 1];
   });
 };
 

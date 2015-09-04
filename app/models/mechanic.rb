@@ -29,4 +29,18 @@ class Mechanic < ActiveRecord::Base
   def orders_count
     orders.available.count || 0
   end
+
+  def regular_client? user
+    user = user.id if user.is_a? User
+    orders.where(user_id: user).exists?
+  end
+
+  def location_name
+    name = ""
+    name << province.name if province
+    name << " #{city.name}" if city && province.lbs_id != city.lbs_id
+    name << " #{district.name}" if district
+    name
+  end
+
 end

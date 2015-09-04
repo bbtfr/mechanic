@@ -16,13 +16,6 @@
   <![endif]-->
 </head>
 <body>
-<% bootstrap_flash_class = { success: 'alert-success', error: 'alert-danger', alert: 'alert-warning', notice: 'alert-info'} %>
-<% flash.each do |type, message| %>
-  <div class="alert alert-block <%= bootstrap_flash_class[type.to_sym] %>">
-    <%= raw message %>
-  </div>
-<% end %>
-
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -33,7 +26,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">后台管理</a>
+      <span class="navbar-brand">后台管理</span>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -43,13 +36,21 @@
         <li class="<%= "active" if controller_name == "user_groups" %>"><%= link_to "堂主", admin_user_groups_path %></li>
         <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "技师", admin_mechanics_path %></li>
         <li class="<%= "active" if controller_name == "orders" %>"><%= link_to "订单", admin_orders_path %></li>
-        <li class="<%= "active" if controller_name == "books" %>"><%= link_to "账目提现", admin_users_path %></li>
+        <li class="<%= "active" if controller_name == "withdrawals" %>"><%= link_to "账目提现", admin_withdrawals_path %></li>
         <li class="<%= "active" if controller_path.start_with? "admin/setting/" %>"><%= link_to "设置", admin_setting_brands_path %></li>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
 
 <div class="container">
+
+<% bootstrap_flash_class = { success: 'alert-success', error: 'alert-danger', alert: 'alert-warning', notice: 'alert-info'} %>
+<% flash.each do |type, message| %>
+  <div class="alert <%= bootstrap_flash_class[type.to_sym] %>">
+    <%= raw message %>
+  </div>
+<% end %>
+
 <%= yield %>
 </div>
 

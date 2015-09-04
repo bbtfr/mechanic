@@ -8,5 +8,10 @@
   <%= i.attribute :mobile %>
   <%= i.attribute :weixin_openid %>
 
-  <%= i.actions :show, :destroy %>
+  <%= i.actions do |a| %>
+    <%= a.action_link :show do %>
+      <%= link_to t(:"index_for.actions.show"), admin_mechanic_path(i.object) %>
+    <% end %>
+    <%= a.action_link :destroy %>
+  <% end %>
 <% end %>

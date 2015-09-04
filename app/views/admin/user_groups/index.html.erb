@@ -16,7 +16,13 @@
       <%= i.actions :show, :destroy %>
     <% else %>
       <%= i.attribute :description %>
-      <%= i.actions :show, :confirm, :destroy %>
+      <%= i.actions do |a| %>
+        <%= a.action_link :show %>
+        <%= a.action_link :confirm do %>
+          <%= link_to t(:"index_for.actions.confirm"), confirm_admin_user_group_path(i.object), data: { method: :post, confirm: "你确定要通过这条申请？" } %>
+        <% end %>
+        <%= a.action_link :destroy %>
+      <% end %>
     <% end %>
   <% end %>
 </div>

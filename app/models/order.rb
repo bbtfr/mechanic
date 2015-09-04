@@ -1,7 +1,7 @@
 class Order < ActiveRecord::Base
   PendingTimeout = 5.minutes
   PayingTimeout = 60.minutes
-  ConfirmingTimeout = 60.minutes
+  ConfirmingTimeout = 5.days
 
   belongs_to :skill
   belongs_to :brand
@@ -26,8 +26,19 @@ class Order < ActiveRecord::Base
   has_attached_file :user_attach_2, styles: { medium: "300x300>", thumb: "100x100#" }
   validates_attachment_content_type :user_attach_1, :content_type => /\Aimage\/.*\Z/
 
-  validates_numericality_of :quoted_price, greater_than: 0
+  validates_numericality_of :quoted_price, greater_than_or_equal_to: 1
   validates_presence_of :skill, :brand, :series, :quoted_price
+  validate :validate_lbs_id, on: :create
+
+  def validate_lbs_id
+    return if lbs_id.present?
+    result = LBS.geocoder address
+    district_name = result["result"]["address_components"]["district"]
+    district = District.where(name: district_name).first
+    self.lbs_id = district.lbs_id
+  rescue
+    errors.add(:base, "无法定位到您的地址，请打开GPS定位或输入更详细的地址") unless lbs_id.present?
+  end
 
   after_initialize do
     if persisted?
@@ -62,7 +73,7 @@ class Order < ActiveRecord::Base
   end
 
   def pay!
-    return false unless pending?
+    return false unless pending? || canceled?
     update_attribute(:state, Order.states[:paid])
     Weixin.send_paid_order_message self
   end

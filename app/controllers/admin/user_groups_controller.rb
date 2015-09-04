@@ -14,4 +14,10 @@ class Admin::UserGroupsController < Admin::ApplicationController
     @user_group.confirm!
     redirect_to request.referer
   end
+
+  def destroy
+    @user_group = UserGroup.find(params[:id])
+    @user_group.destroy
+    redirect_to request.referer
+  end
 end

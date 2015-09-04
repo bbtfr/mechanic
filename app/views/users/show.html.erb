@@ -49,7 +49,7 @@
       <%= link_to "擅长技能：#{current_user.mechanic.skills.map(&:name).join("、")}", edit_user_path, class: "navigate-right" %>
     </li>
     <li class="table-view-cell">
-      <%= link_to "地区：#{current_user.mechanic.province.try :name} #{current_user.mechanic.city.try :name} #{current_user.mechanic.district.try :name}", edit_user_path, class: "navigate-right" %>
+      <%= link_to "地区：#{current_user.mechanic.location_name}", edit_user_path, class: "navigate-right" %>
     </li>
   <% end %>
   <li class="table-view-cell">

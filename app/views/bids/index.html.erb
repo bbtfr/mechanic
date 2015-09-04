@@ -2,6 +2,10 @@
   <%= render "index" %>
 </div>
 
+<div class="content-padded margin-top-large">
+  <%= link_to "取消订单", cancel_order_path(@order), class: "btn btn-block btn-negative" %>
+</div>
+
 <script type="text/javascript">
   var interval = setInterval(function() {
     xhrRequest("GET", window.location.href + ".js", function(xhr) {

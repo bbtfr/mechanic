@@ -1,3 +1,5 @@
+<h3 class="page-header">商家详情</h3>
+
 <div class="col-sm-3 text-right">
   <%= image_tag(@user.avatar.url(:thumb)) %>
 </div>
@@ -12,19 +14,6 @@
     <% end %>
     <%= i.attribute :address %>
     <%= i.attribute :balance %>
-
-    <% if @user.is_mechanic %>
-      <%= i.fields_for :mechanic do |ii| %>
-        <%= ii.attribute :skills do |mechanic| %>
-          <%= mechanic.skills.map(&:name).join("、") %>
-        <% end %>
-        <%= ii.attribute :province, with: :name, if_raise: nil %>
-        <%= ii.attribute :city, with: :name, if_raise: nil %>
-        <%= ii.attribute :district, with: :name, if_raise: nil %>
-      <% end %>
-    <% end %>
-
-    <%= i.actions :admin %>
   <% end %>
 </div>
 

@@ -9,7 +9,9 @@
       <%= image_tag @order.user.avatar.url(:thumb), class: "img-circle" %>
     </div>
     <div class="vertical-bottom">
-      <div class="btn btn-mini btn-primary">老用户</div>
+      <% if current_user.mechanic.regular_client? @order.user %>
+        <div class="btn btn-mini btn-primary">老用户</div>
+      <% end %>
     </div>
   </div>
 

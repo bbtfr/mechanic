@@ -4,12 +4,9 @@ class SendCreateOrderMessageJob < ActiveJob::Base
   def perform(order)
     users = User.where(is_mechanic: true).joins(mechanic: :skills)
 
-    lbs_id = order.lbs_id
-    location = District.where(lbs_id: lbs_id).first ||
-      City.where(lbs_id: lbs_id).first ||
-      Province.where(lbs_id: lbs_id).first
+    location = LBS.find(order.lbs_id).parent
     foreign_key = "mechanics.#{location.class.name.foreign_key}"
-    users = users.where(foreign_key => location.id) if location
+    users = users.where(foreign_key => location.id)
 
     users = users.where("skills.id" => order.skill_id)
     users.load
