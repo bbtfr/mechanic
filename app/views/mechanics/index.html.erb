@@ -2,6 +2,12 @@
   收藏技师
 <% end %>
 
+<% if current_user.mechanics.empty? %>
+  <div class="alert alert-block alert-warning">
+    您还没有收藏任何技师！
+  </div>
+<% end %>
+
 <ul class="table-view">
   <% current_user.mechanics.each do |mechanic| %>
     <li class="table-view-cell media">

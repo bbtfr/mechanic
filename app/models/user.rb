@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
   has_many :orders
   has_many :fellowships
   has_many :mechanics, through: :fellowships
+  has_one :owner_user_group, -> { confirmeds }, class_name: "UserGroup"
 
   belongs_to :user_group
   belongs_to :mechanic, autosave: true
@@ -50,7 +51,7 @@ class User < ActiveRecord::Base
   end
 
   def orders_count
-    orders.available.count || 0
+    orders.available.count
   end
 
   def follow! mechanic

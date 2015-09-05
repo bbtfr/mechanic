@@ -2,8 +2,26 @@
   分堂成员
 <% end %>
 
+<% user_group = current_user.owner_user_group %>
+<% users = user_group.users %>
+
 <ul class="table-view">
-  <% @users.each do |user| %>
+  <li class="table-view-cell media">
+    <%= image_tag user_group.user.avatar.url(:thumb), class: "media-object pull-left" %>
+    <div class="media-body">
+      <div class="media-block">
+        <%= user_group.user.nickname %>
+        <div class="btn btn-mini btn-primary">堂主</div>
+      </div>
+      <% if user_group.user.is_mechanic %>
+        <div class="media-block">
+          <p class="pull-right">接单 <%= user_group.user.mechanic.orders_count %> 次</p>
+          <p>专业 <%= user_group.user.mechanic.professionality_average %> 分 守时 <%= user_group.user.mechanic.timeliness_average %> 分</p>
+        </div>
+      <% end %>
+    </div>
+  </li>
+  <% users.each do |user| %>
     <li class="table-view-cell media">
       <%= image_tag user.avatar.url(:thumb), class: "media-object pull-left" %>
       <div class="media-body">

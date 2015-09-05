@@ -18,17 +18,21 @@ class Withdrawal < ActiveRecord::Base
 
   def pay!
     return false unless pending?
-    update_attribute(:state, Order.states[:paid])
+    update_attribute(:state, Withdrawal.states[:paid])
   end
 
   def cancel!
     return false unless pending?
     user.balance += amount
     user.save
-    update_attribute(:state, Order.states[:canceled])
+    update_attribute(:state, Withdrawal.states[:canceled])
   end
 
   def title
-    "#{user.nickname}申请提现#{amount}元"
+    "#{user.nickname} 申请提现 #{amount} 元"
+  end
+
+  def trade_no
+    "withdrawal#{id}created_at#{created_at.to_i}"
   end
 end

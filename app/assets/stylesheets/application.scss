@@ -52,6 +52,8 @@ body, .bar {
   position: relative;
   display: table;
   overflow: hidden;
+  table-layout: fixed;
+  width: 100%;
 
   .item {
     display: table-cell;

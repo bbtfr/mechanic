@@ -8,7 +8,7 @@
       <%= image_tag review.user.avatar.url(:thumb), class: "media-object pull-left" %>
       <div class="media-body">
         <div class="media-block">
-          <%= review.user_nickname %>
+          <%= review.user.nickname %>
         </div>
         <div class="media-block">
           <p>专业 <%= review.professionality %> 分 守时 <%= review.timeliness %> 分</p>

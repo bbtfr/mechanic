@@ -15,7 +15,7 @@ class Order < ActiveRecord::Base
   as_enum :state, pending: 0, canceled: 1, refunded: 2, paid: 3, working: 4,
     confirming: 5, finished: 6
 
-  scope :available, proc { where('"orders"."state_cd" > 2') }
+  scope :available, -> { where('"orders"."state_cd" > 2') }
 
   has_attached_file :mechanic_attach_1, styles: { medium: "300x300>", thumb: "100x100#" }
   validates_attachment_content_type :mechanic_attach_1, :content_type => /\Aimage\/.*\Z/
@@ -69,13 +69,18 @@ class Order < ActiveRecord::Base
 
   def cancel!
     return false unless pending?
-    update_attribute(:state_cd, Order.states[:canceled])
+    update_attribute(:state, Order.states[:canceled])
   end
 
   def pay!
     return false unless pending? || canceled?
     update_attribute(:state, Order.states[:paid])
     Weixin.send_paid_order_message self
+  end
+
+  def refund!
+    return false unless paid?
+    update_attribute(:state, Order.states[:refund])
   end
 
   def work!
@@ -99,10 +104,14 @@ class Order < ActiveRecord::Base
   end
 
   def title
-    "#{mechanic.user.nickname} #{skill.name}"
+    "#{mechanic.user.nickname} 为您 #{skill.name}"
   end
 
-  def user_nickname
-    user.nickname
+  def trade_no
+    "order#{id}created_at#{created_at.to_i}"
+  end
+
+  def refund_no
+    "order#{id}created_at#{created_at.to_i}refund"
   end
 end

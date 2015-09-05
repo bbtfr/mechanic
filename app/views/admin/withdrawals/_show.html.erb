@@ -1,0 +1,10 @@
+<h3 class="page-header">提现详情 #<%= @withdrawal.id %></h3>
+
+<%= show_for @withdrawal, class: "dl-horizontal" do |i| %>
+  <%= i.attribute :user, with: :nickname %>
+  <%= i.attribute :amount %>
+
+  <%= i.attribute :gender do |user| %>
+    <%= te user, :gender %>
+  <% end %>
+<% end %>

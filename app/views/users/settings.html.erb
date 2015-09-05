@@ -2,8 +2,8 @@
   设置
 <% end %>
 
-<% if current_user.user_group %>
-  <% user_group = current_user.user_group %>
+<% user_group = current_user.owner_user_group %>
+<% if user_group %>
   <div class="content-padded">
     <h3 class="text-center"><%= user_group.nickname %></h3>
   </div>
@@ -11,11 +11,11 @@
   <div class="hero segmented-items segmented-items-bordered text-center">
     <div class="item">
       <h2><%= number_with_delimiter(user_group.orders_count) %></h2>
-      <p>用人次数</p>
+      <p>分堂业绩（笔）</p>
     </div>
     <div class="item">
-      <h2><%= number_with_delimiter(user_group.total_cost) %></h2>
-      <p>总支出</p>
+      <h2><%= number_with_delimiter(user_group.total_commission) %></h2>
+      <p>分堂佣金</p>
     </div>
   </div>
 
@@ -34,7 +34,3 @@
     </li>
   </ul>
 <% end %>
-
-<div class="content-padded">
-  <%= goback_link %>
-</div>

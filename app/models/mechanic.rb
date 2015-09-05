@@ -27,7 +27,7 @@ class Mechanic < ActiveRecord::Base
   end
 
   def orders_count
-    orders.available.count || 0
+    orders.available.count
   end
 
   def regular_client? user

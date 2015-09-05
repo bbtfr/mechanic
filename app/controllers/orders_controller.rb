@@ -73,6 +73,22 @@ class OrdersController < ApplicationController
     end
   end
 
+  def refund
+    if @order.paid?
+      response = Weixin.refund @order
+      if response.success?
+        flash[:notice] = "退款申请已提交，支付款将在3个工作日内退回您的账户..."
+        @order.refund!
+      else
+        flash[:error] = response["return_msg"]
+      end
+      redirect_to order_path(@order)
+    else
+      flash[:error] = "订单状态错误！"
+      redirect_to order_path(@order)
+    end
+  end
+
   def work
     @order.work!
     render :show

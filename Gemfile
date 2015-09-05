@@ -20,7 +20,7 @@ gem 'paperclip'
 gem 'rest-client'
 gem 'weixin_authorize'
 gem 'weixin_rails_middleware'
-gem 'wx_pay'
+gem 'wx_pay', github: "bbtfr/wx_pay"
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'

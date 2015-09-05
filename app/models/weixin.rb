@@ -6,12 +6,7 @@ module Weixin
   WxPay.appid = Config["app_id"].to_s
   WxPay.mch_id = Config["mch_id"].to_s
   WxPay.key = Config["pay_key"]
-
-  if Config["p12_path"]
-    P12 = OpenSSL::PKCS12.new(File.read(Config["p12_path"]), WxPay.mch_id)
-    WxPay.client_key = P12.key
-    WxPay.client_cert = P12.certificate
-  end
+  WxPay.apiclient_cert_path = File.read(Config["p12_path"]) if Config["p12_path"]
 
   Client = WeixinAuthorize::Client.new(Config["app_id"], Config["app_secret"])
 
@@ -136,7 +131,7 @@ module Weixin
     def payment user, order, remote_ip
       params = {
         body: order.title,
-        out_trade_no: "order#{order.id}created_at#{order.created_at.to_i}",
+        out_trade_no: order.trade_no,
         total_fee: order.price * 100,
         spbill_create_ip: remote_ip,
         notify_url: "#{BaseURL}/orders/#{order.id}/notify",
@@ -168,10 +163,25 @@ module Weixin
       Rails.logger.error("  Error occurred when requesting WxPay API: #{e.message}")
     end
 
+    def refund order
+      params = {
+        out_trade_no: order.trade_no,
+        out_refund_no: order.refund_no,
+        total_fee: order.price * 100,
+        refund_fee: order.price * 100
+      }
+
+      Rails.logger.info("  Requested WxPay API invoke_refund with params #{params}")
+      response = WxPay::Service.invoke_refund params
+      Rails.logger.info("  Result: #{response}")
+
+      return response
+    end
+
     def withdrawal withdrawal
       params = {
         desc: withdrawal.title,
-        partner_trade_no: "withdrawal#{withdrawal.id}created_at#{withdrawal.created_at.to_i}",
+        partner_trade_no: withdrawal.trade_no,
         amount: withdrawal.amount * 100,
         check_name: "NO_CHECK",
         spbill_create_ip: LocalIP,
@@ -194,10 +204,10 @@ module Weixin
     end
 
     def callback_signup_event user, weixin_openid
-      group_id = WeixinAuthorize.weixin_redis.hget "qrscene_user_groups", weixin_openid
+      group_id = WeixinAuthorize.weixin_redis.hget "qrscene_user_group", weixin_openid
       return unless group_id
-      WeixinAuthorize.weixin_redis.hdel "qrscene_user_groups", weixin_openid
-      Rails.logger.info "  Audit: qrscene_user_groups, #{weixin_openid}, #{group_id} "
+      WeixinAuthorize.weixin_redis.hdel "qrscene_user_group", weixin_openid
+      Rails.logger.info "  Audit: qrscene_user_group, #{weixin_openid}, #{group_id} "
       user.update_attribute(:user_group_id, group_id)
     end
 

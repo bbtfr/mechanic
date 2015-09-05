@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/bbtfr/wx_pay.git
+  revision: 9752fa1164fc73d44cad83fc636f9987a0d19a43
+  specs:
+    wx_pay (0.2.0)
+      activesupport (>= 3.2)
+      rest-client (>= 1.7)
+
 GEM
   remote: http://ruby.taobao.org/
   specs:
@@ -264,9 +272,6 @@ GEM
       rails (>= 3.1)
       railties (>= 3.1)
       roxml
-    wx_pay (0.2.0)
-      activesupport (>= 3.2)
-      rest-client (>= 1.7)
     yajl-ruby (1.2.1)
 
 PLATFORMS
@@ -304,7 +309,7 @@ DEPENDENCIES
   web-console (~> 2.0)
   weixin_authorize
   weixin_rails_middleware
-  wx_pay
+  wx_pay!
 
 BUNDLED WITH
    1.10.6
