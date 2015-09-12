@@ -4,6 +4,7 @@
 
 <div class="content-padded">
   <%= show_for @order do |s| %>
+    <%= s.attribute :"user.mobile" %>
     <%= s.attribute :address %>
     <%= s.attribute :appointment, format: :long %>
     <%= s.attribute :skill, with: :name %>
@@ -31,7 +32,9 @@
     </li>
   </ul>
   <div class="content-padded">
-    个人简介：<%= @order.mechanic.description %>
+    手机号码：<%= @bid.mechanic.user.mobile %><br>
+    地址：<%= @order.mechanic.user.address %><br>
+    简介：<%= @order.mechanic.description %>
   </div>
 <% end %>
 
@@ -65,7 +68,14 @@
   <% else %>
     <% case @order.state %>
     <% when :paid %>
-      <%= link_to "申请退款", refund_order_path(@order), class: "btn btn-block btn-negative" %>
+      <span class="btn btn-block btn-negative" id="refund_order_button">申请退款</span>
+      <script type="text/javascript">
+        refund_order_button.addEventListener("click", function() {
+          if (confirm("您确定要申请退款？")) {
+            window.location.href = "<%= refund_order_path(@order) %>";
+          }
+        });
+      </script>
     <% when :confirming %>
       <% if @order.mechanic_attach_1 || @order.mechanic_attach_2 %>
         施工照片：点击查看大图<br>

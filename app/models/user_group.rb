@@ -16,7 +16,7 @@ class UserGroup < ActiveRecord::Base
   end
 
   def total_cost
-    orders.available.sum(:price) || 0
+    orders.finisheds.sum(:price) || 0
   end
 
   def total_income
@@ -28,11 +28,11 @@ class UserGroup < ActiveRecord::Base
   end
 
   def total_commission
-    total_cost * 0.05 * 0.3 + total_income * 0.05 * 0.3
+    (total_cost * 0.05 * 0.3 + total_income * 0.05 * 0.3).round(2)
   end
 
   def orders_count
-    orders.available.count
+    orders.finisheds.count + mechanic_orders.finisheds.count
   end
 
   def weixin_qr_code_url

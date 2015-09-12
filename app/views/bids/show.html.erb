@@ -1,3 +1,11 @@
+<%= content_for :title do %>
+  <% if owner %>
+    选择技师
+  <% else %>
+    顾客正在选人
+  <% end %>
+<% end %>
+
 <% owner = @order.user_id == current_user.id %>
 <span class="alert alert-block segmented-items">
   <span class="item"><%= raw l(@order.appointment, format: :short).sub(" ", "<br>") %></span>
@@ -23,7 +31,8 @@
   </li>
 </ul>
 <div class="content-padded">
-  个人简介：<%= @bid.mechanic.description %>
+  地址：<%= @bid.mechanic.user.address %><br>
+  简介：<%= @bid.mechanic.description %>
 </div>
 
 <div class="content-padded margin-top-large">

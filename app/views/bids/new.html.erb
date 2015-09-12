@@ -17,8 +17,11 @@
 
   <div class="content-padded">
     <%= show_for @order do |i| %>
+      <%= i.attribute :address %>
       <%= i.attribute :appointment, format: :short %>
       <%= i.attribute :skill, with: :name %>
+      <%= i.attribute :brand, with: :name %>
+      <%= i.attribute :series, with: :name %>
       <%= i.attribute :quoted_price %>
       <%= i.attribute :remark %>
     <% end %>
