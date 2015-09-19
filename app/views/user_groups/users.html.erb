@@ -13,7 +13,7 @@
         <%= user_group.user.nickname %>
         <div class="btn btn-mini btn-primary">堂主</div>
       </div>
-      <% if user_group.user.is_mechanic %>
+      <% if user_group.user.mechanic? %>
         <div class="media-block">
           <p class="pull-right">接单 <%= user_group.user.mechanic.orders_count %> 次</p>
           <p>专业 <%= user_group.user.mechanic.professionality_average %> 分 守时 <%= user_group.user.mechanic.timeliness_average %> 分</p>
@@ -28,7 +28,7 @@
         <div class="media-block">
           <%= user.nickname %>
         </div>
-        <% if user.is_mechanic %>
+        <% if user.mechanic? %>
           <div class="media-block">
             <p class="pull-right">接单 <%= user.mechanic.orders_count %> 次</p>
             <p>专业 <%= user.mechanic.professionality_average %> 分 守时 <%= user.mechanic.timeliness_average %> 分</p>

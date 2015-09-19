@@ -1,6 +1,9 @@
 class CreateMechanics < ActiveRecord::Migration
   def change
     create_table :mechanics do |t|
+      t.integer :user_id
+      t.index   :user_id
+
       t.integer :province_id
       t.index   :province_id
       t.integer :city_id

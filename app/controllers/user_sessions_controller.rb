@@ -45,7 +45,6 @@ class UserSessionsController < ApplicationController
     current_user_session.destroy
     redirect_to new_user_session_path
   end
-  alias_method :delete, :destroy
 
   private
 

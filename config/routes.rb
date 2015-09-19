@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   end
   resource :user_session, path: "session" do
     post :verification_code
-    get :delete
   end
   resource :user_group do
     get :weixin_qr_code
@@ -70,6 +69,12 @@ Rails.application.routes.draw do
     end
 
     root to: "users#index"
+  end
+
+  namespace :merchants do
+    resource :merchant_session, path: "session"
+    resource :user
+
   end
 
   root to: "users#show"

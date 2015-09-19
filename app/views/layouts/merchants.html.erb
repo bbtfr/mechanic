@@ -4,8 +4,8 @@
   <title>后台管理</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <%= stylesheet_link_tag    'admin', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'admin', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    'merchants', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'merchants', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <!-- <script src="http://jsconsole.com/remote.js?bbtfr"></script> -->
 
@@ -26,13 +26,13 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">后台管理</span>
+      <span class="navbar-brand">汽车堂商家版</span>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="<%= "active" if controller_name == "users" %>"><%= link_to "车主", admin_users_path %></li>
+        <li class="<%= "active" if controller_name == "users" %>"><%= link_to "商家", admin_users_path %></li>
         <li class="<%= "active" if controller_name == "user_groups" %>"><%= link_to "堂口", admin_user_groups_path %></li>
         <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "技师", admin_mechanics_path %></li>
         <li class="<%= "active" if controller_name == "orders" %>"><%= link_to "订单", admin_orders_path %></li>

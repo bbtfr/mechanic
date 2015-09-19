@@ -7,7 +7,7 @@ class BidsController < ApplicationController
   end
 
   def create
-    klass = bid_klass.where(mechanic_id: current_user.mechanic_id)
+    klass = bid_klass.where(mechanic_id: current_user.mechanic)
     @bid = klass.first || klass.new(bid_params)
     if @bid.persisted?
       flash[:notice] = "已经参与过本次竞价，无法修改加价"

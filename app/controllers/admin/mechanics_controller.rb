@@ -2,7 +2,7 @@ class Admin::MechanicsController < Admin::ApplicationController
   before_filter :find_mechanic, except: [ :index ]
 
   def index
-    @mechanics = User.where(is_mechanic: true).all
+    @mechanics = User.mechanics
   end
 
   private

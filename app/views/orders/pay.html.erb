@@ -1,3 +1,7 @@
+<%= content_for :title do %>
+  订单支付
+<% end %>
+
 <% if @order_params %>
   <script type="text/javascript">
     wx.config(<%= raw Weixin.get_jssign_package(request.url).merge(jsApiList: %w(chooseWXPay)).to_json %>);

@@ -32,14 +32,14 @@
     </li>
   </ul>
   <div class="content-padded">
-    手机号码：<%= @bid.mechanic.user.mobile %><br>
+    手机号码：<%= @order.mechanic.user.mobile %><br>
     地址：<%= @order.mechanic.user.address %><br>
     简介：<%= @order.mechanic.description %>
   </div>
 <% end %>
 
 <div class="content-padded margin-top-large">
-  <% if current_user.is_mechanic %>
+  <% if current_user.mechanic? %>
     <% case @order.state %>
     <% when :paid %>
       <%= link_to "开始服务", work_order_path(@order), class: "btn btn-block btn-positive" %>

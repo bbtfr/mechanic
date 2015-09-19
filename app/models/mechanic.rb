@@ -1,10 +1,11 @@
 class Mechanic < ActiveRecord::Base
-  has_one :user
+  belongs_to :user
+
   has_many :orders
   has_and_belongs_to_many :skills
 
   has_many :fellowships
-  has_many :users, through: :fellowships
+  has_many :followed_users, through: :fellowships, source: :user
 
   belongs_to :province
   belongs_to :city

@@ -10,7 +10,7 @@
   </div>
 </div>
 
-<% if current_user.is_mechanic %>
+<% if current_user.mechanic? %>
   <div class="hero segmented-items segmented-items-bordered text-center">
     <div class="item">
       专业 <%= current_user.mechanic.professionality_average %> 分<br><br>
@@ -44,7 +44,7 @@
   <li class="table-view-cell">
     <%= link_to "账户余额：#{number_with_delimiter(current_user.balance || 0)} 元", new_withdrawal_path, class: "navigate-right" %>
   </li>
-  <% if current_user.is_mechanic %>
+  <% if current_user.mechanic? %>
     <li class="table-view-cell">
       <%= link_to "擅长技能：#{current_user.mechanic.skills.map(&:name).join("、")}", edit_user_path, class: "navigate-right" %>
     </li>
@@ -55,7 +55,7 @@
   <li class="table-view-cell">
     <%= link_to "联系地址：#{current_user.address}", edit_user_path, class: "navigate-right" %>
   </li>
-  <% if current_user.is_mechanic %>
+  <% if current_user.mechanic? %>
     <li class="table-view-cell">
       <%= link_to "个人简介：#{current_user.mechanic.description}", edit_user_path, class: "navigate-right" %>
     </li>
@@ -63,7 +63,7 @@
   <li class="table-view-cell">
     <%= link_to "订单管理", orders_path, class: "navigate-right" %>
   </li>
-  <% unless current_user.is_mechanic %>
+  <% unless current_user.mechanic? %>
     <li class="table-view-cell">
       <%= link_to "收藏技师", mechanics_path, class: "navigate-right" %>
     </li>

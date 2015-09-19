@@ -2,7 +2,7 @@
   我的信息
 <% end %>
 
-<% if @user.is_mechanic
+<% if @user.mechanic?
   city_map = City.all.to_a.
     group_by(&:province_id).
     map {|key, value|[key, value.map {|obj| [ obj.name, obj.id ]}]}.
@@ -31,7 +31,7 @@ end %>
     <%= f.input :gender, collection: enum_option_pairs(User, :gender) %>
     <%= f.input :address %>
 
-    <% if @user.is_mechanic %>
+    <% if @user.mechanic? %>
       <%= f.input :skill_ids, as: :check_boxes, collection: Skill.all %>
 
       <%= f.input :province_id, collection: Province.all %>
@@ -46,7 +46,7 @@ end %>
 <% end %>
 
 <script type="text/javascript">
-  <% if @user.is_mechanic %>
+  <% if @user.mechanic? %>
     var cityMap = <%= raw city_map.to_json %>
     var districtMap = <%= raw district_map.to_json %>
 

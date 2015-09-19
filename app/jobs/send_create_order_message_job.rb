@@ -2,7 +2,7 @@ class SendCreateOrderMessageJob < ActiveJob::Base
   queue_as :default
 
   def perform(order)
-    users = User.where(is_mechanic: true).joins(mechanic: :skills)
+    users = User.mechanics.joins(mechanic: :skills)
 
     location = LBS.find(order.lbs_id).parent
     foreign_key = "mechanics.#{location.class.name.foreign_key}"

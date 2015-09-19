@@ -1,3 +1,4 @@
+<% owner = @order.user_id == current_user.id %>
 <%= content_for :title do %>
   <% if owner %>
     选择技师
@@ -6,7 +7,6 @@
   <% end %>
 <% end %>
 
-<% owner = @order.user_id == current_user.id %>
 <span class="alert alert-block segmented-items">
   <span class="item"><%= raw l(@order.appointment, format: :short).sub(" ", "<br>") %></span>
   <span class="item">类型：<br><%= @order.skill.name %></span>
@@ -42,7 +42,7 @@
   <% end %>
 </div>
 
-<% if current_user.is_mechanic %>
+<% if current_user.mechanic? %>
   <script type="text/javascript">
     var interval = setInterval(function() {
       xhrRequest("GET", window.location.href + ".js", function(xhr) {

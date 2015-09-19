@@ -1,0 +1,15 @@
+<h3 class="page-header col-md-12">帐号登录</h3>
+
+<div class="col-md-7">
+  <%= bootstrap_simple_form_for(@merchant_session, url: merchants_merchant_session_path) do |f| %>
+    <%= f.error_messages %>
+
+    <%= f.input :mobile %>
+    <%= f.input :password %>
+
+    <%= link_to "注册帐号", new_merchants_user_path %> |
+    <%= link_to "忘记密码？", edit_merchants_merchant_session_path %>
+
+    <%= f.button :submit, "登录", class: "btn-primary pull-right" %>
+  <% end %>
+</div>

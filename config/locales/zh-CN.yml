@@ -3,6 +3,7 @@ zh-CN:
     error_messages:
       login_blank: 不能为空
       login_not_found: 验证失败
+      password_blank: 不能为空
       verification_code_blank: 不能为空
       verification_code_invalid: 错误
       not_confirmed: 您的帐号还未验证通过
@@ -13,10 +14,22 @@ zh-CN:
         mobile: 手机号码
         verification_code: 验证码
         remember_me: 记住我
+      merchant_session:
+        mobile: 手机号码
+        password: 登录密码
   enums:
     gender:
       male: 男
       female: 女
+  simple_form:
+    labels:
+      user:
+        merchant:
+          nickname: 姓名
+          mobile: 手机号码
+          verification_code: 验证码
+          password: 登录密码
+          password_confirmation: 确认密码
   activerecord:
     attributes:
       user:
@@ -37,11 +50,14 @@ zh-CN:
         district_id: 区县
         district: 区县
         description: 个人简介
+        nickname_for_merchant: 店铺名称
       mechanic:
         skills: 擅长技能
         province: 省份
         city: 城市
         district: 区县
+      merchant:
+        mobile: 手机号码
       user_group:
         nickname: 分堂昵称
         description: 申请简介

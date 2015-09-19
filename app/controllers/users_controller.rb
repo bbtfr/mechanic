@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
   def create
     @user.assign_attributes(user_params)
-    @user.build_mechanic(mechanic_params) if @user.is_mechanic
+    @user.build_mechanic(mechanic_params) if @user.mechanic?
     if @user.save
       redirect_to session[:original_url] || root_path
     else
@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   def update
     @user.assign_attributes(user_params)
     @user.build_mechanic unless @user.mechanic
-    @user.mechanic.assign_attributes(mechanic_params) if @user.is_mechanic
+    @user.mechanic.assign_attributes(mechanic_params) if @user.mechanic?
     if @user.save
       redirect_to user_path
     else

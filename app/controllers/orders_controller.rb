@@ -112,7 +112,7 @@ class OrdersController < ApplicationController
   private
 
     def redirect_pending
-      if current_user.is_mechanic
+      if current_user.mechanic?
         flash[:notice] = "技师无法创建预约订单..."
         redirect_to orders_path
       elsif order = order_klass.pendings.first
@@ -125,14 +125,14 @@ class OrdersController < ApplicationController
     end
 
     def redirect_user
-      unless current_user.is_mechanic
-        flash[:error] = "商户无法进行此操作！"
+      if current_user.client?
+        flash[:error] = "车主无法进行此操作！"
         redirect_to orders_path
       end
     end
 
     def redirect_mechanic
-      if current_user.is_mechanic
+      if current_user.mechanic?
         flash[:error] = "技师无法进行此操作！"
         redirect_to orders_path
       end
@@ -143,8 +143,8 @@ class OrdersController < ApplicationController
     end
 
     def order_klass
-      if current_user.is_mechanic
-        Order.where(mechanic_id: current_user.mechanic_id)
+      if current_user.mechanic?
+        Order.where(mechanic_id: current_user.mechanic)
       else
         Order.where(user_id: current_user)
       end

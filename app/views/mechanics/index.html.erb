@@ -2,14 +2,14 @@
   收藏技师
 <% end %>
 
-<% if current_user.mechanics.empty? %>
+<% if current_user.followed_mechanics.empty? %>
   <div class="alert alert-block alert-warning">
     您还没有收藏任何技师！
   </div>
 <% end %>
 
 <ul class="table-view">
-  <% current_user.mechanics.each do |mechanic| %>
+  <% current_user.followed_mechanics.each do |mechanic| %>
     <li class="table-view-cell media">
       <%= image_tag mechanic.user.avatar.url(:thumb), class: "media-object pull-left" %>
       <div class="media-body">

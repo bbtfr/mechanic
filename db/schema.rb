@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150903102920) do
+ActiveRecord::Schema.define(version: 20150915152711) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 20150903102920) do
   add_index "fellowships", ["user_id"], name: "index_fellowships_on_user_id"
 
   create_table "mechanics", force: :cascade do |t|
+    t.integer  "user_id"
     t.integer  "province_id"
     t.integer  "city_id"
     t.integer  "district_id"
@@ -68,11 +69,30 @@ ActiveRecord::Schema.define(version: 20150903102920) do
   add_index "mechanics", ["city_id"], name: "index_mechanics_on_city_id"
   add_index "mechanics", ["district_id"], name: "index_mechanics_on_district_id"
   add_index "mechanics", ["province_id"], name: "index_mechanics_on_province_id"
+  add_index "mechanics", ["user_id"], name: "index_mechanics_on_user_id"
 
   create_table "mechanics_skills", id: false, force: :cascade do |t|
     t.integer "mechanic_id", null: false
     t.integer "skill_id",    null: false
   end
+
+  create_table "merchants", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "mobile"
+    t.boolean  "mobile_confirmed",    default: false
+    t.string   "nickname"
+    t.string   "avatar_file_name"
+    t.string   "avatar_content_type"
+    t.integer  "avatar_file_size"
+    t.datetime "avatar_updated_at"
+    t.integer  "role_cd",             default: 0
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
+  add_index "merchants", ["mobile"], name: "index_merchants_on_mobile", unique: true
+  add_index "merchants", ["role_cd"], name: "index_merchants_on_role_cd"
+  add_index "merchants", ["user_id"], name: "index_merchants_on_user_id"
 
   create_table "orders", force: :cascade do |t|
     t.integer  "user_id"
@@ -85,7 +105,6 @@ ActiveRecord::Schema.define(version: 20150903102920) do
     t.integer  "quoted_price"
     t.integer  "price"
     t.text     "remark"
-    t.boolean  "avaliable",                      default: false
     t.integer  "professionality",                default: 4
     t.integer  "timeliness",                     default: 4
     t.text     "review"
@@ -109,12 +128,14 @@ ActiveRecord::Schema.define(version: 20150903102920) do
     t.string   "user_attach_2_content_type"
     t.integer  "user_attach_2_file_size"
     t.datetime "user_attach_2_updated_at"
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
   end
 
   add_index "orders", ["bid_id"], name: "index_orders_on_bid_id"
+  add_index "orders", ["mechanic_id"], name: "index_orders_on_mechanic_id"
   add_index "orders", ["state_cd"], name: "index_orders_on_state_cd"
+  add_index "orders", ["user_id"], name: "index_orders_on_user_id"
 
   create_table "provinces", force: :cascade do |t|
     t.string  "name"
@@ -160,15 +181,14 @@ ActiveRecord::Schema.define(version: 20150903102920) do
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
-    t.boolean  "is_mechanic",         default: false
-    t.integer  "mechanic_id"
+    t.integer  "role_cd",             default: 0
     t.integer  "user_group_id"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
   end
 
-  add_index "users", ["mechanic_id"], name: "index_users_on_mechanic_id"
   add_index "users", ["mobile"], name: "index_users_on_mobile", unique: true
+  add_index "users", ["role_cd"], name: "index_users_on_role_cd"
   add_index "users", ["user_group_id"], name: "index_users_on_user_group_id"
 
   create_table "withdrawals", force: :cascade do |t|

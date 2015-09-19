@@ -30,9 +30,8 @@ class CreateUsers < ActiveRecord::Migration
 
       t.attachment :avatar
 
-      t.boolean    :is_mechanic, default: false
-      t.integer    :mechanic_id
-      t.index      :mechanic_id
+      t.integer    :role_cd, default: 0
+      t.index      :role_cd
 
       t.integer    :user_group_id
       t.index      :user_group_id
