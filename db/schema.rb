@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(version: 20150915152711) do
   create_table "orders", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "mechanic_id"
+    t.integer  "merchant_id"
     t.string   "address"
     t.datetime "appointment"
     t.integer  "skill_id"
@@ -140,6 +141,7 @@ ActiveRecord::Schema.define(version: 20150915152711) do
 
   add_index "orders", ["bid_id"], name: "index_orders_on_bid_id"
   add_index "orders", ["mechanic_id"], name: "index_orders_on_mechanic_id"
+  add_index "orders", ["merchant_id"], name: "index_orders_on_merchant_id"
   add_index "orders", ["state_cd"], name: "index_orders_on_state_cd"
   add_index "orders", ["user_id"], name: "index_orders_on_user_id"
 

@@ -6,7 +6,7 @@
   <div class="segmented-control">
     <%= link_to "待服务", orders_path(state: :paids), class: "control-item#{" active" if @state == :paids}" %>
     <%= link_to "服务中", orders_path(state: :workings), class: "control-item#{" active" if @state == :workings}" %>
-    <%= link_to "已结束", orders_path(state: :finisheds), class: "control-item#{" active" if @state == :finisheds}" %>
+    <%= link_to "待评价", orders_path(state: :finisheds), class: "control-item#{" active" if @state == :finisheds}" %>
   </div>
 </nav>
 

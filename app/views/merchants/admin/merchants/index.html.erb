@@ -1,0 +1,11 @@
+<h3 class="page-header">员工管理</h3>
+
+<%= index_for [ :merchants, :admin, @merchants ], class: "table table-hover data-tables" do |i| %>
+  <%= i.attribute :nickname %>
+  <%= i.attribute :mobile %>
+  <%= i.attribute :role do |merchant| %>
+    <%= te merchant, :role %>
+  <% end %>
+
+  <%= i.actions :show %>
+<% end %>

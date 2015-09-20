@@ -1,0 +1,20 @@
+<h3 class="page-header">我的订单</h3>
+
+<div class="col-md-2 col-xs-4">
+  <ul class="nav nav-pills nav-stacked">
+    <li class="<%= "active" if @state == :paids %>"><%= link_to "待服务", merchants_orders_path(state: :paids) %></li>
+    <li class="<%= "active" if @state == :workings %>"><%= link_to "服务中", merchants_orders_path(state: :workings) %></li>
+    <li class="<%= "active" if @state == :finisheds %>"><%= link_to "待评价", merchants_orders_path(state: :finisheds) %></li>
+  </ul>
+</div>
+
+<div class="col-md-10 col-xs-8">
+  <%= index_for [ :merchants, @orders ], class: "table table-hover data-tables" do |i| %>
+    <%= i.attribute :appointment, format: :short %>
+    <%= i.attribute :skill, with: :name %>
+    <%= i.attribute :price %>
+    <%= i.attribute :mechanic, with: :user_nickname, if_raise: nil %>
+
+    <%= i.actions :show %>
+  <% end %>
+</div>

@@ -110,6 +110,12 @@ Rails.application.routes.draw do
     resources :merchants
     resources :mechanics
 
+    namespace :admin do
+      resources :merchants
+      resources :orders
+
+    end
+
     root to: "orders#new"
   end
 

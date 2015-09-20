@@ -40,6 +40,9 @@ class CreateOrders < ActiveRecord::Migration
       t.string     :contact_nickname
       t.string     :contact_mobile
 
+      t.integer   :cancel_cd, default: 0
+      t.index     :cancel_cd
+
       t.timestamps null: false
     end
   end

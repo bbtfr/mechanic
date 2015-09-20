@@ -23,6 +23,8 @@ zh-CN:
     gender:
       male: 男
       female: 女
+    role:
+      admin: 管理员
   activerecord:
     attributes:
       user:
@@ -62,6 +64,7 @@ zh-CN:
         current_password: 当前密码
         password: 登录密码
         password_confirmation: 确认密码
+        role: 系统角色
       store:
         nickname: 店铺名称
       user_group:
@@ -87,6 +90,8 @@ zh-CN:
         review: 评论
         mechanic_attach_1: 施工照片
         mechanic_attach_2: 施工照片
+        merchant: 发布人
+        contact: 联系人
         contact_nickname: 姓名
         contact_mobile: 手机号码
       bid:

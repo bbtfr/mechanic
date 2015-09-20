@@ -3,6 +3,8 @@ class Merchant < ActiveRecord::Base
 
   attr_accessor :current_password
 
+  as_enum :role, admin: 0, user: 1
+
   belongs_to :user
   belongs_to :store, foreign_key: :user_id, autosave: true
   accepts_nested_attributes_for :store

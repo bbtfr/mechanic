@@ -2,7 +2,7 @@
 
 <% @series = @series.includes(:brand) %>
 
-<div class="col-md-10 col-xs-8" id="collapseExample">
+<div class="col-md-10 col-xs-8">
   <%= index_for [ :admin, :setting, @series ], class: "table table-hover data-tables" do |i| %>
     <%= i.attribute :name %>
     <%= i.attribute :brand, with: :name %>

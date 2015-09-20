@@ -3,6 +3,15 @@ class Merchants::OrdersController < Merchants::ApplicationController
   before_filter :find_order, except: [ :index, :new, :create, :notify ]
   before_filter :redirect_pending, only: [ :new, :create ]
 
+  def index
+    @state = if %w(pendings paids workings finisheds).include? params[:state]
+        params[:state].to_sym
+      else
+        :paids
+      end
+    @orders = order_klass.send(@state)
+  end
+
   def new
     @order = order_klass.new
   end
@@ -84,7 +93,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
     end
 
     def order_klass
-      Order.where(user_id: current_merchant.store)
+      Order.where(user_id: current_merchant.store, merchant_id: current_merchant)
     end
 
     def order_params
