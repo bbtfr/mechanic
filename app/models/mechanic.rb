@@ -23,12 +23,16 @@ class Mechanic < ActiveRecord::Base
     user.nickname
   end
 
+  def user_address
+    user.address
+  end
+
   def total_income
     orders.finisheds.sum(:price) || 0
   end
 
   def orders_count
-    orders.available.count
+    orders.availables.count
   end
 
   def regular_client? user

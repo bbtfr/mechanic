@@ -7,7 +7,21 @@ class CreateMerchants < ActiveRecord::Migration
       t.string     :mobile
       t.index      :mobile, unique: true
 
-      t.boolean    :mobile_confirmed, default: false
+      # Authlogic::ActsAsAuthentic::Password
+      t.string    :crypted_password
+      t.string    :password_salt
+
+      # Authlogic::ActsAsAuthentic::PersistenceToken
+      t.string     :persistence_token
+
+      # Authlogic::ActsAsAuthentic::VerificationCode
+      t.string     :verification_code
+
+      # # Authlogic::Session::MagicStates
+      # t.boolean    :active, default: false
+      # t.boolean    :approved, default: false
+      t.boolean    :confirmed, default: false
+
       t.string     :nickname
 
       t.attachment :avatar

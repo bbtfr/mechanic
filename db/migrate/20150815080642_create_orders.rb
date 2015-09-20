@@ -5,6 +5,8 @@ class CreateOrders < ActiveRecord::Migration
       t.index     :user_id
       t.integer   :mechanic_id
       t.index     :mechanic_id
+      t.integer   :merchant_id
+      t.index     :merchant_id
 
       t.string    :address
       t.datetime  :appointment
@@ -34,6 +36,9 @@ class CreateOrders < ActiveRecord::Migration
 
       t.attachment :user_attach_1
       t.attachment :user_attach_2
+
+      t.string     :contact_nickname
+      t.string     :contact_mobile
 
       t.timestamps null: false
     end

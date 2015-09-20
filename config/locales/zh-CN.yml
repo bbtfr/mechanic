@@ -1,9 +1,11 @@
 zh-CN:
   authlogic:
     error_messages:
+      login_invalid: 只能包含数字
       login_blank: 不能为空
       login_not_found: 验证失败
       password_blank: 不能为空
+      login_invalid: 错误
       verification_code_blank: 不能为空
       verification_code_invalid: 错误
       not_confirmed: 您的帐号还未验证通过
@@ -21,15 +23,6 @@ zh-CN:
     gender:
       male: 男
       female: 女
-  simple_form:
-    labels:
-      user:
-        merchant:
-          nickname: 姓名
-          mobile: 手机号码
-          verification_code: 验证码
-          password: 登录密码
-          password_confirmation: 确认密码
   activerecord:
     attributes:
       user:
@@ -50,14 +43,27 @@ zh-CN:
         district_id: 区县
         district: 区县
         description: 个人简介
-        nickname_for_merchant: 店铺名称
       mechanic:
+        user_nickname: 姓名
+        user_mobile: 手机号码
+        user_address: 地址
+        description: 详情
+        orders_count: 接单次数
+        professionality_average: 专业
+        timeliness_average: 守时
         skills: 擅长技能
         province: 省份
         city: 城市
         district: 区县
       merchant:
+        nickname: 姓名
         mobile: 手机号码
+        verification_code: 验证码
+        current_password: 当前密码
+        password: 登录密码
+        password_confirmation: 确认密码
+      store:
+        nickname: 店铺名称
       user_group:
         nickname: 分堂昵称
         description: 申请简介
@@ -81,6 +87,8 @@ zh-CN:
         review: 评论
         mechanic_attach_1: 施工照片
         mechanic_attach_2: 施工照片
+        contact_nickname: 姓名
+        contact_mobile: 手机号码
       bid:
         markup_price: 加价
       brand:

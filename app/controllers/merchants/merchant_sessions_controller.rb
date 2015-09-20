@@ -8,7 +8,7 @@ class Merchants::MerchantSessionsController < Merchants::ApplicationController
   def create
     @merchant_session = MerchantSession.new(merchant_session_params)
     if @merchant_session.save
-      redirect_to session[:original_url] || root_path
+      redirect_to session[:original_url] || merchants_root_path
     else
       render :new
     end

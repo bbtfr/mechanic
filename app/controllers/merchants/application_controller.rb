@@ -17,11 +17,11 @@ class Merchants::ApplicationController < ActionController::Base
 
     def current_merchant
       return @current_merchant if defined?(@current_merchant)
-      @current_merchant = current_merchant_session && current_merchant_session.user
+      @current_merchant = current_merchant_session && current_merchant_session.merchant
     end
 
     def authenticate!
-      if !current_merchant_session || !current_merchant || !current_merchant.mobile_confirmed
+      if !current_merchant_session || !current_merchant
         session[:original_url] = request.original_url
         redirect_to new_merchants_merchant_session_path
       else

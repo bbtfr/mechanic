@@ -1,14 +1,10 @@
-<%= content_for :title do %>
-  选择技师
-<% end %>
+<h3 class="page-header col-md-12">选择技师</h3>
 
-<div id="content">
+<div class="clearfix" id="content">
   <%= render "index" %>
 </div>
 
-<div class="content-padded margin-top-large">
-  <%= link_to "取消订单", cancel_order_path(@order), class: "btn btn-block btn-negative" %>
-</div>
+<%= link_to "取消订单", cancel_merchants_order_path(@order), class: "btn btn-danger pull-right" %>
 
 <script type="text/javascript">
   var interval = setInterval(function() {

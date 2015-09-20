@@ -4,7 +4,12 @@
 
 <div class="content-padded">
   <%= show_for @order do |s| %>
-    <%= s.attribute :"user.mobile" %>
+    <% if @order.available? %>
+      <%= s.fields_for :user do |ss| %>
+        <%= ss.attribute :mobile %>
+      <% end %>
+    <% end %>
+
     <%= s.attribute :address %>
     <%= s.attribute :appointment, format: :long %>
     <%= s.attribute :skill, with: :name %>

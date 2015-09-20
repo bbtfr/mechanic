@@ -9,7 +9,6 @@ module MobileVerificationCode
     end
 
     validates_format_of :mobile, with: /\d{11}/
-    validates_presence_of :mobile
     validates_uniqueness_of :mobile
     validate :send_verification_code, if: :verification_code_changed?
 
@@ -21,10 +20,10 @@ module MobileVerificationCode
   def send_verification_code
     return unless mobile =~ /\d{11}/
     result = SMSMailer.confirmation(self).deliver
-    errors.add :base, result[:error] unless result[:success]
+    # errors.add :base, result[:error] unless result[:success]
   end
 
-  def confirm_mobile!
-    update_attribute(:mobile_confirmed, true)
+  def confirm!
+    update_attribute(:confirmed, true)
   end
 end

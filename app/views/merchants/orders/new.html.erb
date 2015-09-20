@@ -1,0 +1,73 @@
+<h3 class="page-header col-md-12">预约技师</h3>
+
+<%
+series_map = Series.all.to_a.
+  group_by(&:brand_id).
+  map {|key, value|[key, value.map {|obj| [ obj.name, obj.id ]}]}.
+  to_h
+%>
+
+<div class="col-md-7">
+  <%= bootstrap_simple_form_for([:merchants, @order]) do |f| %>
+    <%= f.error_messages %>
+
+    <h5 class="text-muted">需求信息</h5>
+
+    <%= f.input :address %>
+    <%= f.input :appointment do %>
+      <div class="datetime-input-group">
+        <%= f.input_field :appointment, class: "form-control" %>
+      </div>
+    <% end %>
+
+    <%= f.association :skill %>
+
+    <%= f.input :brand_id, collection: Brand.all %>
+    <%= f.input :series_id, collection: series_map[@order.brand_id] || [] %>
+
+    <%= f.input :quoted_price %>
+    <%= f.input :remark, input_html: { rows: 4 } %>
+
+    <h5 class="text-muted">联系人信息</h5>
+
+    <%= f.input :contact_nickname %>
+    <%= f.input :contact_mobile %>
+
+    <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  var seriesMap = <%= raw series_map.to_json %>
+
+  var brand = order_brand_id;
+  var series = order_series_id;
+  var brandCallback = function() {
+    removeOptions(series.querySelectorAll("option"));
+    appendOptions(series, seriesMap[brand.value]);
+  };
+
+  brand.addEventListener("change", brandCallback);
+
+  var getLocationCallback = function(res) {
+    url = "http://apis.map.qq.com/ws/geocoder/v1";
+    url += "?location=" + encodeURI(res.latitude + "," + res.longitude);
+    url += "&coord_type=1"
+    url += "&output=jsonp";
+    url += "&key=<%= LBS::Key %>";
+
+    jsonp(url, function(res) {
+      address = res["result"]["formatted_addresses"]["recommend"];
+      order_lbs_id.value = res["result"]["ad_info"]["adcode"];
+      if (order_address.value !== address && confirm("使用定位地址：" + address)) {
+        order_address.value = address;
+      }
+    });
+  };
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      getLocationCallback(position.coords);
+    });
+  }
+</script>

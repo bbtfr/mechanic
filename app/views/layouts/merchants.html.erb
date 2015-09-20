@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>后台管理</title>
+  <title>汽车堂商家版</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <%= stylesheet_link_tag    'merchants', media: 'all', 'data-turbolinks-track' => true %>
@@ -29,16 +29,24 @@
       <span class="navbar-brand">汽车堂商家版</span>
     </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="<%= "active" if controller_name == "users" %>"><%= link_to "商家", admin_users_path %></li>
-        <li class="<%= "active" if controller_name == "user_groups" %>"><%= link_to "堂口", admin_user_groups_path %></li>
-        <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "技师", admin_mechanics_path %></li>
-        <li class="<%= "active" if controller_name == "orders" %>"><%= link_to "订单", admin_orders_path %></li>
-        <li class="<%= "active" if controller_name == "withdrawals" %>"><%= link_to "账目提现", admin_withdrawals_path %></li>
-        <li class="<%= "active" if controller_path.start_with? "admin/setting/" %>"><%= link_to "设置", admin_setting_brands_path %></li>
-    </div><!-- /.navbar-collapse -->
+    <% if current_merchant %>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="<%= "active" if controller_name == "orders" and %w(new).include? action_name or controller_name == "bids" %>"><%= link_to "预约技师", new_merchants_order_path %></li>
+          <li class="<%= "active" if controller_name == "orders" and %w(index).include? action_name %>"><%= link_to "订单管理", merchants_orders_path %></li>
+          <li class="<%= "active" if controller_name == "merchants" and action_name != "change_password" %>"><%= link_to "员工管理", merchants_merchants_path %></li>
+          <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "我的技师", merchants_mechanics_path %></li>
+          <li class="<%= "active" if controller_name == "merchants" and action_name == "change_password" %>"><%= link_to "修改密码", change_password_merchants_merchant_path %></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li><a><%= current_merchant.nickname %></a></li>
+          <li><%= link_to "退出登录", merchants_merchant_session_path, method: :delete %></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    <% end %>
+
   </div><!-- /.container-fluid -->
 </nav>
 
@@ -52,6 +60,7 @@
 <% end %>
 
 <%= yield %>
+
 </div>
 
 </body>

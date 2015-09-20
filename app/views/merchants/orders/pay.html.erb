@@ -1,0 +1,14 @@
+<h3 class="page-header col-md-12">支付订单</h3>
+
+<div class="col-sm-6">
+  微信扫码支付订单
+  <%= image_tag @code_url, id: "qr_code" %>
+</div>
+
+<script type="text/javascript">
+  var interval = setInterval(function() {
+    xhrRequest("GET", "/merchants/order/<%= @order.id %>/result.js", function(xhr) {
+      eval(xhr.responseText);
+    });
+  }, 5000)
+</script>

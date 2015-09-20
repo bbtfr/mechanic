@@ -1,0 +1,12 @@
+<h3 class="page-header col-md-12">验证手机</h3>
+
+<div class="col-md-7">
+  <%= bootstrap_simple_form_for(@merchant, url: confirm_merchants_merchant_path) do |f| %>
+    <%= f.error_messages %>
+
+    <%= f.hidden_field :mobile %>
+    <%= f.input :verification_code, input_html: { value: nil } %>
+
+    <%= f.button :submit, "验证手机", class: "btn-primary pull-right" %>
+  <% end %>
+</div>

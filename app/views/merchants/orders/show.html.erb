@@ -1,0 +1,73 @@
+<h3 class="page-header col-md-12">订单详情</h3>
+
+<div class="col-sm-offset-3 col-sm-9">
+  <%= show_for @order, class: "dl-horizontal" do |s| %>
+    <% if @order.available? %>
+      <%= s.fields_for :user do |ss| %>
+        <%= ss.attribute :mobile %>
+      <% end %>
+    <% end %>
+
+    <%= s.attribute :address %>
+    <%= s.attribute :appointment, format: :long %>
+    <%= s.attribute :skill, with: :name %>
+    <%= s.attribute :brand, with: :name %>
+    <%= s.attribute :series, with: :name %>
+    <%= s.attribute :price %>
+    <%= s.attribute :remark %>
+  <% end %>
+</div>
+
+<% if @order.mechanic_id %>
+
+  <h3 class="page-header col-md-12">技师信息</h3>
+
+  <div class="col-sm-3 text-right">
+    <%= image_tag(@order.mechanic.user.avatar.url(:thumb)) %>
+  </div>
+
+  <div class="col-sm-9">
+    <%= show_for @order.mechanic, class: "dl-horizontal" do |s| %>
+      <%= s.attribute :user_nickname %>
+      <%= s.attribute :user_address %>
+      <%= s.attribute :description %>
+      <%= s.attribute :orders_count %>
+      <%= s.attribute :professionality_average %>
+      <%= s.attribute :timeliness_average %>
+    <% end %>
+  </div>
+<% end %>
+
+<% case @order.state %>
+<% when :paid %>
+  <div class="pull-right">
+    <span class="btn btn-danger" id="refund_order_button">申请退款</span>
+  </div>
+  <script type="text/javascript">
+    refund_order_button.addEventListener("click", function() {
+      if (confirm("您确定要申请退款？")) {
+        window.location.href = "<%= refund_merchants_order_path(@order) %>";
+      }
+    });
+  </script>
+<% when :confirming %>
+  <% if @order.mechanic_attach_1 || @order.mechanic_attach_2 %>
+    施工照片：点击查看大图<br>
+    <%= link_to @order.mechanic_attach_1.url(:original) do %>
+      <%= image_tag @order.mechanic_attach_1.url(:thumb) %>
+    <% end if @order.mechanic_attach_1.present? %>
+    <%= link_to @order.mechanic_attach_2.url(:original) do %>
+      <%= image_tag @order.mechanic_attach_2.url(:thumb) %>
+    <% end if @order.mechanic_attach_2.present? %>
+  <% end %>
+  <%= link_to "确认完工", confirm_order_path(@order), class: "btn btn-primary" %>
+<% when :finished %>
+  <div class="pull-right">
+    <% if current_user.follow? @order.mechanic %>
+      <%= link_to "取消收藏技师", unfollow_mechanic_path(@order.mechanic), class: "btn btn-danger" %>
+    <% else %>
+      <%= link_to "收藏技师", follow_mechanic_path(@order.mechanic), class: "btn btn-primary" %>
+    <% end %>
+    <%= link_to "点评技师", review_order_path(@order), class: "btn btn-primary" %>
+  </div>
+<% end %>

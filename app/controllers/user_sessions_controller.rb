@@ -11,7 +11,7 @@ class UserSessionsController < ApplicationController
     if params.key? "code"
       @openid = Weixin.get_oauth_access_token(params["code"]).result["openid"]
       user = User.where(weixin_openid: @openid).first
-      if user && user.mobile_confirmed
+      if user && user.confirmed
         UserSession.create(user)
         redirect_to session[:original_url] || root_path
       end
@@ -33,7 +33,7 @@ class UserSessionsController < ApplicationController
       render :new
     else
       if @user_session.save
-        @user.confirm_mobile!
+        @user.confirm!
         redirect_to session[:original_url] || root_path
       else
         render :new

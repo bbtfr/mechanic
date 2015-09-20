@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
     end
 
     def authenticate!
-      if !current_user_session || !current_user || !current_user.mobile_confirmed
+      if !current_user_session || !current_user
         session[:original_url] = request.original_url
         redirect_to new_user_session_path
       elsif current_user.invalid?

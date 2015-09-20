@@ -1,0 +1,24 @@
+<h3 class="page-header col-md-12">注册帐号</h3>
+
+<div class="col-md-7">
+  <%= bootstrap_simple_form_for(@merchant, url: merchants_merchant_path) do |f| %>
+    <%= f.error_messages %>
+
+    <h5 class="text-muted">联系人信息</h5>
+
+    <%= f.input :nickname %>
+    <%= f.input :mobile %>
+
+    <%= f.input :password %>
+    <%= f.input :password_confirmation %>
+
+    <h5 class="text-muted">商家信息</h5>
+
+    <%= f.bootstrap_simple_fields_for :store do |ff| %>
+      <%= ff.input :nickname %>
+    <% end %>
+
+    已有帐号？<%= link_to "马上登录", new_merchants_merchant_session_path %>
+    <%= f.button :submit, "注册", class: "btn-primary pull-right" %>
+  <% end %>
+</div>

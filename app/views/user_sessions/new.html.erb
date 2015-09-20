@@ -10,7 +10,7 @@
     <%= f.input :mobile %>
     <%= f.input :verification_code do %>
       <%= f.text_field :verification_code %>
-      <%= f.submit "获取验证码", name: "verification_code", id: "user_session_verification_code_button",class: "btn btn-positive" %>
+      <%= f.button :submit, "获取验证码", name: "verification_code", id: "user_session_verification_code_button",class: "btn btn-positive" %>
     <% end %>
 
     <%= f.button :submit, "确定", class: "btn-block btn-positive" %>

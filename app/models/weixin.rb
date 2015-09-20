@@ -163,6 +163,25 @@ module Weixin
       Rails.logger.error("  Error occurred when requesting WxPay API: #{e.message}")
     end
 
+
+    def payment_qrcode order
+      params = {
+        body: order.title,
+        out_trade_no: order.trade_no,
+        product_id: order.trade_no,
+        total_fee: order.price * 100,
+        spbill_create_ip: LocalIP,
+        notify_url: "#{BaseURL}/merchants/orders/#{order.id}/notify",
+        trade_type: "NATIVE", # could be "JSAPI", "NATIVE" or "APP",
+      }
+
+      Rails.logger.info("  Requested WxPay API invoke_unifiedorder with params #{params}")
+      response = WxPay::Service.invoke_unifiedorder params
+      Rails.logger.info("  Result: #{response}")
+
+      response
+    end
+
     def refund order
       params = {
         out_trade_no: order.trade_no,

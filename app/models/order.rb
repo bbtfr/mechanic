@@ -1,5 +1,5 @@
 class Order < ActiveRecord::Base
-  PendingTimeout = 5.minutes
+  PendingTimeout = 60.minutes
   PayingTimeout = 60.minutes
   ConfirmingTimeout = 5.days
 
@@ -15,7 +15,11 @@ class Order < ActiveRecord::Base
   as_enum :state, pending: 0, canceled: 1, refunded: 2, paid: 3, working: 4,
     confirming: 5, finished: 6
 
-  scope :available, -> { where('"orders"."state_cd" > 2') }
+  scope :availables, -> { where('"orders"."state_cd" > 2') }
+
+  def available?
+    state_cd > 2
+  end
 
   has_attached_file :mechanic_attach_1, styles: { medium: "300x300>", thumb: "100x100#" }
   validates_attachment_content_type :mechanic_attach_1, :content_type => /\Aimage\/.*\Z/
@@ -27,7 +31,7 @@ class Order < ActiveRecord::Base
   validates_attachment_content_type :user_attach_1, :content_type => /\Aimage\/.*\Z/
 
   validates_numericality_of :quoted_price, greater_than_or_equal_to: 1
-  validates_presence_of :skill, :brand, :series, :quoted_price
+  validates_presence_of :skill, :brand_id, :series_id, :quoted_price
   validate :validate_lbs_id, on: :create
 
   def validate_lbs_id
@@ -37,7 +41,7 @@ class Order < ActiveRecord::Base
     district = District.where(name: district_name).first
     self.lbs_id = district.lbs_id
   rescue
-    errors.add(:base, "无法定位到您的地址，请打开GPS定位或输入更详细的地址") unless lbs_id.present?
+    errors.add(:address, "无法定位，请打开GPS定位或输入更详细的地址") unless lbs_id.present?
   end
 
   after_initialize do

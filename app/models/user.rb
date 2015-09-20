@@ -27,23 +27,23 @@ class User < ActiveRecord::Base
   has_many :followed_mechanics, through: :fellowships, source: :mechanic
 
   has_one :mechanic, autosave: true
-  has_one :merchant, autosave: true
+  has_one :merchant
 
   has_one :owner_user_group, -> { confirmeds }, class_name: "UserGroup"
 
   belongs_to :user_group
 
-  validates_presence_of :nickname, :gender, :address, if: :mobile_confirmed
+  validates_presence_of :nickname, :gender, :address, if: :confirmed
 
   delegate :province_id, :city_id, :district_id, :skill_ids, :description,
     to: :mechanic, allow_nil: true
 
   def total_cost
-    orders.available.sum(:price) || 0
+    orders.availables.sum(:price) || 0
   end
 
   def orders_count
-    orders.available.count
+    orders.availables.count
   end
 
   def follow! mechanic

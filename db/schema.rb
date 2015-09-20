@@ -79,7 +79,11 @@ ActiveRecord::Schema.define(version: 20150915152711) do
   create_table "merchants", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "mobile"
-    t.boolean  "mobile_confirmed",    default: false
+    t.string   "crypted_password"
+    t.string   "password_salt"
+    t.string   "persistence_token"
+    t.string   "verification_code"
+    t.boolean  "confirmed",           default: false
     t.string   "nickname"
     t.string   "avatar_file_name"
     t.string   "avatar_content_type"
@@ -128,6 +132,8 @@ ActiveRecord::Schema.define(version: 20150915152711) do
     t.string   "user_attach_2_content_type"
     t.integer  "user_attach_2_file_size"
     t.datetime "user_attach_2_updated_at"
+    t.string   "contact_nickname"
+    t.string   "contact_mobile"
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
   end
@@ -171,8 +177,8 @@ ActiveRecord::Schema.define(version: 20150915152711) do
     t.string   "mobile"
     t.string   "persistence_token"
     t.string   "verification_code"
+    t.boolean  "confirmed",           default: false
     t.string   "weixin_openid"
-    t.boolean  "mobile_confirmed",    default: false
     t.string   "nickname"
     t.integer  "gender_cd"
     t.string   "address"

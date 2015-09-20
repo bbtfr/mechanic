@@ -19,9 +19,13 @@ class CreateUsers < ActiveRecord::Migration
       # t.string     :current_login_ip
       # t.string     :last_login_ip
 
+      # # Authlogic::Session::MagicStates
+      # t.boolean   :active, default: false
+      # t.boolean   :approved, default: false
+      t.boolean   :confirmed, default: false
+
       t.string     :weixin_openid
 
-      t.boolean    :mobile_confirmed, default: false
       t.string     :nickname
       t.integer    :gender_cd
       t.string     :address

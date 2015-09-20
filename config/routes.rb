@@ -73,8 +73,44 @@ Rails.application.routes.draw do
 
   namespace :merchants do
     resource :merchant_session, path: "session"
-    resource :user
+    resource :merchant do
+      get :forget_password
+      post :verification_code
+      patch :verification_code
+      patch :confirm
 
+      get :change_password
+      patch :password
+    end
+
+    resources :orders do
+      resources :bids do
+        member do
+          get :pick
+        end
+      end
+
+      collection do
+        get :"pay/:id", action: :pay, as: :pay
+      end
+
+      member do
+        get :cancel
+
+        get :refund
+        post :notify
+        get :result
+
+        get :confirm
+
+        get :review
+      end
+    end
+
+    resources :merchants
+    resources :mechanics
+
+    root to: "orders#new"
   end
 
   root to: "users#show"

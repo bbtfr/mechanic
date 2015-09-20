@@ -12,7 +12,7 @@ module SimpleForm
       if has_errors?
         template.content_tag(error_messages_tag, html_options) do
           messages = template.content_tag(error_messages_list_tag) do
-            object.errors.full_messages.map do |message|
+            object.errors.full_messages.uniq.map do |message|
               template.content_tag(error_messages_item_tag) do
                 message
               end

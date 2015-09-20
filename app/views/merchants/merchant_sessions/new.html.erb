@@ -7,8 +7,8 @@
     <%= f.input :mobile %>
     <%= f.input :password %>
 
-    <%= link_to "注册帐号", new_merchants_user_path %> |
-    <%= link_to "忘记密码？", edit_merchants_merchant_session_path %>
+    <%= link_to "注册帐号", new_merchants_merchant_path %> |
+    <%= link_to "忘记密码？", forget_password_merchants_merchant_path %>
 
     <%= f.button :submit, "登录", class: "btn-primary pull-right" %>
   <% end %>

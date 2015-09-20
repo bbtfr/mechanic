@@ -30,8 +30,7 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:mobile, :nickname, :gender, :address, :mobile_confirmed, :avatar,
-        :is_mechanic)
+      params.require(:user).permit(:mobile, :nickname, :gender, :address, :avatar, :is_mechanic)
     end
 
     def mechanic_params
@@ -39,7 +38,7 @@ class UsersController < ApplicationController
     end
 
     def authenticate!
-      if !current_user_session || !current_user || !current_user.mobile_confirmed
+      if !current_user_session || !current_user
         session[:original_url] = request.original_url
         redirect_to new_user_session_path
       else

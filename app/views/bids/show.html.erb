@@ -42,12 +42,10 @@
   <% end %>
 </div>
 
-<% if current_user.mechanic? %>
-  <script type="text/javascript">
-    var interval = setInterval(function() {
-      xhrRequest("GET", window.location.href + ".js", function(xhr) {
-        eval(xhr.responseText);
-      });
-    }, 5000);
-  </script>
-<% end %>
+<script type="text/javascript">
+  var interval = setInterval(function() {
+    xhrRequest("GET", window.location.href + ".js", function(xhr) {
+      eval(xhr.responseText);
+    });
+  }, 5000);
+</script>

@@ -1,0 +1,30 @@
+<div class="alert alert-success">正在向 <%= @order.mechanic_sent_count %> 位技师发送用人信息...</div>
+
+<% bids = @order.bids.includes(mechanic: :user) %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>技师姓名</th>
+      <th>加价</th>
+      <th>接单</th>
+      <th>专业</th>
+      <th>守时</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% bids.each do |bid| %>
+      <tr>
+        <td class="attr_avatar"><%= image_tag bid.mechanic.user.avatar.url(:thumb) %></td>
+        <td><%= bid.mechanic.user_nickname %></td>
+        <td><%= bid.markup_price %></td>
+        <td><%= bid.mechanic.orders_count %></td>
+        <td><%= bid.mechanic.professionality_average %></td>
+        <td><%= bid.mechanic.timeliness_average %></td>
+        <td><%= link_to "详情", merchants_order_bid_path(@order, bid) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

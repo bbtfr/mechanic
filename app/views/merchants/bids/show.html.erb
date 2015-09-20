@@ -1,0 +1,37 @@
+<h3 class="page-header col-md-12">选择技师</h3>
+
+<div class="col-sm-3 text-right">
+  <%= image_tag(@bid.mechanic.user.avatar.url(:thumb)) %>
+</div>
+
+<div class="col-sm-9">
+  <%= show_for @bid, class: "dl-horizontal" do |s| %>
+    <%= s.fields_for :mechanic do |ss| %>
+      <%= ss.attribute :user_nickname %>
+      <%= ss.attribute :user_address %>
+      <%= ss.attribute :description %>
+      <%= ss.attribute :orders_count %>
+      <%= ss.attribute :professionality_average %>
+      <%= ss.attribute :timeliness_average %>
+    <% end %>
+    <%= s.fields_for :order do |ss| %>
+      <%= ss.attribute :appointment, format: :short %>
+      <%= ss.attribute :skill, with: :name %>
+      <%= ss.attribute :quoted_price %>
+    <% end %>
+    <%= s.attribute :markup_price %>
+  <% end %>
+</div>
+
+<div class="pull-right">
+  <%= link_to "选择此技师", pick_merchants_order_bid_path(@order, @bid), class: "btn btn-primary" %>
+  <%= link_to "返回竞价列表", merchants_order_bids_path(@order), class: "btn btn-primary" %>
+</div>
+
+<script type="text/javascript">
+  var interval = setInterval(function() {
+    xhrRequest("GET", window.location.href + ".js", function(xhr) {
+      eval(xhr.responseText);
+    });
+  }, 5000);
+</script>
