@@ -1,0 +1,9 @@
+<div class="col-md-7">
+  <%= bootstrap_simple_form_for([ :admin, :settings, @skill ]) do |f| %>
+    <%= f.error_messages %>
+
+    <%= f.input :name %>
+
+    <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+  <% end %>
+</div>

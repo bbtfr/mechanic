@@ -34,10 +34,11 @@
       <ul class="nav navbar-nav">
         <li class="<%= "active" if controller_name == "users" %>"><%= link_to "车主", admin_users_path %></li>
         <li class="<%= "active" if controller_name == "user_groups" %>"><%= link_to "堂口", admin_user_groups_path %></li>
+        <li class="<%= "active" if controller_name == "merchants" %>"><%= link_to "商家", admin_merchants_path %></li>
         <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "技师", admin_mechanics_path %></li>
         <li class="<%= "active" if controller_name == "orders" %>"><%= link_to "订单", admin_orders_path %></li>
         <li class="<%= "active" if controller_name == "withdrawals" %>"><%= link_to "账目提现", admin_withdrawals_path %></li>
-        <li class="<%= "active" if controller_path.start_with? "admin/setting/" %>"><%= link_to "设置", admin_setting_brands_path %></li>
+        <li class="<%= "active" if controller_path.start_with? "admin/settings/" %>"><%= link_to "设置", admin_settings_skills_path %></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

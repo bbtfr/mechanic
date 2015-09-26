@@ -22,9 +22,12 @@ class Merchants::MerchantsController < Merchants::ApplicationController
   end
 
   def verification_code
-    @merchant = Merchant.where(mobile: params[:merchant][:mobile]).first_or_initialize
+    mobile = session[:mobile] || params[:merchant][:mobile]
+    @merchant = Merchant.where(mobile: mobile).first_or_initialize
     if @merchant.persisted?
       if @merchant.reset_verification_code!
+        flash.now[:info] = "短信验证码已发送，请注意查收"
+        session[:mobile] = nil
         render :verification_code
       else
         render :forget_password
@@ -80,7 +83,7 @@ class Merchants::MerchantsController < Merchants::ApplicationController
 
     def merchant_params
       params.require(:merchant).permit(:mobile, :nickname, :address, :password, :password_confirmation,
-        :current_password, store_attributes: [:nickname])
+        :current_password, store_attributes: [:nickname, :qq])
     end
 
     def verification_code_params

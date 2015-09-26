@@ -2,9 +2,17 @@
 
 <%= index_for [ :admin, @orders ], class: "table table-hover data-tables" do |i| %>
   <%= i.attribute :user, with: :nickname %>
-  <%= i.attribute :mechanic, with: :user_nickname, if_raise: nil %>
+  <%= i.attribute :contact %>
   <%= i.attribute :skill, with: :name %>
   <%= i.attribute :price %>
+  <%= i.attribute :mechanic, with: :user_nickname, if_raise: nil %>
+  <%= i.attribute :state do |order| %>
+    <% if order.canceled? %>
+      <%= te order, :cancel %>
+    <% else %>
+      <%= te order, :state %>
+    <% end %>
+  <% end %>
 
   <%= i.actions :show %>
 <% end %>

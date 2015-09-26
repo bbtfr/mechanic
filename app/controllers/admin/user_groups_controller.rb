@@ -6,7 +6,6 @@ class Admin::UserGroupsController < Admin::ApplicationController
   end
 
   def confirmed
-    @confirmed = true
     @user_groups = UserGroup.confirmeds
     render :index
   end

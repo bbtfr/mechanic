@@ -16,6 +16,7 @@
 
     <%= f.bootstrap_simple_fields_for :store do |ff| %>
       <%= ff.input :nickname %>
+      <%= ff.input :qq %>
     <% end %>
 
     已有帐号？<%= link_to "马上登录", new_merchants_merchant_session_path %>

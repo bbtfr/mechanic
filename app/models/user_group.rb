@@ -8,6 +8,8 @@ class UserGroup < ActiveRecord::Base
 
   validates_presence_of :nickname
 
+  delegate :nickname, :role, to: :user, prefix: true
+
   scope :confirmeds, -> { where(confirmed: true) }
   scope :unconfirmeds, -> { where.not(confirmed: true) }
 
@@ -28,11 +30,16 @@ class UserGroup < ActiveRecord::Base
   end
 
   def total_commission
-    (total_cost * 0.05 * 0.3 + total_income * 0.05 * 0.3).round(2)
+    (total_cost * Setting.commission_percent.to_f / 100 * Setting.client_commission_percent.to_f / 100 +
+      total_income * Setting.commission_percent.to_f / 100 * Setting.mechanic_commission_percent.to_f / 100).round(2)
   end
 
   def orders_count
     orders.finisheds.count + mechanic_orders.finisheds.count
+  end
+
+  def users_count
+    users.count
   end
 
   def weixin_qr_code_url

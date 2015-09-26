@@ -6,8 +6,7 @@ Rails.application.routes.draw do
     resource :merchant_session, path: "session"
     resource :merchant do
       get :forget_password
-      post :verification_code
-      patch :verification_code
+      match :verification_code, via: [:get, :post, :patch]
       patch :confirm
 
       get :change_password
@@ -104,8 +103,7 @@ Rails.application.routes.draw do
   resources :withdrawals
 
   namespace :admin do
-    resources :users
-    resources :user_groups do
+    concern :confirm do
       collection do
         get :confirmed
       end
@@ -113,14 +111,19 @@ Rails.application.routes.draw do
         post :confirm
       end
     end
+    resources :users
+    resources :user_groups, concerns: [:confirm]
     resources :mechanics
+    resources :merchants, concerns: [:confirm]
     resources :orders
-    resources :withdrawals do
-      member do
-        post :confirm
+    resources :withdrawals, concerns: [:confirm] do
+      collection do
+        get :settings
+        post :settings, action: :update_settings
       end
     end
-    namespace :setting do
+    namespace :settings do
+      resources :skills
       resources :brands
       resources :series, except: :show
     end

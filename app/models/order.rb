@@ -14,17 +14,16 @@ class Order < ActiveRecord::Base
   belongs_to :bid
   has_many :bids
 
-  as_enum :state, { pending: 0, canceled: 1, refunded: 2, paid: 3, working: 4,
-    confirming: 5, finished: 6, reviewed: 7 }
-  as_enum :cancel, { pending_timeout: 0, paying_timeout: 1, user_cancel: 2, refunded: 3 }
+  as_enum :state, { pending: 0, paying: 1, canceled: 2, refunded: 3, paid: 4, working: 5,
+    confirming: 6, finished: 7, reviewed: 8 }
+  as_enum :cancel, { pending_timeout: 0, paying_timeout: 1, user_abstain: 2, user_cancel: 3,
+    refunded: 4 }
 
-  scope :availables, -> { where('"orders"."state_cd" > 2') }
-
+  AVAILABLE_GREATER_THAN = 3
+  scope :availables, -> { where('"orders"."state_cd" > ?', AVAILABLE_GREATER_THAN) }
   def available?
-    state_cd > 2
+    state_cd > AVAILABLE_GREATER_THAN
   end
-
-  alias_attribute :contact, :contact_nickname
 
   has_attached_file :mechanic_attach_1, styles: { medium: "300x300>", thumb: "100x100#" }
   validates_attachment_content_type :mechanic_attach_1, :content_type => /\Aimage\/.*\Z/
@@ -56,17 +55,14 @@ class Order < ActiveRecord::Base
 
   after_initialize do
     if persisted?
-      if pending?
-        if mechanic_id
-          if Time.now - updated_at >= PayingTimeout
-            cancel! :paying_timeout
-          end
+      if pending? && Time.now - created_at >= PendingTimeout
+        if mechanic_sent_count > 0
+          cancel! :pending_timeout
         else
-          if Time.now - created_at >= PendingTimeout
-            cancel! :pending_timeout
-          end
+          cancel! :user_abstain
         end
-
+      elsif paying? && Time.now - updated_at >= PayingTimeout
+        cancel! :paying_timeout
       elsif confirming? && Time.now - updated_at > ConfirmingTimeout
         confirm!
       end
@@ -75,11 +71,20 @@ class Order < ActiveRecord::Base
 
   after_create do
     SendCreateOrderMessageJob.perform_later(self)
+    if mechanic_id
+      pick! bids.create(mechanic_id: mechanic_id, markup_price: 0)
+    else
+      pend!
+    end
+  end
+
+  def pend!
     UpdateOrderStateJob.set(wait: PendingTimeout).perform_later(self)
   end
 
   def pick! bid
-    return false if canceled?
+    return false unless pending?
+    update_attribute(:state, Order.states[:paying])
     UpdateOrderStateJob.set(wait: PayingTimeout).perform_later(self)
     self.bid_id = bid.id
     self.mechanic_id = bid.mechanic_id
@@ -88,13 +93,13 @@ class Order < ActiveRecord::Base
   end
 
   def cancel! reason = :user_cancel
-    return false unless pending?
+    return false unless pending? || paying?
     update_attribute(:cancel, Order.cancels[reason])
     update_attribute(:state, Order.states[:canceled])
   end
 
   def pay!
-    return false unless pending? || canceled?
+    return false unless paying? || canceled?
     update_attribute(:state, Order.states[:paid])
     Weixin.send_paid_order_message self
   rescue => error
@@ -109,6 +114,7 @@ class Order < ActiveRecord::Base
 
   def work!
     return false unless paid?
+    update_attribute(:start_working_at, Time.now)
     update_attribute(:state, Order.states[:working])
   end
 
@@ -124,13 +130,30 @@ class Order < ActiveRecord::Base
   def confirm!
     return false unless confirming?
     user = mechanic.user
-    user.balance += price
-    user.save
+    commission = (price * Setting.commission_percent.to_f / 100).round(2)
+    user.increase_balance!(price - commission)
+
+    client_chief = user.user_group.user rescue nil
+    if client_chief
+      client_commission = (commission * Setting.client_commission_percent.to_f / 100).round(2)
+      client_chief.increase_balance!(client_commission)
+    end
+
+    mechanic_chief = mechanic.user.user_group.user rescue nil
+    if mechanic_chief
+      mechanic_commission = (commission * Setting.mechanic_commission_percent.to_f / 100).round(2)
+      mechanic_chief.increase_balance!(mechanic_commission)
+    end
+
     update_attribute(:state, Order.states[:finished])
   end
 
   def review!
     update_attribute(:state, Order.states[:reviewed])
+  end
+
+  def contact
+    contact_nickname.presence
   end
 
   def title

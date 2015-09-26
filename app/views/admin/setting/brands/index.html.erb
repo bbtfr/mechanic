@@ -1,8 +1,0 @@
-<%= render "admin/setting/side_menu" %>
-
-<div class="col-md-10 col-xs-8">
-  <%= index_for [ :admin, :setting, @brands ], class: "table table-hover data-tables" do |i| %>
-    <%= i.attribute :name %>
-    <%= i.actions :edit, :destroy %>
-  <% end %>
-</div>

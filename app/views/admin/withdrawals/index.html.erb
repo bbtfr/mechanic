@@ -1,16 +1,25 @@
 <h3 class="page-header">提现管理</h3>
 
-<%= index_for [ :admin, @withdrawals ], class: "table table-hover data-tables" do |i| %>
-  <%= i.attribute :user, with: :nickname %>
-  <%= i.attribute :amount %>
+<div class="col-md-2 col-xs-4">
+  <ul class="nav nav-pills nav-stacked">
+    <li class="active"><%= link_to "申请列表", admin_withdrawals_path %></li>
+    <li><%= link_to "佣金设置", settings_admin_withdrawals_path %></li>
+  </ul>
+</div>
 
-  <% if i.object.paid? %>
-    <%= i.actions :show %>
-  <% else %>
-    <%= i.actions do |a| %>
-      <%= a.action_link :show %>
-      <%= a.action_link :confirm, method: :post, confirm: "你确定要通过这条申请？" %>
+<div class="col-md-10 col-xs-8">
+  <%= index_for [ :admin, @withdrawals ], class: "table table-hover data-tables" do |i| %>
+    <%= i.attribute :user, with: :nickname %>
+    <%= i.attribute :amount %>
+
+    <% if i.object.paid? %>
+      <%= i.actions :show %>
+    <% else %>
+      <%= i.actions do |a| %>
+        <%= a.action_link :show %>
+        <%= a.action_link :confirm, method: :post, confirm: "你确定要通过这条申请？" %>
+      <% end %>
     <% end %>
-  <% end %>
 
-<% end %>
+  <% end %>
+</div>

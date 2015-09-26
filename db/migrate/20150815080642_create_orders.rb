@@ -29,7 +29,7 @@ class CreateOrders < ActiveRecord::Migration
       t.integer   :bid_id
       t.index     :bid_id
 
-      t.integer :lbs_id
+      t.integer   :lbs_id
 
       t.attachment :mechanic_attach_1
       t.attachment :mechanic_attach_2
@@ -37,11 +37,13 @@ class CreateOrders < ActiveRecord::Migration
       t.attachment :user_attach_1
       t.attachment :user_attach_2
 
-      t.string     :contact_nickname
-      t.string     :contact_mobile
+      t.string    :contact_nickname
+      t.string    :contact_mobile
 
       t.integer   :cancel_cd, default: 0
       t.index     :cancel_cd
+
+      t.datetime  :start_working_at
 
       t.timestamps null: false
     end

@@ -1,12 +1,11 @@
 <h3 class="page-header">车主管理</h3>
 
 <%= index_for [ :admin, @users ], class: "table table-hover data-tables" do |i| %>
-  <%= i.attribute :avatar do |user| %>
-    <%= image_tag(user.avatar.url(:thumb)) %>
-  <% end %>
   <%= i.attribute :nickname %>
   <%= i.attribute :mobile %>
   <%= i.attribute :weixin_openid %>
+  <%= i.attribute :orders_count %>
+  <%= i.attribute :total_cost %>
 
   <%= i.actions :show %>
 <% end %>

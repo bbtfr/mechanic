@@ -2,15 +2,18 @@
 
 <div class="col-md-2 col-xs-4">
   <ul class="nav nav-pills nav-stacked">
-    <li class="<%= "active" unless @confirmed %>"><%= link_to "申请列表", admin_user_groups_path %></li>
-    <li class="<%= "active" if @confirmed %>"><%= link_to "堂口列表", confirmed_admin_user_groups_path %></li>
+    <li class="<%= "active" unless action_name == "confirmed" %>"><%= link_to "申请列表", admin_user_groups_path %></li>
+    <li class="<%= "active" if action_name == "confirmed" %>"><%= link_to "堂口列表", confirmed_admin_user_groups_path %></li>
   </ul>
 </div>
 
 <div class="col-md-10 col-xs-8">
   <%= index_for [ :admin, @user_groups ], class: "table table-hover data-tables" do |i| %>
     <%= i.attribute :nickname %>
-    <%= i.attribute :user, with: :nickname %>
+    <%= i.attribute :user_role do |user_group| %>
+      <%= te user_group.user, :role %>
+    <% end %>
+    <%= i.attribute :user_nickname %>
 
     <% if @confirmed %>
       <%= i.actions :show, :destroy %>

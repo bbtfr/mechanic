@@ -1,5 +1,5 @@
 class Admin::WithdrawalsController < Admin::ApplicationController
-  before_filter :find_withdrawal, except: [ :index ]
+  before_filter :find_withdrawal, except: [ :index, :settings, :update_settings ]
 
   def index
     @withdrawals = Withdrawal.all
@@ -15,9 +15,20 @@ class Admin::WithdrawalsController < Admin::ApplicationController
     redirect_to request.referer
   end
 
+  def update_settings
+    setting_params.each do |key, value|
+      ::Setting[key] = value
+    end
+    redirect_to settings_admin_withdrawals_path
+  end
+
   private
 
     def find_withdrawal
       @withdrawal = Withdrawal.find(params[:id])
+    end
+
+    def setting_params
+      params.require(:setting).permit(:commission_percent, :client_commission_percent, :mechanic_commission_percent)
     end
 end

@@ -1,0 +1,37 @@
+<h3 class="page-header">订单详情 #<%= @order.id %></h3>
+
+<div class="row">
+  <div class="col-sm-6">
+    <h4 class="col-sm-offset-1">交易信息</h4>
+
+    <%= show_for @order, class: "dl-horizontal" do |i| %>
+      <% if @order.merchant_id %>
+        <%= i.attribute :merchant_nickname %>
+        <%= i.attribute :merchant_mobile %>
+        <%= i.attribute :contact_nickname %>
+        <%= i.attribute :contact_mobile %>
+      <% else %>
+        <%= i.attribute :user_nickname %>
+        <%= i.attribute :user_mobile %>
+      <% end %>
+
+      <%= i.attribute :skill, with: :name %>
+      <%= i.attribute :brand, with: :name %>
+      <%= i.attribute :series, with: :name %>
+      <%= i.attribute :created_at, format: :long %>
+      <%= i.attribute :start_working_at, format: :long %>
+
+    <% end %>
+  </div>
+
+  <div class="col-sm-6">
+    <h4 class="col-sm-offset-1">价格信息</h4>
+
+    <%= show_for @order, class: "dl-horizontal" do |i| %>
+      <%= i.attribute :price, label: "总价" %>
+      <%= i.attribute :quoted_price %>
+      <%= i.attribute :"bid.markup_price" %>
+    <% end %>
+  </div>
+
+</div>

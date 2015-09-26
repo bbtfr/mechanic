@@ -42,11 +42,11 @@
           <% end %>
 
           <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "我的技师", merchants_mechanics_path %></li>
-          <li class="<%= "active" if controller_name == "merchants" and action_name == "change_password" %>"><%= link_to "修改密码", change_password_merchants_merchant_path %></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
           <li><a><%= current_merchant.nickname %></a></li>
+          <li class="<%= "active" if controller_name == "merchants" and action_name == "change_password" %>"><%= link_to "修改密码", change_password_merchants_merchant_path %></li>
           <li><%= link_to "退出登录", merchants_merchant_session_path, method: :delete %></li>
         </ul>
       </div><!-- /.navbar-collapse -->

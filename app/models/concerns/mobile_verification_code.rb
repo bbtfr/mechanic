@@ -20,7 +20,7 @@ module MobileVerificationCode
   def send_verification_code
     return unless mobile =~ /\d{11}/
     result = SMSMailer.confirmation(self).deliver
-    # errors.add :base, result[:error] unless result[:success]
+    errors.add :base, result[:error] unless result[:success]
   end
 
   def confirm!

@@ -5,16 +5,12 @@
 <div class="content-padded">
   <%= show_for @order do |i| %>
     <% if current_user.mechanic? && @order.available? %>
+      <%= i.attribute :user do |order| %>
+        <%= order.user_nickname %> <%= tel_link_to order.user_mobile %>
+      <% end %>
       <% if @order.merchant_id %>
-        <%= i.attribute :user do %>
-          <%= @order.user_nickname %> <a href="tel:<%= @order.user_mobile %>"><%= @order.user_mobile %></a>
-        <% end %>
-        <%= i.attribute :contact do %>
-          <%= @order.contact_nickname %> <a href="tel:<%= @order.contact_mobile %>"><%= @order.contact_mobile %></a>
-        <% end %>
-      <% else %>
-        <%= i.attribute :user do %>
-          <a href="tel:<%= @order.mobile %>"><%= @order.mobile %></a>
+        <%= i.attribute :contact do |order| %>
+          <%= order.contact_nickname %> <%= tel_link_to order.contact_mobile %>
         <% end %>
       <% end %>
     <% end %>

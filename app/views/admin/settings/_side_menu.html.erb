@@ -1,0 +1,12 @@
+<h3 class="page-header">
+  设置
+  <small><%= yield(:subtitle) if content_for?(:subtitle) %></small>
+</h3>
+
+<div class="col-md-2 col-xs-4">
+  <ul class="nav nav-pills nav-stacked">
+    <li class="<%= "active" if controller_name == "skills" %>"><%= link_to "类型管理", admin_settings_skills_path %></li>
+    <li class="<%= "active" if controller_name == "brands" %>"><%= link_to "车型管理", admin_settings_brands_path %></li>
+    <li class="<%= "active" if controller_name == "series" %>"><%= link_to "车系管理", "/admin/settings/series" %></li>
+  </ul>
+</div>

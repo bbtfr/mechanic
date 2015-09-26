@@ -19,7 +19,11 @@ class Merchants::OrdersController < Merchants::ApplicationController
   def create
     @order = order_klass.new(order_params)
     if @order.save
-      redirect_to merchants_order_bids_path(@order)
+      if @order.pending?
+        redirect_to merchants_order_bids_path(@order)
+      elsif @order.paying?
+        redirect_to pay_merchants_orders_path(@order)
+      end
     else
       render :new
     end
@@ -108,7 +112,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
     def order_params
       params.require(:order).permit(:address, :appointment, :skill_id,
         :brand_id, :series_id, :quoted_price, :remark, :lbs_id, :professionality,
-        :timeliness, :review, :contact_mobile, :contact_nickname)
+        :timeliness, :review, :contact_mobile, :contact_nickname, :mechanic_id)
     end
 
 end

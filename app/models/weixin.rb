@@ -1,6 +1,7 @@
 module Weixin
   Config = YAML.load(ERB.new(File.read("#{Rails.root}/config/weixin.yml")).result)[Rails.env]
-  BaseURL = ENV["BASE_URL"] || "http://mechanic.dev.com"
+  BaseURL = ENV["BASE_URL"] || "http://qichetang.cn"
+  MerchantsURL = ENV["MERCHANTS_URL"] || Rails.env.production? ? "http://es.qichetang.cn" : "http://qichetang.cn/merchants"
   LocalIP = ENV["LOCAL_IP"] || "127.0.0.1"
 
   WxPay.appid = Config["app_id"].to_s
@@ -78,7 +79,7 @@ module Weixin
         "#{BaseURL}/orders/#{order.id}",
         TemplateTopColor,
         {
-          first: format_template_data("#{order.user.nickname} 刚刚#{order.merchant_id ? "指派" : "预约"}了新订单"),
+          first: format_template_data("#{order.user.nickname} 刚刚指派了新订单"),
           keyword1: format_template_data(I18n.l(order.appointment, format: :long)),
           keyword2: format_template_data(order.skill.try :name),
           keyword3: format_template_data("#{order.brand.try :name} #{order.series.try :name}"),
@@ -188,7 +189,7 @@ module Weixin
         product_id: order.trade_no,
         total_fee: order.price * 100,
         spbill_create_ip: LocalIP,
-        notify_url: "#{BaseURL}/merchants/orders/#{order.id}/notify",
+        notify_url: "#{MerchantsURL}/orders/#{order.id}/notify",
         trade_type: "NATIVE", # could be "JSAPI", "NATIVE" or "APP",
       }
 

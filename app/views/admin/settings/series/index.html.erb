@@ -1,0 +1,15 @@
+<% content_for :subtitle do %>
+  <%= link_to "添加车系", new_admin_settings_series_path %>
+<% end %>
+
+<%= render "admin/settings/side_menu" %>
+
+<% @series = @series.includes(:brand) %>
+
+<div class="col-md-10 col-xs-8">
+  <%= index_for [ :admin, :settings, @series ], class: "table table-hover data-tables" do |i| %>
+    <%= i.attribute :name %>
+    <%= i.attribute :brand, with: :name %>
+    <%= i.actions :edit, :destroy %>
+  <% end %>
+</div>

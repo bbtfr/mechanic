@@ -20,7 +20,7 @@ class CreateUsers < ActiveRecord::Migration
       # t.string     :last_login_ip
 
       # # Authlogic::Session::MagicStates
-      # t.boolean   :active, default: false
+      t.boolean   :active, default: true
       # t.boolean   :approved, default: false
       t.boolean   :confirmed, default: false
 
@@ -29,6 +29,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string     :nickname
       t.integer    :gender_cd
       t.string     :address
+      t.string     :qq
 
       t.integer    :balance, default: 0
 

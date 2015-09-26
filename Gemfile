@@ -11,6 +11,7 @@ gem 'sidekiq'
 
 # Use authlogic for authentication
 gem 'authlogic', '~> 3.4.6'
+gem 'rails-settings-cached'
 
 gem 'simple_enum'
 gem 'simple_form'

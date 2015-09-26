@@ -1,12 +1,18 @@
 <h3 class="page-header">技师管理</h3>
 
 <%= index_for [ :admin, @mechanics ], class: "table table-hover data-tables" do |i| %>
-  <%= i.attribute :avatar do |user| %>
-    <%= image_tag(user.avatar.url(:thumb)) %>
-  <% end %>
   <%= i.attribute :nickname %>
   <%= i.attribute :mobile %>
   <%= i.attribute :weixin_openid %>
+  <%= i.fields_for :mechanic, model: Mechanic do |ii| %>
+    <%= ii.attribute :province, with: :name, if_raise: nil %>
+    <%= ii.attribute :city, with: :name, if_raise: nil %>
+    <%= ii.attribute :district, with: :name, if_raise: nil %>
+    <%= ii.attribute :orders_count %>
+    <%= ii.attribute :total_income %>
+    <%= ii.attribute :professionality_average %>
+    <%= ii.attribute :timeliness_average %>
+  <% end %>
 
   <%= i.actions do |a| %>
     <%= a.action_link :show, url: admin_mechanic_path(i.object) %>

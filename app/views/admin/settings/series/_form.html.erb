@@ -1,0 +1,10 @@
+<div class="col-md-7">
+  <%= bootstrap_simple_form_for([ :admin, :settings, @series ]) do |f| %>
+    <%= f.error_messages %>
+
+    <%= f.input :name %>
+    <%= f.association :brand %>
+
+    <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+  <% end %>
+</div>

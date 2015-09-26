@@ -39,6 +39,10 @@ class User < ActiveRecord::Base
   delegate :province_id, :city_id, :district_id, :skill_ids, :description,
     to: :mechanic, allow_nil: true
 
+  def increase_balance! amount
+    update_attribute(:balance, (balance || 0) + amount)
+  end
+
   def total_cost
     orders.availables.sum(:price) || 0
   end

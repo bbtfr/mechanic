@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150915152711) do
+ActiveRecord::Schema.define(version: 20150926140244) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -135,11 +135,14 @@ ActiveRecord::Schema.define(version: 20150915152711) do
     t.datetime "user_attach_2_updated_at"
     t.string   "contact_nickname"
     t.string   "contact_mobile"
+    t.integer  "cancel_cd",                      default: 0
+    t.datetime "start_working_at"
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
   end
 
   add_index "orders", ["bid_id"], name: "index_orders_on_bid_id"
+  add_index "orders", ["cancel_cd"], name: "index_orders_on_cancel_cd"
   add_index "orders", ["mechanic_id"], name: "index_orders_on_mechanic_id"
   add_index "orders", ["merchant_id"], name: "index_orders_on_merchant_id"
   add_index "orders", ["state_cd"], name: "index_orders_on_state_cd"
@@ -158,6 +161,17 @@ ActiveRecord::Schema.define(version: 20150915152711) do
   end
 
   add_index "series", ["brand_id"], name: "index_series_on_brand_id"
+
+  create_table "settings", force: :cascade do |t|
+    t.string   "var",                   null: false
+    t.text     "value"
+    t.integer  "thing_id"
+    t.string   "thing_type", limit: 30
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "settings", ["thing_type", "thing_id", "var"], name: "index_settings_on_thing_type_and_thing_id_and_var", unique: true
 
   create_table "skills", force: :cascade do |t|
     t.string "name"
@@ -179,11 +193,13 @@ ActiveRecord::Schema.define(version: 20150915152711) do
     t.string   "mobile"
     t.string   "persistence_token"
     t.string   "verification_code"
+    t.boolean  "active",              default: true
     t.boolean  "confirmed",           default: false
     t.string   "weixin_openid"
     t.string   "nickname"
     t.integer  "gender_cd"
     t.string   "address"
+    t.string   "qq"
     t.integer  "balance",             default: 0
     t.string   "avatar_file_name"
     t.string   "avatar_content_type"

@@ -27,12 +27,23 @@ zh-CN:
     role:
       admin: 管理员
       user: 派单人员
+      client: 车主
+      mechanic: 技师
+      merchant: 商户
+  simple_form:
+    labels:
+      defaults:
+        commission_percent: 每笔交易佣金比例
+        client_commission_percent: 车主堂主佣金比例
+        mechanic_commission_percent: 技师堂主佣金比例
   activerecord:
     attributes:
       user:
         avatar: 头像
         nickname: 姓名
         weixin_openid: 微信号
+        orders_count: 预约次数
+        total_cost: 总支出
         gender: 性别
         address: 地址
         mobile: 手机号码
@@ -47,18 +58,21 @@ zh-CN:
         district_id: 区县
         district: 区县
         description: 个人简介
+        qq: QQ
       mechanic:
         user_nickname: 姓名
         user_mobile: 手机号码
         user_address: 地址
         description: 详情
         orders_count: 接单次数
+        total_income: 总支出
         professionality_average: 专业
         timeliness_average: 守时
         skills: 擅长技能
         province: 省份
         city: 城市
         district: 区县
+        check: 选中技师
       merchant:
         nickname: 姓名
         mobile: 手机号码
@@ -69,11 +83,22 @@ zh-CN:
         role: 系统角色
       store:
         nickname: 店铺名称
+        orders_count: 预约次数
+        total_cost: 总支出
+        qq: QQ
       user_group:
         nickname: 分堂昵称
+        user_nickname: 堂主
+        user_role: 类型
         description: 申请简介
-        user: 堂主
+        orders_count: 分堂业绩
+        total_commission: 分堂佣金
+        users_count: 分堂成员
+        weixin_qr_code_url: 二维码
       order:
+        user: 发布人
+        user_nickname: 发布人姓名
+        user_mobile: 手机号码
         merchant: 发布人
         merchant_nickname: 发布人姓名
         merchant_mobile: 手机号码
@@ -99,8 +124,13 @@ zh-CN:
         mechanic_attach_1: 施工照片
         mechanic_attach_2: 施工照片
         mobile: 联系电话
+        created_at: 订单创建
+        start_working_at: 开始服务
+        state: 状态
       bid:
         markup_price: 加价
+      skill:
+        name: 名称
       brand:
         name: 名称
       series:
