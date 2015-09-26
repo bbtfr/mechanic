@@ -1,12 +1,12 @@
 <h3 class="page-header">订单管理</h3>
 
 <%= index_for [ :merchants, :admin, @orders ], class: "table table-hover data-tables" do |i| %>
-  <%= i.attribute :merchant, with: :user_nickname %>
+  <%= i.attribute :merchant, with: :nickname %>
   <%= i.attribute :contact %>
-  <%= i.attribute :mechanic, with: :user_nickname %>
   <%= i.attribute :appointment, format: :short %>
   <%= i.attribute :skill, with: :name %>
   <%= i.attribute :price %>
+  <%= i.attribute :mechanic, with: :user_nickname %>
 
   <%= i.actions :show %>
 <% end %>

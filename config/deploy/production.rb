@@ -10,4 +10,4 @@
 server '182.254.151.21', user: 'ubuntu', roles: %w{web app db}
 set :rails_env, :production
 
-set :nginx_server_name, 'www.qichetang.cn qichetang.cn'
+set :nginx_server_name, 'qichetang.cn www.qichetang.cn es.qichetang.cn'

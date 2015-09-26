@@ -26,6 +26,7 @@ zh-CN:
       female: 女
     role:
       admin: 管理员
+      user: 派单人员
   activerecord:
     attributes:
       user:
@@ -73,7 +74,13 @@ zh-CN:
         description: 申请简介
         user: 堂主
       order:
-        user: 发布人
+        merchant: 发布人
+        merchant_nickname: 发布人姓名
+        merchant_mobile: 手机号码
+        merchant: 发布人
+        contact: 联系人
+        contact_nickname: 联系人姓名
+        contact_mobile: 手机号码
         mechanic: 技师
         address: 地址
         appointment: 预约时间
@@ -91,10 +98,6 @@ zh-CN:
         review: 评论
         mechanic_attach_1: 施工照片
         mechanic_attach_2: 施工照片
-        merchant: 发布人
-        contact: 联系人
-        contact_nickname: 姓名
-        contact_mobile: 手机号码
         mobile: 联系电话
       bid:
         markup_price: 加价

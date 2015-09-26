@@ -2,6 +2,8 @@
 
 <div class="col-sm-offset-3 col-sm-9">
   <%= show_for @order, class: "dl-horizontal" do |i| %>
+    <%= i.attribute :merchant_nickname %>
+    <%= i.attribute :merchant_mobile %>
     <%= i.attribute :contact_nickname %>
     <%= i.attribute :contact_mobile %>
     <%= i.attribute :address %>
@@ -63,18 +65,18 @@
 <% when :finished %>
   <div class="pull-right">
     <% if current_merchant.store.follow? @order.mechanic %>
-      <%= link_to "取消收藏技师", unfollow_merchants_mechanic_path(@order.mechanic), class: "btn btn-danger" %>
+      <%= link_to "取消收藏技师", unfollow_merchants_mechanic_path(@order.mechanic), method: :post, class: "btn btn-danger" %>
     <% else %>
-      <%= link_to "收藏技师", follow_merchants_mechanic_path(@order.mechanic), class: "btn btn-primary" %>
+      <%= link_to "收藏技师", follow_merchants_mechanic_path(@order.mechanic), method: :post, class: "btn btn-primary" %>
     <% end %>
     <%= link_to "点评技师", review_merchants_order_path(@order), class: "btn btn-primary" %>
   </div>
 <% when :reviewed %>
   <div class="pull-right">
     <% if current_merchant.store.follow? @order.mechanic %>
-      <%= link_to "取消收藏技师", unfollow_merchants_mechanic_path(@order.mechanic), class: "btn btn-danger" %>
+      <%= link_to "取消收藏技师", unfollow_merchants_mechanic_path(@order.mechanic), method: :post, class: "btn btn-danger" %>
     <% else %>
-      <%= link_to "收藏技师", follow_merchants_mechanic_path(@order.mechanic), class: "btn btn-primary" %>
+      <%= link_to "收藏技师", follow_merchants_mechanic_path(@order.mechanic), method: :post, class: "btn btn-primary" %>
     <% end %>
   </div>
 <% end %>

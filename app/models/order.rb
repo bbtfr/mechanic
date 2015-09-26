@@ -14,8 +14,9 @@ class Order < ActiveRecord::Base
   belongs_to :bid
   has_many :bids
 
-  as_enum :state, pending: 0, canceled: 1, refunded: 2, paid: 3, working: 4,
-    confirming: 5, finished: 6, reviewed: 7
+  as_enum :state, { pending: 0, canceled: 1, refunded: 2, paid: 3, working: 4,
+    confirming: 5, finished: 6, reviewed: 7 }
+  as_enum :cancel, { pending_timeout: 0, paying_timeout: 1, user_cancel: 2, refunded: 3 }
 
   scope :availables, -> { where('"orders"."state_cd" > 2') }
 
@@ -41,6 +42,7 @@ class Order < ActiveRecord::Base
   validate :validate_lbs_id, on: :create
 
   delegate :nickname, :mobile, to: :user, prefix: true
+  delegate :nickname, :mobile, to: :merchant, prefix: true
 
   def validate_lbs_id
     return if lbs_id.present?
@@ -55,10 +57,16 @@ class Order < ActiveRecord::Base
   after_initialize do
     if persisted?
       if pending?
-        if (!mechanic_id && Time.now - created_at > PendingTimeout) ||
-          (mechanic_id && Time.now - updated_at > PayingTimeout)
-            cancel!
+        if mechanic_id
+          if Time.now - updated_at >= PayingTimeout
+            cancel! :paying_timeout
+          end
+        else
+          if Time.now - created_at >= PendingTimeout
+            cancel! :pending_timeout
+          end
         end
+
       elsif confirming? && Time.now - updated_at > ConfirmingTimeout
         confirm!
       end
@@ -79,8 +87,9 @@ class Order < ActiveRecord::Base
     save
   end
 
-  def cancel!
+  def cancel! reason = :user_cancel
     return false unless pending?
+    update_attribute(:cancel, Order.cancels[reason])
     update_attribute(:state, Order.states[:canceled])
   end
 
@@ -94,7 +103,8 @@ class Order < ActiveRecord::Base
 
   def refund!
     return false unless paid?
-    update_attribute(:state, Order.states[:refund])
+    update_attribute(:cancel, Order.cancels[:refunded])
+    update_attribute(:state, Order.states[:refunded])
   end
 
   def work!

@@ -1,14 +1,13 @@
-<h3 class="page-header col-md-12">支付订单</h3>
+<h3 class="page-header col-md-12">微信扫码支付订单</h3>
 
 <div class="col-sm-6 qrcode">
-  微信扫码支付订单
-  <% qrcode = RQRCode::QRCode.new(@code_url, :size => 4, :level => :h) %>
+  <% qrcode = RQRCode::QRCode.new(@code_url) %>
   <%= raw qrcode.as_html %>
 </div>
 
 <script type="text/javascript">
   var interval = setInterval(function() {
-    xhrRequest("GET", "/merchants/order/<%= @order.id %>/result.js", function(xhr) {
+    xhrRequest("GET", "<%= result_merchants_order_path(@order, format: "js") %>", function(xhr) {
       eval(xhr.responseText);
     });
   }, 5000)

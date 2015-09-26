@@ -13,7 +13,7 @@
     <%= i.attribute :appointment, format: :short %>
     <%= i.attribute :skill, with: :name %>
     <%= i.attribute :price %>
-    <%= i.attribute :mechanic, with: :user_nickname, if_raise: nil %>
+    <%= i.attribute :mechanic, with: :user_nickname %>
 
     <%= i.actions :show %>
   <% end %>

@@ -3,8 +3,11 @@
 <%= index_for [ :merchants, current_merchant.store.followed_mechanics ], class: "table table-hover data-tables" do |i| %>
   <%= i.attribute :user_nickname %>
   <%= i.attribute :user_mobile %>
+  <%= i.attribute :professionality_average %>
+  <%= i.attribute :timeliness_average %>
+  <%= i.attribute :orders_count %>
 
-  <%= i.actions :show do |a| %>
+  <%= i.actions do |a| %>
     <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
   <% end %>
 <% end %>

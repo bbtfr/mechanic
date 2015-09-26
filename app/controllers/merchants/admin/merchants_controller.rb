@@ -42,6 +42,7 @@ class Merchants::Admin::MerchantsController < Merchants::Admin::ApplicationContr
     end
 
     def merchant_params
-      params.require(:merchant).permit(:mobile, :nickname, :address, :password, :password_confirmation)
+      params.require(:merchant).permit(:mobile, :nickname, :address, :password,
+        :password_confirmation, :role)
     end
 end

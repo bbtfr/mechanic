@@ -11,7 +11,7 @@ class Mechanic < ActiveRecord::Base
   belongs_to :city
   belongs_to :district
 
-  delegate :nickname, :mobile, :address, to: :user, prefix: true
+  delegate :nickname, :mobile, :address, :weixin_openid, to: :user, prefix: true
 
   def professionality_average
     (orders.average(:professionality) || 4).round(2)

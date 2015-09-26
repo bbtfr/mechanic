@@ -20,3 +20,6 @@ $(document).on 'ready page:load', ->
         sPrevious: "前一页"
         sNext: "后一页"
         sLast: "尾页"
+
+$(document).on 'page:change', ->
+  clearInterval(interval) if interval
