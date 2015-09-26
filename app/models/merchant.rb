@@ -11,4 +11,6 @@ class Merchant < ActiveRecord::Base
 
   validates_presence_of :nickname
 
+  delegate :nickname, :mobile, :address, to: :user, prefix: true
+
 end

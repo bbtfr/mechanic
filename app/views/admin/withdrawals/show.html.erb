@@ -3,8 +3,4 @@
 <%= show_for @withdrawal, class: "dl-horizontal" do |i| %>
   <%= i.attribute :user, with: :nickname %>
   <%= i.attribute :amount %>
-
-  <%= i.attribute :gender do |user| %>
-    <%= te user, :gender %>
-  <% end %>
 <% end %>

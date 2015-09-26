@@ -1,0 +1,13 @@
+<div class="col-md-7">
+  <%= bootstrap_simple_form_for([ :merchants, :admin, @merchant ]) do |f| %>
+    <%= f.error_messages %>
+
+    <%= f.input :nickname %>
+    <%= f.input :mobile %>
+
+    <%= f.input :password %>
+    <%= f.input :password_confirmation %>
+
+    <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+  <% end %>
+</div>

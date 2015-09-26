@@ -1,8 +1,9 @@
 <h3 class="page-header col-md-12">支付订单</h3>
 
-<div class="col-sm-6">
+<div class="col-sm-6 qrcode">
   微信扫码支付订单
-  <%= image_tag @code_url, id: "qr_code" %>
+  <% qrcode = RQRCode::QRCode.new(@code_url, :size => 4, :level => :h) %>
+  <%= raw qrcode.as_html %>
 </div>
 
 <script type="text/javascript">

@@ -11,20 +11,14 @@ class Mechanic < ActiveRecord::Base
   belongs_to :city
   belongs_to :district
 
+  delegate :nickname, :mobile, :address, to: :user, prefix: true
+
   def professionality_average
     (orders.average(:professionality) || 4).round(2)
   end
 
   def timeliness_average
     (orders.average(:timeliness) || 4).round(2)
-  end
-
-  def user_nickname
-    user.nickname
-  end
-
-  def user_address
-    user.address
   end
 
   def total_income

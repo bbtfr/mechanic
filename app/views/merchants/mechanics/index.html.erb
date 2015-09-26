@@ -1,0 +1,10 @@
+<h3 class="page-header">我的技师</h3>
+
+<%= index_for [ :merchants, current_merchant.store.followed_mechanics ], class: "table table-hover data-tables" do |i| %>
+  <%= i.attribute :user_nickname %>
+  <%= i.attribute :user_mobile %>
+
+  <%= i.actions :show do |a| %>
+    <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
+  <% end %>
+<% end %>

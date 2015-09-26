@@ -5,6 +5,7 @@ zh-CN:
       login_blank: 不能为空
       login_not_found: 验证失败
       password_blank: 不能为空
+      password_invalid: 错误
       login_invalid: 错误
       verification_code_blank: 不能为空
       verification_code_invalid: 错误
@@ -94,6 +95,7 @@ zh-CN:
         contact: 联系人
         contact_nickname: 姓名
         contact_mobile: 手机号码
+        mobile: 联系电话
       bid:
         markup_price: 加价
       brand:

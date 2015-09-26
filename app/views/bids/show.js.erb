@@ -7,7 +7,7 @@
     clearInterval(interval);
     <% if @order.mechanic_id == current_user.mechanic.id %>
       if (confirm("抢单成功，电话确认一下吧\r\n点击确认拨打电话")) {
-        window.location.href = "tel:<%= @order.user.mobile %>";
+        window.location.href = "tel:<%= @order.mobile %>";
       } else {
         window.location.href = "<%= order_path(@order) %>";
       }

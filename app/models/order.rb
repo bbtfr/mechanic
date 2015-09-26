@@ -9,11 +9,13 @@ class Order < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :mechanic
+  belongs_to :merchant
+
   belongs_to :bid
   has_many :bids
 
   as_enum :state, pending: 0, canceled: 1, refunded: 2, paid: 3, working: 4,
-    confirming: 5, finished: 6
+    confirming: 5, finished: 6, reviewed: 7
 
   scope :availables, -> { where('"orders"."state_cd" > 2') }
 
@@ -34,7 +36,11 @@ class Order < ActiveRecord::Base
 
   validates_numericality_of :quoted_price, greater_than_or_equal_to: 1
   validates_presence_of :skill, :brand_id, :series_id, :quoted_price
+  validates_presence_of :contact_mobile, if: :merchant_id
+  validates_format_of :contact_mobile, with: /\d{11}/, if: :merchant_id
   validate :validate_lbs_id, on: :create
+
+  delegate :nickname, :mobile, to: :user, prefix: true
 
   def validate_lbs_id
     return if lbs_id.present?
@@ -82,6 +88,8 @@ class Order < ActiveRecord::Base
     return false unless pending? || canceled?
     update_attribute(:state, Order.states[:paid])
     Weixin.send_paid_order_message self
+  rescue => error
+    Rails.logger.error "#{error.class}: #{error.message} from Order#pay!"
   end
 
   def refund!
@@ -99,6 +107,8 @@ class Order < ActiveRecord::Base
     update_attribute(:state, Order.states[:confirming])
     UpdateOrderStateJob.set(wait: ConfirmingTimeout).perform_later(self)
     Weixin.send_confirm_order_message self
+  rescue => error
+    Rails.logger.error "#{error.class}: #{error.message} from Order#finish!"
   end
 
   def confirm!
@@ -109,8 +119,16 @@ class Order < ActiveRecord::Base
     update_attribute(:state, Order.states[:finished])
   end
 
+  def review!
+    update_attribute(:state, Order.states[:reviewed])
+  end
+
   def title
     "#{mechanic.user.nickname} 为您 #{skill.name}"
+  end
+
+  def mobile
+    contact_mobile || user.mobile
   end
 
   def trade_no
@@ -120,4 +138,5 @@ class Order < ActiveRecord::Base
   def refund_no
     "order#{id}created_at#{created_at.to_i}refund"
   end
+
 end

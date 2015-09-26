@@ -1,4 +1,7 @@
-<h3 class="page-header">员工管理</h3>
+<h3 class="page-header">
+  员工管理
+  <small><%= link_to "添加员工", new_merchants_admin_merchant_path %></small>
+</h3>
 
 <%= index_for [ :merchants, :admin, @merchants ], class: "table table-hover data-tables" do |i| %>
   <%= i.attribute :nickname %>
@@ -7,5 +10,10 @@
     <%= te merchant, :role %>
   <% end %>
 
-  <%= i.actions :show %>
+  <%= i.actions do |a| %>
+    <%= a.action_link :edit %>
+    <% if current_merchant != i.object %>
+      <%= a.action_link :destroy %>
+    <% end %>
+  <% end %>
 <% end %>

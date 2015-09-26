@@ -5,21 +5,21 @@
 </div>
 
 <div class="col-sm-9">
-  <%= show_for @bid, class: "dl-horizontal" do |s| %>
-    <%= s.fields_for :mechanic do |ss| %>
-      <%= ss.attribute :user_nickname %>
-      <%= ss.attribute :user_address %>
-      <%= ss.attribute :description %>
-      <%= ss.attribute :orders_count %>
-      <%= ss.attribute :professionality_average %>
-      <%= ss.attribute :timeliness_average %>
+  <%= show_for @bid, class: "dl-horizontal" do |i| %>
+    <%= i.fields_for :mechanic do |ii| %>
+      <%= ii.attribute :user_nickname %>
+      <%= ii.attribute :user_address %>
+      <%= ii.attribute :description %>
+      <%= ii.attribute :orders_count %>
+      <%= ii.attribute :professionality_average %>
+      <%= ii.attribute :timeliness_average %>
     <% end %>
-    <%= s.fields_for :order do |ss| %>
-      <%= ss.attribute :appointment, format: :short %>
-      <%= ss.attribute :skill, with: :name %>
-      <%= ss.attribute :quoted_price %>
+    <%= i.fields_for :order do |ii| %>
+      <%= ii.attribute :appointment, format: :short %>
+      <%= ii.attribute :skill, with: :name %>
+      <%= ii.attribute :quoted_price %>
     <% end %>
-    <%= s.attribute :markup_price %>
+    <%= i.attribute :markup_price %>
   <% end %>
 </div>
 

@@ -5,6 +5,10 @@ class Merchants::Admin::OrdersController < Merchants::Admin::ApplicationControll
     @orders = order_klass.all
   end
 
+  def show
+    render "merchants/orders/show"
+  end
+
   private
 
     def find_order

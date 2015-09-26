@@ -3,20 +3,20 @@
 <% end %>
 
 <div class="content-padded">
-  <%= show_for @order do |s| %>
-    <% if @order.available? %>
-      <%= s.fields_for :user do |ss| %>
-        <%= ss.attribute :mobile %>
+  <%= show_for @order do |i| %>
+    <% if current_user.mechanic? && @order.available? %>
+      <%= i.attribute :mobile do %>
+        <a href="tel:<%= @order.mobile %>"><%= @order.mobile %></a>
       <% end %>
     <% end %>
 
-    <%= s.attribute :address %>
-    <%= s.attribute :appointment, format: :long %>
-    <%= s.attribute :skill, with: :name %>
-    <%= s.attribute :brand, with: :name %>
-    <%= s.attribute :series, with: :name %>
-    <%= s.attribute :quoted_price %>
-    <%= s.attribute :remark %>
+    <%= i.attribute :address %>
+    <%= i.attribute :appointment, format: :long %>
+    <%= i.attribute :skill, with: :name %>
+    <%= i.attribute :brand, with: :name %>
+    <%= i.attribute :series, with: :name %>
+    <%= i.attribute :quoted_price %>
+    <%= i.attribute :remark %>
   <% end %>
 </div>
 
@@ -37,8 +37,10 @@
     </li>
   </ul>
   <div class="content-padded">
-    手机号码：<%= @order.mechanic.user.mobile %><br>
-    地址：<%= @order.mechanic.user.address %><br>
+    <% if !current_user.mechanic? && @order.available? %>
+      手机号码：<%= @order.mechanic.user_mobile %><br>
+      地址：<%= @order.mechanic.user_address %><br>
+    <% end %>
     简介：<%= @order.mechanic.description %>
   </div>
 <% end %>
@@ -83,7 +85,7 @@
       </script>
     <% when :confirming %>
       <% if @order.mechanic_attach_1 || @order.mechanic_attach_2 %>
-        施工照片：点击查看大图<br>
+        施工照片：点击查看原图<br>
         <%= link_to @order.mechanic_attach_1.url(:original) do %>
           <%= image_tag @order.mechanic_attach_1.url(:thumb) %>
         <% end if @order.mechanic_attach_1.present? %>
@@ -99,6 +101,12 @@
         <%= link_to "收藏技师", follow_mechanic_path(@order.mechanic), class: "btn btn-block btn-positive" %>
       <% end %>
       <%= link_to "点评技师", review_order_path(@order), class: "btn btn-block btn-positive" %>
+    <% when :reviewed %>
+      <% if current_user.follow? @order.mechanic %>
+        <%= link_to "取消收藏技师", unfollow_mechanic_path(@order.mechanic), class: "btn btn-block btn-negative" %>
+      <% else %>
+        <%= link_to "收藏技师", follow_mechanic_path(@order.mechanic), class: "btn btn-block btn-positive" %>
+      <% end %>
     <% end %>
   <% end %>
 </div>

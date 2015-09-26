@@ -1,7 +1,7 @@
 class Merchants::OrdersController < Merchants::ApplicationController
   skip_before_filter :verify_authenticity_token, :authenticate!, only: [ :notify ]
   before_filter :find_order, except: [ :index, :new, :create, :notify ]
-  before_filter :redirect_pending, only: [ :new, :create ]
+  before_filter :redirect_pending, only: [ :new, :create, :index ]
 
   def index
     @state = if %w(pendings paids workings finisheds).include? params[:state]
@@ -20,6 +20,15 @@ class Merchants::OrdersController < Merchants::ApplicationController
     @order = order_klass.new(order_params)
     if @order.save
       redirect_to merchants_order_bids_path(@order)
+    else
+      render :new
+    end
+  end
+
+  def update
+    if @order.update_attributes(order_params)
+      @order.review!
+      redirect_to merchants_order_path(@order)
     else
       render :new
     end
@@ -99,7 +108,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
     def order_params
       params.require(:order).permit(:address, :appointment, :skill_id,
         :brand_id, :series_id, :quoted_price, :remark, :lbs_id, :professionality,
-        :timeliness, :review)
+        :timeliness, :review, :contact_mobile, :contact_nickname)
     end
 
 end

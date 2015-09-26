@@ -29,6 +29,7 @@ class OrdersController < ApplicationController
 
   def update
     if @order.update_attributes(order_params)
+      @order.review!
       redirect_to order_path(@order)
     else
       render :new

@@ -108,7 +108,13 @@ Rails.application.routes.draw do
     end
 
     resources :merchants
-    resources :mechanics
+    resources :mechanics do
+      member do
+        post :follow
+        post :unfollow
+        get :reviews
+      end
+    end
 
     namespace :admin do
       resources :merchants

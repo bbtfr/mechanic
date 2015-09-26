@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   include MobileVerificationCode
+  include Followable
 
   def update_weixin_openid openid
     return unless openid.present?
@@ -44,20 +45,5 @@ class User < ActiveRecord::Base
 
   def orders_count
     orders.availables.count
-  end
-
-  def follow! mechanic
-    mechanic = mechanic.id if mechanic.is_a? Mechanic
-    Fellowship.where(mechanic_id: mechanic, user: self).first_or_create
-  end
-
-  def unfollow! mechanic
-    mechanic = mechanic.id if mechanic.is_a? Mechanic
-    Fellowship.where(mechanic_id: mechanic, user: self).destroy_all
-  end
-
-  def follow? mechanic
-    mechanic = mechanic.id if mechanic.is_a? Mechanic
-    Fellowship.where(mechanic_id: mechanic, user: self).exists?
   end
 end

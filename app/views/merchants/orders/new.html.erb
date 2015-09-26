@@ -8,7 +8,7 @@ series_map = Series.all.to_a.
 %>
 
 <div class="col-md-7">
-  <%= bootstrap_simple_form_for([:merchants, @order]) do |f| %>
+  <%= bootstrap_simple_form_for([ :merchants, @order ]) do |f| %>
     <%= f.error_messages %>
 
     <h5 class="text-muted">需求信息</h5>
