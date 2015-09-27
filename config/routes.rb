@@ -114,7 +114,12 @@ Rails.application.routes.draw do
     resources :users
     resources :user_groups, concerns: [:confirm]
     resources :mechanics
-    resources :merchants, concerns: [:confirm]
+    resources :merchants, concerns: [:confirm] do
+      member do
+        post :active
+        post :inactive
+      end
+    end
     resources :orders
     resources :withdrawals, concerns: [:confirm] do
       collection do

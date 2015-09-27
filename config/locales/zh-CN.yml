@@ -10,6 +10,8 @@ zh-CN:
       verification_code_blank: 不能为空
       verification_code_invalid: 错误
       not_confirmed: 您的帐号还未验证通过
+      store_not_confirmed: 您的店铺还未验证通过
+      store_not_active: 您的店铺已被锁定，请联系管理员
       no_authentication_details: 您没用提供登录所需的信息
       general_credentials_error: 手机号码/验证码 错误
     attributes:

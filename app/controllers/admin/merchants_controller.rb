@@ -15,6 +15,16 @@ class Admin::MerchantsController < Admin::ApplicationController
     redirect_to request.referer
   end
 
+  def active
+    @merchant.active!
+    redirect_to request.referer
+  end
+
+  def inactive
+    @merchant.inactive!
+    redirect_to request.referer
+  end
+
   def destroy
     @merchant.destroy
     redirect_to request.referer
