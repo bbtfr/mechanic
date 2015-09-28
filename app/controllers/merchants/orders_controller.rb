@@ -75,8 +75,10 @@ class Merchants::OrdersController < Merchants::ApplicationController
         case notify_params[:notify_type]
         when "trade_status_sync"
           Order.find(params[:id]).pay! :alipay
+          render nothing: true
         when "batch_refund_notify"
           Order.find(params[:id]).refund!
+          render nothing: true
         else
           render text: "未知支付类型", status: 400
         end

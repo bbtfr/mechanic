@@ -174,12 +174,14 @@ class Order < ActiveRecord::Base
     contact_mobile || user.mobile
   end
 
-  def trade_no
-    "order#{id}created_at#{created_at.to_i}"
+  def trade_no update_timestamp = true
+    update_attribute(:paid_at, Time.now) if update_timestamp
+    "#{paid_at.strftime("%Y%m%d")}#{"%06d" % id}"
   end
 
-  def refund_no
-    "order#{id}created_at#{created_at.to_i}refund"
+  def refund_no update_timestamp = true
+    update_attribute(:refunded_at, Time.now) if update_timestamp
+    "#{refunded_at.strftime("%Y%m%d")}#{"%06d" % id}"
   end
 
 end

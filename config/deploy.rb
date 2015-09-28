@@ -36,8 +36,6 @@ set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/sys
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-set :sidekiq_require, File.join(current_path, 'config', 'initializers', 'sidekiq.rb')
-
 namespace :deploy do
 
   after :restart, :clear_cache do
@@ -52,8 +50,17 @@ namespace :deploy do
 end
 
 desc "tail log file"
-task :tail do
+task :logs do
   on roles(:app) do
     execute "tail -f #{shared_path}/log/#{fetch(:rails_env)}.log"
+  end
+end
+
+namespace :sidekiq do
+  desc "tail log file"
+  task :logs do
+    on roles(:app) do
+      execute "tail -f -n 200 #{shared_path}/log/sidekiq.log"
+    end
   end
 end
