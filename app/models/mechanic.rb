@@ -24,7 +24,7 @@ class Mechanic < ActiveRecord::Base
   end
 
   def total_income
-    orders.finisheds.sum(:price) || 0
+    ((orders.finisheds.sum(:price) || 0) * (100 - Setting.commission_percent.to_f) / 100).round(2)
   end
 
   def orders_count

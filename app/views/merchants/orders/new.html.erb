@@ -7,8 +7,8 @@ series_map = Series.all.to_a.
   to_h
 %>
 
-<div class="col-md-7">
-  <%= bootstrap_simple_form_for([ :merchants, @order ]) do |f| %>
+<%= bootstrap_simple_form_for([ :merchants, @order ]) do |f| %>
+  <div class="col-md-7">
     <%= f.error_messages %>
 
     <h5 class="text-muted">需求信息</h5>
@@ -32,7 +32,9 @@ series_map = Series.all.to_a.
 
     <%= f.input :contact_nickname %>
     <%= f.input :contact_mobile %>
+  </div>
 
+  <div class="col-md-12">
     <h5 class="text-muted">指派技师 <a href="#" id="clean_mechanic">取消选中技师</a></h5>
 
     <%= index_for [ :merchants, current_merchant.store.followed_mechanics ], class: "table table-hover data-tables" do |i| %>
@@ -40,15 +42,17 @@ series_map = Series.all.to_a.
         <%= f.radio_button :mechanic_id, mechanic.id %>
       <% end %>
       <%= i.attribute :user_nickname %>
-      <%= i.attribute :user_mobile %>
+      <%= i.attribute :province, with: :name, if_raise: nil %>
+      <%= i.attribute :city, with: :name, if_raise: nil %>
+      <%= i.attribute :district, with: :name, if_raise: nil %>
+      <%= i.attribute :orders_count %>
       <%= i.attribute :professionality_average %>
       <%= i.attribute :timeliness_average %>
-      <%= i.attribute :orders_count %>
     <% end %>
 
     <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
-  <% end %>
-</div>
+  </div>
+<% end %>
 
 <script type="text/javascript">
   var seriesMap = <%= raw series_map.to_json %>

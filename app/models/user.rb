@@ -34,10 +34,17 @@ class User < ActiveRecord::Base
 
   belongs_to :user_group
 
+  scope :confirmeds, -> { where(confirmed: true) }
+  scope :unconfirmeds, -> { where(confirmed: false) }
+
   validates_presence_of :nickname, :gender, :address, if: :confirmed
 
   delegate :province_id, :city_id, :district_id, :skill_ids, :description,
     to: :mechanic, allow_nil: true
+
+  def balance
+    super.round(2)
+  end
 
   def increase_balance! amount
     update_attribute(:balance, (balance || 0) + amount)

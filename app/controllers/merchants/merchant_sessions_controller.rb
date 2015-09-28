@@ -1,5 +1,5 @@
 class Merchants::MerchantSessionsController < Merchants::ApplicationController
-  skip_before_filter :authenticate!
+  skip_before_filter :authenticate!, except: [ :destroy ]
 
   def new
     @merchant_session = MerchantSession.new

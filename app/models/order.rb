@@ -35,7 +35,7 @@ class Order < ActiveRecord::Base
   validates_attachment_content_type :user_attach_1, :content_type => /\Aimage\/.*\Z/
 
   validates_numericality_of :quoted_price, greater_than_or_equal_to: 1
-  validates_presence_of :skill, :brand_id, :series_id, :quoted_price
+  validates_presence_of :skill_id, :brand_id, :series_id, :quoted_price
   validates_presence_of :contact_mobile, if: :merchant_id
   validates_format_of :contact_mobile, with: /\d{11}/, if: :merchant_id
   validate :validate_lbs_id, on: :create
@@ -135,20 +135,13 @@ class Order < ActiveRecord::Base
   def confirm!
     return false unless confirming?
     user = mechanic.user
-    commission = (price * Setting.commission_percent.to_f / 100).round(2)
     user.increase_balance!(price - commission)
 
     client_chief = user.user_group.user rescue nil
-    if client_chief
-      client_commission = (commission * Setting.client_commission_percent.to_f / 100).round(2)
-      client_chief.increase_balance!(client_commission)
-    end
+    client_chief.increase_balance!(client_commission) if client_chief
 
     mechanic_chief = mechanic.user.user_group.user rescue nil
-    if mechanic_chief
-      mechanic_commission = (commission * Setting.mechanic_commission_percent.to_f / 100).round(2)
-      mechanic_chief.increase_balance!(mechanic_commission)
-    end
+    mechanic_chief.increase_balance!(mechanic_commission) if mechanic_chief
 
     update_attribute(:state, Order.states[:finished])
   end
@@ -159,6 +152,18 @@ class Order < ActiveRecord::Base
 
   def contact
     contact_nickname.presence
+  end
+
+  def commission
+    @commission ||= (price * Setting.commission_percent.to_f / 100).round(2)
+  end
+
+  def client_commission
+    (commission * Setting.client_commission_percent.to_f / 100).round(2)
+  end
+
+  def mechanic_commission
+    (commission * Setting.mechanic_commission_percent.to_f / 100).round(2)
   end
 
   def title

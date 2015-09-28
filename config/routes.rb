@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     resource :merchant do
       get :forget_password
       match :verification_code, via: [:get, :post, :patch]
-      patch :confirm
+      match :confirm, via: [:post, :patch]
 
       get :change_password
       patch :password

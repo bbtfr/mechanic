@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150928001351) do
+ActiveRecord::Schema.define(version: 20150928030648) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -201,7 +201,7 @@ ActiveRecord::Schema.define(version: 20150928001351) do
     t.integer  "gender_cd"
     t.string   "address"
     t.string   "qq"
-    t.integer  "balance",             default: 0
+    t.float    "balance",             default: 0.0
     t.string   "avatar_file_name"
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"
