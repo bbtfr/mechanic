@@ -14,10 +14,10 @@ class Order < ActiveRecord::Base
   belongs_to :bid
   has_many :bids
 
-  as_enum :state, { pending: 0, paying: 1, canceled: 2, refunded: 3, paid: 4, working: 5,
-    confirming: 6, finished: 7, reviewed: 8 }
-  as_enum :cancel, { pending_timeout: 0, paying_timeout: 1, user_abstain: 2, user_cancel: 3,
-    refunded: 4 }
+  as_enum :state, pending: 0, paying: 1, canceled: 2, refunded: 3, paid: 4, working: 5,
+    confirming: 6, finished: 7, reviewed: 8
+  as_enum :cancel, pending_timeout: 0, paying_timeout: 1, user_abstain: 2, user_cancel: 3
+  as_enum :pay_type, { weixin: 0, alipay: 1 }, prefix: true
 
   AVAILABLE_GREATER_THAN = 3
   scope :availables, -> { where('"orders"."state_cd" > ?', AVAILABLE_GREATER_THAN) }
@@ -103,8 +103,9 @@ class Order < ActiveRecord::Base
     update_attribute(:state, Order.states[:canceled])
   end
 
-  def pay!
+  def pay! pay_type = :weixin
     return false unless paying? || canceled?
+    update_attribute(:pay_type, Order.pay_types[pay_type])
     update_attribute(:state, Order.states[:paid])
     Weixin.send_paid_order_message self
   rescue => error
@@ -113,7 +114,6 @@ class Order < ActiveRecord::Base
 
   def refund!
     return false unless paid?
-    update_attribute(:cancel, Order.cancels[:refunded])
     update_attribute(:state, Order.states[:refunded])
   end
 

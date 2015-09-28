@@ -1,0 +1,12 @@
+default: &default
+  pid: <%= ENV["ALIPAY_PID"] %>
+  key: <%= ENV["ALIPAY_KEY"] %>
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

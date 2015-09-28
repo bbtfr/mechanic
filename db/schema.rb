@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150928030648) do
+ActiveRecord::Schema.define(version: 20150928124036) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -140,12 +140,14 @@ ActiveRecord::Schema.define(version: 20150928030648) do
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
     t.integer  "markup_price",                   default: 0
+    t.integer  "pay_type_cd",                    default: 0
   end
 
   add_index "orders", ["bid_id"], name: "index_orders_on_bid_id"
   add_index "orders", ["cancel_cd"], name: "index_orders_on_cancel_cd"
   add_index "orders", ["mechanic_id"], name: "index_orders_on_mechanic_id"
   add_index "orders", ["merchant_id"], name: "index_orders_on_merchant_id"
+  add_index "orders", ["pay_type_cd"], name: "index_orders_on_pay_type_cd"
   add_index "orders", ["state_cd"], name: "index_orders_on_state_cd"
   add_index "orders", ["user_id"], name: "index_orders_on_user_id"
 

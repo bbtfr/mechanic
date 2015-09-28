@@ -28,7 +28,7 @@ Rails.application.routes.draw do
         get :cancel
 
         get :refund
-        post :notify
+        match :notify, via: [:get, :post]
         get :result
 
         get :confirm

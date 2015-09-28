@@ -181,7 +181,6 @@ module Weixin
       Rails.logger.error("  Error occurred when requesting WxPay API: #{e.message}")
     end
 
-
     def payment_qrcode order
       params = {
         body: order.title,
@@ -189,7 +188,7 @@ module Weixin
         product_id: order.trade_no,
         total_fee: order.price * 100,
         spbill_create_ip: LocalIP,
-        notify_url: "#{MerchantsURL}/orders/#{order.id}/notify",
+        notify_url: "#{MerchantsURL}/orders/#{order.id}/notify.weixin",
         trade_type: "NATIVE", # could be "JSAPI", "NATIVE" or "APP",
       }
 

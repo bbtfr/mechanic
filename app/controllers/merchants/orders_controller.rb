@@ -22,7 +22,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
       if @order.pending?
         redirect_to merchants_order_bids_path(@order)
       elsif @order.paying?
-        redirect_to pay_merchants_orders_path(@order)
+        redirect_to merchants_order_path(@order)
       end
     else
       render :new
@@ -40,53 +40,90 @@ class Merchants::OrdersController < Merchants::ApplicationController
 
   def cancel
     @order.cancel!
-    flash[:notice] = "已取消订单！"
+    flash[:notice] = "订单已取消！"
     redirect_to new_merchants_order_path
   end
 
   def pay
-    response = Weixin.payment_qrcode @order
-    if response.success?
-      @code_url = response["code_url"]
-      flash.now[:notice] = "正在创建支付订单..."
+    case params[:format]
+    when "alipay"
+      response = Ali.payment @order
+      redirect_to response
+    when "weixin"
+      response = Weixin.payment_qrcode @order
+      if response.success?
+        @code_url = response["code_url"]
+        flash.now[:notice] = "正在创建支付订单..."
+      else
+        @order.pay! :weixin if response["err_code"] == "ORDERPAID"
+        flash[:error] = response["return_msg"]
+        redirect_to merchants_order_path(@order)
+      end
     else
-      @order.pay! if response["err_code"] == "ORDERPAID"
-      flash[:error] = response["return_msg"]
+      flash[:error] = "未知支付类型"
       redirect_to merchants_order_path(@order)
     end
   end
 
   def notify
-    result = Hash.from_xml(request.body.read)["xml"]
+    p params
 
-    if WxPay::Sign.verify?(result)
-      # find your order and process the post-paid logic.
-      Order.find(params[:id]).pay!
-      render :xml => {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
+    case params[:format]
+    when "alipay"
+      notify_params = params.except(*request.path_parameters.keys)
+      if Alipay::Notify.verify?(notify_params)
+        case notify_params[:notify_type]
+        when "trade_status_sync"
+          Order.find(params[:id]).pay! :alipay
+        when "batch_refund_notify"
+          Order.find(params[:id]).refund!
+        else
+          render text: "未知支付类型", status: 400
+        end
+      end
+    when "weixin"
+      notify_params = Hash.from_xml(request.body.read)["xml"]
+
+      if WxPay::Sign.verify?(notify_params)
+        # find your order and process the post-paid logic.
+        Order.find(params[:id]).pay! :weixin
+        render :xml => {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
+      else
+        render :xml => {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
+      end
     else
-      render :xml => {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
+      render text: "未知支付类型", status: 400
     end
   end
 
   def refund
     if @order.paid?
-      response = Weixin.refund @order
-      if response.success?
-        flash[:notice] = "退款申请已提交，支付款将在3个工作日内退回您的账户..."
-        @order.refund!
+      if @order.pay_type_alipay?
+        response = Ali.refund @order
+        redirect_to response
+      elsif @order.pay_type_weixin?
+        response = Weixin.refund @order
+        if response.success?
+          flash[:notice] = "退款申请已提交，支付款将在3个工作日内退回您的账户..."
+          @order.refund!
+        else
+          flash[:error] = response["return_msg"]
+        end
+        redirect_to merchants_order_path(@order)
       else
-        flash[:error] = response["return_msg"]
+        flash[:error] = "未知支付类型"
+        redirect_to merchants_order_path(@order)
       end
-      redirect_to order_path(@order)
     else
       flash[:error] = "订单状态错误！"
-      redirect_to order_path(@order)
+      redirect_to merchants_order_path(@order)
     end
   end
 
   def confirm
     @order.confirm!
-    render :show
+    flash[:notice] = "订单确认完工！"
+    redirect_to merchants_order_path(@order)
   end
 
   private

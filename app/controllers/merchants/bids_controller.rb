@@ -5,7 +5,7 @@ class Merchants::BidsController < Merchants::ApplicationController
   def pick
     if @order.pick!(@bid)
       flash[:success] = "成功选中技师！"
-      redirect_to pay_merchants_orders_path @order
+      redirect_to merchants_order_path @order
     else
       flash.now[:error] = "订单已失效..."
       render :show

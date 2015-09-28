@@ -44,6 +44,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    alipay (0.8.0)
     arel (6.0.3)
     authlogic (3.4.6)
       activerecord (>= 3.2)
@@ -282,6 +283,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  alipay
   authlogic (~> 3.4.6)
   bootstrap-sass
   byebug
