@@ -30,8 +30,6 @@
 
 <script type="text/javascript">
   var interval = setInterval(function() {
-    xhrRequest("GET", window.location.href + ".js", function(xhr) {
-      eval(xhr.responseText);
-    });
+    $.getScript(window.location.href + ".js");
   }, 5000);
 </script>

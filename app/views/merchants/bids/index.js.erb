@@ -4,5 +4,6 @@
   window.location.href = "/merchants/orders/new";
 <% else %>
   var index = "<%= j render "index" %>";
-  if (content.innerHTML !== index) content.innerHTML = index;
+  var $content = $("#content");
+  if ($content.html() !== index) $content.html(index);
 <% end %>

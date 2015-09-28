@@ -22,4 +22,4 @@ $(document).on 'ready page:load', ->
         sLast: "尾页"
 
 $(document).on 'page:before-unload', ->
-  clearInterval(interval) if interval
+  clearInterval(interval) if interval?

@@ -55,46 +55,20 @@ series_map = Series.all.to_a.
 <% end %>
 
 <script type="text/javascript">
-  var seriesMap = <%= raw series_map.to_json %>
+  $(document).ready(function() {
+    var seriesMap = <%= raw series_map.to_json %>
 
-  var brand = order_brand_id;
-  var series = order_series_id;
-  var brandCallback = function() {
-    removeOptions(series.querySelectorAll("option"));
-    appendOptions(series, seriesMap[brand.value]);
-  };
-
-  brand.addEventListener("change", brandCallback);
-
-  var cleanMechanic = clean_mechanic;
-  var cleanMechanicCallback = function(event) {
-    event.preventDefault();
-    var mechanics = document.querySelectorAll("[name=order\\[mechanic_id\\]]");
-    for (var i = mechanics.length - 1; i >= 0; i--) {
-      mechanics[i].checked = false
-    }
-  }
-  cleanMechanic.addEventListener("click", cleanMechanicCallback);
-
-  var getLocationCallback = function(res) {
-    url = "http://apis.map.qq.com/ws/geocoder/v1";
-    url += "?location=" + encodeURI(res.latitude + "," + res.longitude);
-    url += "&coord_type=1"
-    url += "&output=jsonp";
-    url += "&key=<%= LBS::Key %>";
-
-    jsonp(url, function(res) {
-      address = res["result"]["formatted_addresses"]["recommend"];
-      order_lbs_id.value = res["result"]["ad_info"]["adcode"];
-      if (order_address.value !== address && confirm("使用定位地址：" + address)) {
-        order_address.value = address;
-      }
+    var $brand = $("#order_brand_id");
+    var $series = $("#order_series_id");
+    $brand.change(function() {
+      $series.removeOptions();
+      $series.appendOptions(seriesMap[$brand.val()]);
     });
-  };
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      getLocationCallback(position.coords);
+    var $cleanMechanic = $("#clean_mechanic");
+    $cleanMechanic.click(function(event) {
+      event.preventDefault();
+      $("input[type=radio][name=order\\[mechanic_id\\]]").attr("checked", false);
     });
-  }
+  })
 </script>

@@ -7,8 +7,6 @@
 
 <script type="text/javascript">
   var interval = setInterval(function() {
-    xhrRequest("GET", "<%= result_merchants_order_path(@order, format: "js") %>", function(xhr) {
-      eval(xhr.responseText);
-    });
-  }, 5000)
+    $.getScript("<%= result_merchants_order_path(@order) %>.js");
+  }, 5000);
 </script>

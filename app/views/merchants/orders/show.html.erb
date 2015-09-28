@@ -43,7 +43,7 @@
     <span class="btn btn-danger" id="refund_order_button">申请退款</span>
   </div>
   <script type="text/javascript">
-    refund_order_button.addEventListener("click", function() {
+    $("#refund_order_button").click(function() {
       if (confirm("您确定要申请退款？")) {
         window.location.href = "<%= refund_merchants_order_path(@order) %>";
       }
