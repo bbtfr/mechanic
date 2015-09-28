@@ -41,7 +41,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
   def cancel
     @order.cancel!
     flash[:notice] = "已取消订单！"
-    redirect_to new_merchants_order_path(@order)
+    redirect_to new_merchants_order_path
   end
 
   def pay

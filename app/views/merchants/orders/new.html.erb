@@ -35,7 +35,7 @@ series_map = Series.all.to_a.
 
     <h5 class="text-muted">指派技师 <a href="#" id="clean_mechanic">取消选中技师</a></h5>
 
-    <%= index_for [ :merchants, current_merchant.store.followed_mechanics ], class: "table table-hover" do |i| %>
+    <%= index_for [ :merchants, current_merchant.store.followed_mechanics ], class: "table table-hover data-tables" do |i| %>
       <%= i.attribute :check do |mechanic| %>
         <%= f.radio_button :mechanic_id, mechanic.id %>
       <% end %>

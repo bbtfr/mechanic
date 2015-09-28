@@ -11,10 +11,10 @@ class Merchants::MerchantSessionsController < Merchants::ApplicationController
       redirect_to session[:original_url] || merchants_root_path
     else
       merchant = @merchant_session.attempted_record
-      unless merchant.confirmed?
+      if merchant && !merchant.confirmed?
         session[:mobile] = merchant.mobile
         link_url = verification_code_merchants_merchant_path
-        @merchant_session.errors.add :base, "<a href=\"#{link_url}\">重新发送验证码</a>".html_safe
+        @merchant_session.errors.add :base, "点击这里<a href=\"#{link_url}\">重新发送验证码</a>".html_safe
       end
 
       render :new

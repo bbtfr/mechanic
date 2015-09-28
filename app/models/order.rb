@@ -72,7 +72,7 @@ class Order < ActiveRecord::Base
   after_create do
     SendCreateOrderMessageJob.perform_later(self)
     if mechanic_id
-      pick! bids.create(mechanic_id: mechanic_id, markup_price: 0)
+      pick!
     else
       pend!
     end
@@ -82,14 +82,19 @@ class Order < ActiveRecord::Base
     UpdateOrderStateJob.set(wait: PendingTimeout).perform_later(self)
   end
 
-  def pick! bid
+  def pick! bid = nil
     return false unless pending?
     update_attribute(:state, Order.states[:paying])
     UpdateOrderStateJob.set(wait: PayingTimeout).perform_later(self)
-    self.bid_id = bid.id
-    self.mechanic_id = bid.mechanic_id
-    self.price = quoted_price + bid.markup_price
-    save
+
+    if bid
+      self.bid_id = bid.id
+      self.mechanic_id = bid.mechanic_id
+      self.markup_price = bid.markup_price
+    end
+
+    self.price = quoted_price + markup_price
+    save(validate: false)
   end
 
   def cancel! reason = :user_cancel

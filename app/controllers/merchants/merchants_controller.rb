@@ -22,11 +22,11 @@ class Merchants::MerchantsController < Merchants::ApplicationController
   end
 
   def verification_code
-    mobile = session[:mobile] || params[:merchant][:mobile]
+    mobile = session[:mobile] || params[:merchant][:mobile] rescue nil
     @merchant = Merchant.where(mobile: mobile).first_or_initialize
     if @merchant.persisted?
       if @merchant.reset_verification_code!
-        flash.now[:info] = "短信验证码已发送，请注意查收"
+        flash.now[:notice] = "短信验证码已发送，请注意查收"
         session[:mobile] = nil
         render :verification_code
       else
@@ -47,6 +47,7 @@ class Merchants::MerchantsController < Merchants::ApplicationController
       merchant_session.save
 
       redirect_to session[:original_url] || merchants_root_path
+      session[:original_url] = nil
     else
       @merchant.errors.add :base, "验证码错误"
       render :verification_code

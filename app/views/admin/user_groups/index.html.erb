@@ -1,9 +1,9 @@
-<h3 class="page-header">堂口管理</h3>
+<h3 class="page-header">堂主管理</h3>
 
 <div class="col-md-2 col-xs-4">
   <ul class="nav nav-pills nav-stacked">
     <li class="<%= "active" unless action_name == "confirmed" %>"><%= link_to "申请列表", admin_user_groups_path %></li>
-    <li class="<%= "active" if action_name == "confirmed" %>"><%= link_to "堂口列表", confirmed_admin_user_groups_path %></li>
+    <li class="<%= "active" if action_name == "confirmed" %>"><%= link_to "堂主列表", confirmed_admin_user_groups_path %></li>
   </ul>
 </div>
 
@@ -15,7 +15,7 @@
     <% end %>
     <%= i.attribute :user_nickname %>
 
-    <% if @confirmed %>
+    <% if action_name == "confirmed" %>
       <%= i.actions :show, :destroy %>
     <% else %>
       <%= i.attribute :description %>
