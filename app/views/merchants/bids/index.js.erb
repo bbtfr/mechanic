@@ -3,6 +3,6 @@
   alert("非常抱歉，订单超时，您没有选择技师\r\n本次服务取消\r\n点击确认再来一次");
   window.location.href = "/merchants/orders/new";
 <% else %>
-  index = "<%= j render "index" %>";
+  var index = "<%= j render "index" %>";
   if (content.innerHTML !== index) content.innerHTML = index;
 <% end %>
