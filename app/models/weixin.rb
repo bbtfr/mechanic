@@ -149,7 +149,7 @@ module Weixin
     def payment user, order, remote_ip
       params = {
         body: order.title,
-        out_trade_no: order.trade_no,
+        out_trade_no: order.out_trade_no,
         total_fee: order.price * 100,
         spbill_create_ip: remote_ip,
         notify_url: "#{BaseURL}/orders/#{order.id}/notify",
@@ -184,8 +184,8 @@ module Weixin
     def payment_qrcode order
       params = {
         body: order.title,
-        out_trade_no: order.trade_no,
-        product_id: order.trade_no,
+        out_trade_no: order.out_trade_no,
+        product_id: order.to_global_id.to_s,
         total_fee: order.price * 100,
         spbill_create_ip: LocalIP,
         notify_url: "#{MerchantsURL}/orders/#{order.id}/notify.weixin",
@@ -201,8 +201,8 @@ module Weixin
 
     def refund order
       params = {
-        out_trade_no: order.trade_no,
-        out_refund_no: order.refund_no,
+        out_trade_no: order.out_trade_no,
+        out_refund_no: order.out_refund_no,
         total_fee: order.price * 100,
         refund_fee: order.price * 100
       }
@@ -217,7 +217,7 @@ module Weixin
     def withdrawal withdrawal
       params = {
         desc: withdrawal.title,
-        partner_trade_no: withdrawal.trade_no,
+        partner_trade_no: withdrawal.out_trade_no,
         amount: withdrawal.amount * 100,
         check_name: "NO_CHECK",
         spbill_create_ip: LocalIP,

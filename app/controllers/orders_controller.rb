@@ -47,18 +47,18 @@ class OrdersController < ApplicationController
     if @order_params
       flash.now[:notice] = "正在创建支付订单..."
     else
-      @order.pay! if response["err_code"] == "ORDERPAID"
+      @order.pay! :weixin if response["err_code"] == "ORDERPAID"
       flash[:error] = response["return_msg"]
       redirect_to order_path(@order)
     end
   end
 
   def notify
-    result = Hash.from_xml(request.body.read)["xml"]
+    notify_params = Hash.from_xml(request.body.read)["xml"]
 
-    if WxPay::Sign.verify?(result)
+    if WxPay::Sign.verify?(notify_params)
       # find your order and process the post-paid logic.
-      Order.find(params[:id]).pay!
+      Order.find(params[:id]).pay! :weixin, notify_params[:transaction_id]
       render :xml => {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
     else
       render :xml => {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
@@ -66,6 +66,7 @@ class OrdersController < ApplicationController
   end
 
   def result
+    return if params[:format] == "js"
     if @order.paid?
       flash[:success] = "成功支付订单！"
       redirect_to order_path(@order)

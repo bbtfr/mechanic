@@ -66,15 +66,13 @@ class Merchants::OrdersController < Merchants::ApplicationController
   end
 
   def notify
-    p params
-
     case params[:format]
     when "alipay"
       notify_params = params.except(*request.path_parameters.keys)
       if Alipay::Notify.verify?(notify_params)
         case notify_params[:notify_type]
         when "trade_status_sync"
-          Order.find(params[:id]).pay! :alipay
+          Order.find(params[:id]).pay! :alipay, notify_params[:trade_no]
           render nothing: true
         when "batch_refund_notify"
           Order.find(params[:id]).refund!
@@ -88,7 +86,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
 
       if WxPay::Sign.verify?(notify_params)
         # find your order and process the post-paid logic.
-        Order.find(params[:id]).pay! :weixin
+        Order.find(params[:id]).pay! :weixin, notify_params[:transaction_id]
         render :xml => {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
       else
         render :xml => {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
@@ -98,11 +96,28 @@ class Merchants::OrdersController < Merchants::ApplicationController
     end
   end
 
+  def result
+    return if params[:format] == "js"
+
+    notify_params = params.except(*request.path_parameters.keys)
+    if Alipay::Notify.verify?(notify_params)
+      Order.find(params[:id]).pay! :alipay, notify_params[:trade_no]
+    end
+
+    if @order.paid?
+      flash[:success] = "成功支付订单！"
+      redirect_to merchants_order_path(@order)
+    else
+      flash.now[:notice] = "正在查询订单支付结果..."
+    end
+  end
+
   def refund
     if @order.paid?
       if @order.pay_type_alipay?
-        response = Ali.refund @order
-        redirect_to response
+        # response = Ali.refund @order
+        # redirect_to response
+        flash[:error] = "暂不支持支付宝退款"
       elsif @order.pay_type_weixin?
         response = Weixin.refund @order
         if response.success?
@@ -111,15 +126,13 @@ class Merchants::OrdersController < Merchants::ApplicationController
         else
           flash[:error] = response["return_msg"]
         end
-        redirect_to merchants_order_path(@order)
       else
         flash[:error] = "未知支付类型"
-        redirect_to merchants_order_path(@order)
       end
     else
       flash[:error] = "订单状态错误！"
-      redirect_to merchants_order_path(@order)
     end
+    redirect_to merchants_order_path(@order)
   end
 
   def confirm

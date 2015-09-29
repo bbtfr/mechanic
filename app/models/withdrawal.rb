@@ -32,7 +32,7 @@ class Withdrawal < ActiveRecord::Base
     "#{user.nickname} 申请提现 #{amount} 元"
   end
 
-  def trade_no
+  def out_trade_no
     "withdrawal#{id}created_at#{created_at.to_i}"
   end
 end

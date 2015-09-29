@@ -103,9 +103,10 @@ class Order < ActiveRecord::Base
     update_attribute(:state, Order.states[:canceled])
   end
 
-  def pay! pay_type = :weixin
+  def pay! pay_type = :weixin, trade_no = nil
     return false unless paying? || canceled?
     update_attribute(:pay_type, Order.pay_types[pay_type])
+    update_attribute(:trade_no, trade_no) if trade_no
     update_attribute(:state, Order.states[:paid])
     Weixin.send_paid_order_message self
   rescue => error
@@ -174,12 +175,12 @@ class Order < ActiveRecord::Base
     contact_mobile || user.mobile
   end
 
-  def trade_no update_timestamp = true
+  def out_trade_no update_timestamp = true
     update_attribute(:paid_at, Time.now) if update_timestamp
     "#{paid_at.strftime("%Y%m%d")}#{"%06d" % id}"
   end
 
-  def refund_no update_timestamp = true
+  def out_refund_no update_timestamp = true
     update_attribute(:refunded_at, Time.now) if update_timestamp
     "#{refunded_at.strftime("%Y%m%d")}#{"%06d" % id}"
   end
