@@ -70,7 +70,7 @@ class Order < ActiveRecord::Base
   end
 
   after_create do
-    SendCreateOrderMessageJob.perform_later(self)
+    SendCreateOrderMessageJob.set(wait: 1.second).perform_later(self)
     if mechanic_id
       pick!
     else
