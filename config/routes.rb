@@ -121,6 +121,11 @@ Rails.application.routes.draw do
       end
     end
     resources :orders
+    resources :refunds do
+      member do
+        post :confirm
+      end
+    end
     resources :withdrawals, concerns: [:confirm] do
       collection do
         get :settings

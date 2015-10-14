@@ -53,6 +53,15 @@
         </li>
         <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "技师", admin_mechanics_path %></li>
         <li class="<%= "active" if controller_name == "orders" %>"><%= link_to "订单", admin_orders_path %></li>
+        <li class="<%= "active" if controller_name == "refunds" %>">
+          <%= link_to admin_refunds_path do %>
+            退款
+            <% unconfirmed_refunds_count = Order.refundings.count %>
+            <% if unconfirmed_refunds_count > 0 %>
+              <span class="badge"><%= unconfirmed_refunds_count %></span>
+            <% end %>
+          <% end %>
+        </li>
         <li class="<%= "active" if controller_name == "withdrawals" %>"><%= link_to "账目提现", admin_withdrawals_path %></li>
         <li class="<%= "active" if controller_path.start_with? "admin/settings/" %>"><%= link_to "设置", admin_settings_skills_path %></li>
       </ul>

@@ -1,7 +1,7 @@
 class Order < ActiveRecord::Base
-  PendingTimeout = 60.minutes
+  PendingTimeout = 10.minutes
   PayingTimeout = 60.minutes
-  ConfirmingTimeout = 5.days
+  ConfirmingTimeout = 1.days
 
   belongs_to :skill
   belongs_to :brand
@@ -14,12 +14,12 @@ class Order < ActiveRecord::Base
   belongs_to :bid
   has_many :bids
 
-  as_enum :state, pending: 0, paying: 1, canceled: 2, refunded: 3, paid: 4, working: 5,
-    confirming: 6, finished: 7, reviewed: 8
+  as_enum :state, pending: 0, paying: 1, canceled: 2, refunding: 3, refunded: 4, paid: 5, working: 6,
+    confirming: 7, finished: 8, reviewed: 9
   as_enum :cancel, pending_timeout: 0, paying_timeout: 1, user_abstain: 2, user_cancel: 3
   as_enum :pay_type, { weixin: 0, alipay: 1 }, prefix: true
 
-  AVAILABLE_GREATER_THAN = 3
+  AVAILABLE_GREATER_THAN = 4
   scope :availables, -> { where('"orders"."state_cd" > ?', AVAILABLE_GREATER_THAN) }
   def available?
     state_cd > AVAILABLE_GREATER_THAN
@@ -113,8 +113,13 @@ class Order < ActiveRecord::Base
     Rails.logger.error "#{error.class}: #{error.message} from Order#pay!"
   end
 
-  def refund!
+  def refunding!
     return false unless paid?
+    update_attribute(:state, Order.states[:refunding])
+  end
+
+  def refund!
+    return false unless paid? || refunding?
     update_attribute(:state, Order.states[:refunded])
   end
 

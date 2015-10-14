@@ -36,6 +36,7 @@ zh-CN:
       pending: 等待应答
       paying: 未支付
       canceled: 已取消
+      refunding: 退款中
       refunded: 已退款
       paid: 已支付
       working: 施工中

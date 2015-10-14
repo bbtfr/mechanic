@@ -115,9 +115,8 @@ class Merchants::OrdersController < Merchants::ApplicationController
   def refund
     if @order.paid?
       if @order.pay_type_alipay?
-        # response = Ali.refund @order
-        # redirect_to response
-        flash[:error] = "暂不支持支付宝退款"
+        flash[:notice] = "退款申请已提交，等待管理员审核..."
+        @order.refunding!
       elsif @order.pay_type_weixin?
         response = Weixin.refund @order
         if response.success?
