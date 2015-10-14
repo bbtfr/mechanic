@@ -135,6 +135,7 @@ zh-CN:
         series_id: 车系
         series: 车系
         quoted_price: 出价
+        markup_price: 加价
         remark: 备注
         price: 价格
         professionality: 专业
