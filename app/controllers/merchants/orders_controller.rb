@@ -146,6 +146,9 @@ class Merchants::OrdersController < Merchants::ApplicationController
       if order = order_klass.pendings.first
         flash[:notice] = "您有一条竞价中的订单..."
         redirect_to merchants_order_bids_path(order)
+      elsif order = order_klass.payings.first
+        flash[:notice] = "您有一条需要支付的订单..."
+        redirect_to merchants_order_path(order)
       elsif order = order_klass.confirmings.first
         flash[:notice] = "您有一条需要确认完工的订单..."
         redirect_to merchants_order_path(order)
