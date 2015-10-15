@@ -18,11 +18,11 @@ class UserGroup < ActiveRecord::Base
   end
 
   def total_cost
-    orders.finisheds.sum(:price) || 0
+    orders.settleds.sum(:price) || 0
   end
 
   def total_income
-    mechanic_orders.finisheds.sum(:price) || 0
+    mechanic_orders.settleds.sum(:price) || 0
   end
 
   def total_turnover
@@ -35,7 +35,7 @@ class UserGroup < ActiveRecord::Base
   end
 
   def orders_count
-    orders.finisheds.count + mechanic_orders.finisheds.count
+    orders.settleds.count + mechanic_orders.settleds.count
   end
 
   def users_count

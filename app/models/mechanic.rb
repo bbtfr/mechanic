@@ -24,7 +24,7 @@ class Mechanic < ActiveRecord::Base
   end
 
   def total_income
-    ((orders.finisheds.sum(:price) || 0) * (100 - Setting.commission_percent.to_f) / 100).round(2)
+    ((orders.settleds.sum(:price) || 0) * (100 - Setting.commission_percent.to_f) / 100).round(2)
   end
 
   def orders_count
@@ -37,11 +37,11 @@ class Mechanic < ActiveRecord::Base
   end
 
   def location_name
-    name = ""
+    name = []
     name << province.name if province
-    name << " #{city.name}" if city && province.lbs_id != city.lbs_id
-    name << " #{district.name}" if district
-    name
+    name << city.name if city && province.lbs_id != city.lbs_id
+    name << district.name if district
+    name.join(" ")
   end
 
 end

@@ -25,6 +25,12 @@ class Order < ActiveRecord::Base
     state_cd > AVAILABLE_GREATER_THAN
   end
 
+  SETTLED_GREATER_THAN = 7
+  scope :settleds, -> { where('"orders"."state_cd" > ?', SETTLED_GREATER_THAN) }
+  def settled?
+    state_cd > SETTLED_GREATER_THAN
+  end
+
   has_attached_file :mechanic_attach_1, styles: { medium: "300x300>", thumb: "100x100#" }
   validates_attachment_content_type :mechanic_attach_1, :content_type => /\Aimage\/.*\Z/
   has_attached_file :mechanic_attach_2, styles: { medium: "300x300>", thumb: "100x100#" }
