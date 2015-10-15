@@ -21,17 +21,19 @@ district_map = District.all.to_a.
     <%= f.input :gender, collection: enum_option_pairs(User, :gender) %>
     <%= f.input :address %>
 
-    <%= f.input :is_mechanic, as: :boolean %>
+    <%= f.fields_for :mechanic do |ff| %>
+      <%= ff.input :_create, as: :boolean, label: "我是技师" %>
 
-    <div id="user_mechanic" style="display: none;">
-      <%= f.input :skill_ids, as: :check_boxes, collection: Skill.all %>
+      <div id="user_mechanic_attributes" style="display: none;">
+        <%= ff.input :skill_ids, as: :check_boxes, collection: Skill.all %>
 
-      <%= f.input :province_id, collection: Province.all %>
-      <%= f.input :city_id, collection: city_map[@user.province_id] || [] %>
-      <%= f.input :district_id, collection: district_map[@user.city_id] || [] %>
+        <%= ff.input :province_id, collection: Province.all %>
+        <%= ff.input :city_id, collection: city_map[ff.object.province_id] || [] %>
+        <%= ff.input :district_id, collection: district_map[ff.object.city_id] || [] %>
 
-      <%= f.input :description, as: :text, input_html: { rows: 4 } %>
-    </div>
+        <%= ff.input :description, as: :text, input_html: { rows: 4 } %>
+      </div>
+    <% end %>
 
     <%= f.button :submit, "确定", class: "btn-block btn-positive" %>
   </div>
@@ -44,8 +46,8 @@ district_map = District.all.to_a.
 </div>
 
 <script type="text/javascript">
-  var isMechanic = user_is_mechanic;
-  var mechanic = user_mechanic;
+  var isMechanic = user_mechanic_attributes__create;
+  var mechanic = user_mechanic_attributes;
   var isMechanicCallback = function() {
     if (isMechanic.checked) mechanic.style.display = "";
     else mechanic.style.display = "none";
@@ -57,9 +59,9 @@ district_map = District.all.to_a.
   var cityMap = <%= raw city_map.to_json %>
   var districtMap = <%= raw district_map.to_json %>
 
-  var province = user_province_id;
-  var city = user_city_id;
-  var district = user_district_id;
+  var province = user_mechanic_attributes_province_id;
+  var city = user_mechanic_attributes_city_id;
+  var district = user_mechanic_attributes_district_id;
 
   var provinceCallback = function() {
     removeOptions(city.querySelectorAll("option"));
@@ -75,4 +77,3 @@ district_map = District.all.to_a.
   province.addEventListener("change", provinceCallback);
   city.addEventListener("change", cityCallback);
 </script>
-

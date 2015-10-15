@@ -33,6 +33,6 @@ class Withdrawal < ActiveRecord::Base
   end
 
   def out_trade_no
-    "withdrawal#{id}created_at#{created_at.to_i}"
+    "#{created_at.strftime("%Y%m%d")}#{"%06d" % id}"
   end
 end

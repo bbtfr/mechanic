@@ -7,7 +7,7 @@ class Merchant < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :store, foreign_key: :user_id, autosave: true
-  accepts_nested_attributes_for :store
+  accepts_nested_attributes_for :store, update_only: true
 
   validates_presence_of :nickname
 

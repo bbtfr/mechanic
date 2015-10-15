@@ -13,7 +13,7 @@ class Mechanic < ActiveRecord::Base
 
   delegate :nickname, :mobile, :address, :weixin_openid, to: :user, prefix: true
 
-  attr_accessor :check
+  attr_accessor :_check, :_create
 
   def professionality_average
     (orders.average(:professionality) || 4).round(2)

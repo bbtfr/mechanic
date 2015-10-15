@@ -2,10 +2,12 @@ class UsersController < ApplicationController
   before_filter :validate!, except: [ :new, :create ]
   before_filter :find_user, only: [ :new, :create, :edit, :update ]
 
+  def new
+    @user.build_mechanic
+  end
+
   def create
-    @user.assign_attributes(user_params)
-    @user.build_mechanic(mechanic_params) if @user.mechanic?
-    if @user.save
+    if @user.update_attributes(user_params)
       redirect_to session[:original_url] || root_path
     else
       render :new
@@ -13,10 +15,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.assign_attributes(user_params)
-    @user.build_mechanic unless @user.mechanic
-    @user.mechanic.assign_attributes(mechanic_params) if @user.mechanic?
-    if @user.save
+    if @user.update_attributes(user_params)
       redirect_to user_path
     else
       render :edit
@@ -30,11 +29,9 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:mobile, :nickname, :gender, :address, :avatar, :is_mechanic)
-    end
-
-    def mechanic_params
-      params.require(:user).permit(:province_id, :city_id, :district_id, :description, skill_ids: [])
+      params.require(:user).permit(:mobile, :nickname, :gender, :address, :avatar,
+        mechanic_attributes: [:_create, :id, :province_id, :city_id, :district_id, :description,
+        {skill_ids: []}])
     end
 
     def authenticate!

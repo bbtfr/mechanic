@@ -31,13 +31,15 @@ end %>
     <%= f.input :address %>
 
     <% if @user.mechanic? %>
-      <%= f.input :skill_ids, as: :check_boxes, collection: Skill.all %>
+      <%= f.fields_for :mechanic do |ff| %>
+        <%= ff.input :skill_ids, as: :check_boxes, collection: Skill.all %>
 
-      <%= f.input :province_id, collection: Province.all %>
-      <%= f.input :city_id, collection: city_map[@user.province_id] || [] %>
-      <%= f.input :district_id, collection: district_map[@user.city_id] || [] %>
+        <%= ff.input :province_id, collection: Province.all %>
+        <%= ff.input :city_id, collection: city_map[ff.object.province_id] || [] %>
+        <%= ff.input :district_id, collection: district_map[ff.object.city_id] || [] %>
 
-      <%= f.input :description, as: :text, input_html: { rows: 4 } %>
+        <%= ff.input :description, as: :text, input_html: { rows: 4 } %>
+      <% end %>
     <% end %>
 
     <%= f.button :submit, "确定", class: "btn-block btn-positive" %>
@@ -49,9 +51,9 @@ end %>
     var cityMap = <%= raw city_map.to_json %>
     var districtMap = <%= raw district_map.to_json %>
 
-    var province = user_province_id;
-    var city = user_city_id;
-    var district = user_district_id;
+    var province = user_mechanic_attributes_province_id;
+    var city = user_mechanic_attributes_city_id;
+    var district = user_mechanic_attributes_district_id;
 
     var provinceCallback = function() {
       removeOptions(city.querySelectorAll("option"));

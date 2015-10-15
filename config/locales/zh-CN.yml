@@ -67,16 +67,6 @@ zh-CN:
         address: 地址
         mobile: 手机号码
         balance: 余额
-        is_mechanic: 我是技师
-        skill_ids: 擅长技能
-        skills: 擅长技能
-        province_id: 省份
-        province: 省份
-        city_id: 城市
-        city: 城市
-        district_id: 区县
-        district: 区县
-        description: 个人简介
         qq: QQ
       mechanic:
         user_nickname: 姓名
@@ -87,9 +77,13 @@ zh-CN:
         total_income: 总收入
         professionality_average: 专业
         timeliness_average: 守时
+        skill_ids: 擅长技能
         skills: 擅长技能
+        province_id: 省份
         province: 省份
+        city_id: 城市
         city: 城市
+        district_id: 区县
         district: 区县
         check: 选中技师
       merchant:

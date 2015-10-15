@@ -12,22 +12,25 @@ class User < ActiveRecord::Base
   as_enum :gender, male: 0, female: 1
   as_enum :role, client: 0, mechanic: 1, merchant: 2
 
-  def is_mechanic
-    mechanic?
-  end
-
-  def is_mechanic= is_mechanic
-    self.role = :mechanic if ["1", 1, true].include? is_mechanic
-  end
-
   has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100#" }
   validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
 
   has_many :orders
+  has_many :withdrawals
+
   has_many :fellowships
   has_many :followed_mechanics, through: :fellowships, source: :mechanic
 
   has_one :mechanic, autosave: true
+  accepts_nested_attributes_for :mechanic, update_only: true,
+    reject_if: :reject_create_mechanic
+
+  def reject_create_mechanic attributes
+    return true if ["0", 0, false].include? attributes[:_create]
+    mechanic!
+    false
+  end
+
   has_one :merchant
 
   has_one :owner_user_group, -> { confirmeds }, class_name: "UserGroup"
@@ -38,9 +41,6 @@ class User < ActiveRecord::Base
   scope :unconfirmeds, -> { where(confirmed: false) }
 
   validates_presence_of :nickname, :gender, :address, if: :confirmed
-
-  delegate :province_id, :city_id, :district_id, :skill_ids, :description,
-    to: :mechanic, allow_nil: true
 
   def balance
     super.round(2)
