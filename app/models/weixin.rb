@@ -25,18 +25,20 @@ module Weixin
       sub_button: [
       {
         type: "view",
-        name: "店家教程",
-        url: "http://www.baidu.com/"
-      },
-      {
+        name: "派单教程",
+        url: "http://mp.weixin.qq.com/s?__biz=MzA3MjYwNzYxMA==&mid=207851238&idx=1&sn=92226aa626e8e9ab45ff5e6c90e58d23#rd"
+      }, {
         type: "view",
-        name: "技师教程",
-        url: "http://www.baidu.com/"
-      },
-      {
+        name: "接单教程",
+        url: "http://mp.weixin.qq.com/s?__biz=MzA3MjYwNzYxMA==&mid=400001510&idx=1&sn=f52d3e55726d342ed15c56e9b40338f6#rd"
+      }, {
         type: "view",
-        name: "售后电话",
-        url: "http://www.baidu.com/"
+        name: "成为堂主",
+        url: "http://mp.weixin.qq.com/s?__biz=MzA3MjYwNzYxMA==&mid=400002374&idx=1&sn=d98a87390f02d9e9bc2ed2fb6fc5d7f2#rd"
+      }, {
+        type: "view",
+        name: "联系客服",
+        url: "http://mp.weixin.qq.com/s?__biz=MzA3MjYwNzYxMA==&mid=400002961&idx=1&sn=3dc701c788b2979557378bc6f65938f8#rd"
       }]
     }, {
       type: "view",
