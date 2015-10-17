@@ -23,21 +23,21 @@ def create_province pd
     if cd["cidx"]
       create_city cd, p
     else
-      c = City.where(name: pd["name"] || pd["fullname"], province_cd: p.id, lbs_id: pd["id"]).first_or_create
+      c = City.where(name: pd["name"] || pd["fullname"], province_id: p.id, lbs_id: pd["id"]).first_or_create
       create_district cd, c
     end
   end
 end
 
 def create_city cd, p
-  c = City.create(name: cd["name"] || cd["fullname"], province_cd: p.id, lbs_id: cd["id"])
+  c = City.create(name: cd["name"] || cd["fullname"], province_id: p.id, lbs_id: cd["id"])
   DistrictList[2][cd["cidx"][0]..cd["cidx"][1]].each do |dd|
     create_district dd, c
   end
 end
 
 def create_district dd, c
-  District.create(name: dd["name"] || dd["fullname"], city_cd: c.id, lbs_id: dd["id"])
+  District.create(name: dd["name"] || dd["fullname"], city_id: c.id, lbs_id: dd["id"])
 end
 
 ActiveRecord::Base.transaction do
@@ -54,7 +54,7 @@ doc.css(".choose_list a").each do |brand|
     doc.css(".choose_list a").each do |series|
       name = series.text.strip
       name = "#{$1.strip}（#{$2.strip.titlecase}）" if name =~ /(.*?)[\(（](.*?)[\)）]/
-      Series.create(name: name, brand_cd: record.id)
+      Series.create(name: name, brand_id: record.id)
     end
   end
 end

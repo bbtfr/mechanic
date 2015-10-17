@@ -85,7 +85,7 @@ WeixinRailsMiddleware::WeixinController.class_eval do
         # 扫描带参数二维码事件: 1. 用户未关注时，进行关注后的事件推送
         Weixin.audit_subscribe_event @keyword, @weixin_message["FromUserName"]
         info("Subscribe event: 1. User unsubscribed, keyword: #{@keyword}")
-        return reply_text_message("感谢您的关注")
+        return reply_text_message("欢迎关注汽车堂助手。我是你贴身的汽车服务小伙伴。致力于提供更专业、更靠谱的服务。")
       end
       info("Subscribe")
     end
