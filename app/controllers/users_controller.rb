@@ -30,8 +30,8 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(:mobile, :nickname, :gender, :address, :avatar,
-        mechanic_attributes: [:_create, :id, :province_id, :city_id, :district_id, :description,
-        {skill_ids: []}])
+        mechanic_attributes: [:_create, :id, :province_cd, :city_cd, :district_cd, :description,
+        {skill_cds: []}])
     end
 
     def authenticate!

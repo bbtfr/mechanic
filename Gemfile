@@ -1,5 +1,5 @@
 # source 'https://rubygems.org'
-source 'http://ruby.taobao.org'
+source 'https://ruby.taobao.org'
 
 gem 'dotenv-rails'
 
@@ -14,6 +14,9 @@ gem 'authlogic', '~> 3.4.6'
 gem 'rails-settings-cached'
 
 gem 'simple_enum'
+gem 'simple_enum-multiple'
+gem 'simple_enum-persistence'
+
 gem 'simple_form'
 gem 'index_for'
 

@@ -9,7 +9,7 @@
 
 <span class="alert alert-block segmented-items">
   <span class="item"><%= raw l(@order.appointment, format: :short).sub(" ", "<br>") %></span>
-  <span class="item">类型：<br><%= @order.skill.name %></span>
+  <span class="item">类型：<br><%= @order.skill %></span>
   <span class="item">价格：<br><%= @order.quoted_price + @bid.markup_price %></span>
 </span>
 <ul class="table-view">

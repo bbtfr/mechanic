@@ -9,7 +9,7 @@
 <div class="col-md-10 col-xs-8">
   <%= index_for [ :admin, :settings, @series ], class: "table table-hover data-tables" do |i| %>
     <%= i.attribute :name %>
-    <%= i.attribute :brand, with: :name %>
+    <%= i.attribute :brand, with: :name, if_raise: nil  %>
     <%= i.actions :edit, :destroy %>
   <% end %>
 </div>

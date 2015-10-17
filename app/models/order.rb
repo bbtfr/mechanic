@@ -3,16 +3,16 @@ class Order < ActiveRecord::Base
   PayingTimeout = 60.minutes
   ConfirmingTimeout = 1.days
 
-  belongs_to :skill
-  belongs_to :brand
-  belongs_to :series
-
   belongs_to :user
   belongs_to :mechanic
   belongs_to :merchant
 
   belongs_to :bid
   has_many :bids
+
+  as_enum :skill, Skill, persistence: true
+  as_enum :brand, Brand, persistence: true
+  as_enum :series, Series, persistence: true
 
   as_enum :state, pending: 0, paying: 1, canceled: 2, refunding: 3, refunded: 4, paid: 5, working: 6,
     confirming: 7, finished: 8, reviewed: 9
@@ -41,7 +41,7 @@ class Order < ActiveRecord::Base
   validates_attachment_content_type :user_attach_1, :content_type => /\Aimage\/.*\Z/
 
   validates_numericality_of :quoted_price, greater_than_or_equal_to: 1
-  validates_presence_of :skill_id, :brand_id, :series_id, :quoted_price
+  validates_presence_of :skill_cd, :brand_cd, :series_cd, :quoted_price
   validates_presence_of :contact_mobile, if: :merchant_id
   validates_format_of :contact_mobile, with: /\d{11}/, if: :merchant_id
   validate :validate_lbs_id, on: :create
@@ -179,7 +179,7 @@ class Order < ActiveRecord::Base
   end
 
   def title
-    "#{mechanic.user.nickname} 为您 #{skill.name}"
+    "#{mechanic.user.nickname} 为您 #{skill}"
   end
 
   def mobile

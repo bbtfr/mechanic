@@ -2,14 +2,14 @@ class Mechanic < ActiveRecord::Base
   belongs_to :user
 
   has_many :orders
-  has_and_belongs_to_many :skills
 
   has_many :fellowships
   has_many :followed_users, through: :fellowships, source: :user
 
-  belongs_to :province
-  belongs_to :city
-  belongs_to :district
+  as_enum :province, Province, persistence: true
+  as_enum :city, City, persistence: true
+  as_enum :district, District, persistence: true
+  as_enum :skills, Skill, persistence: true, accessor: :join_table
 
   delegate :nickname, :mobile, :address, :weixin_openid, to: :user, prefix: true
 
@@ -38,9 +38,9 @@ class Mechanic < ActiveRecord::Base
 
   def location_name
     name = []
-    name << province.name if province
-    name << city.name if city && province.lbs_id != city.lbs_id
-    name << district.name if district
+    name << province if province
+    name << city if city && province != city
+    name << district if district
     name.join(" ")
   end
 

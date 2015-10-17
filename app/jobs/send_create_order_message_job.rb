@@ -2,16 +2,15 @@ class SendCreateOrderMessageJob < ActiveJob::Base
   queue_as :default
 
   def perform(order)
-    users = User.mechanics.joins(mechanic: :skills)
+    users = User.mechanics
 
     location = LBS.find(order.lbs_id).parent
-    foreign_key = "mechanics.#{location.class.name.foreign_key}"
-    users = users.where(foreign_key => location.id)
+    users = users.location_scope(location)
 
-    users = users.where("skills.id" => order.skill_id)
+    users = users.skill_scope(order.skill)
     users.load
 
-    Rails.logger.info "Send order##{order.id} template message to #{users.size} users, skill_id = #{order.skill_id}, lbs_id = #{order.lbs_id} (#{location.try :name})"
+    Rails.logger.info "Send order##{order.id} template message to #{users.size} users, skill_cd = #{order.skill_cd}, lbs_id = #{order.lbs_id} (#{location.try :name})"
     users.each do |user|
       Rails.logger.info "Send order##{order.id} template message to user##{user.id}"
       response = Weixin.send_create_order_message user, order rescue nil

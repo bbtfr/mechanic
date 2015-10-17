@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150929020533) do
+ActiveRecord::Schema.define(version: 20151015161529) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -58,17 +58,17 @@ ActiveRecord::Schema.define(version: 20150929020533) do
 
   create_table "mechanics", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "province_id"
-    t.integer  "city_id"
-    t.integer  "district_id"
+    t.integer  "province_cd"
+    t.integer  "city_cd"
+    t.integer  "district_cd"
     t.text     "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
 
-  add_index "mechanics", ["city_id"], name: "index_mechanics_on_city_id"
-  add_index "mechanics", ["district_id"], name: "index_mechanics_on_district_id"
-  add_index "mechanics", ["province_id"], name: "index_mechanics_on_province_id"
+  add_index "mechanics", ["city_cd"], name: "index_mechanics_on_city_cd"
+  add_index "mechanics", ["district_cd"], name: "index_mechanics_on_district_cd"
+  add_index "mechanics", ["province_cd"], name: "index_mechanics_on_province_cd"
   add_index "mechanics", ["user_id"], name: "index_mechanics_on_user_id"
 
   create_table "mechanics_skills", id: false, force: :cascade do |t|
@@ -104,9 +104,9 @@ ActiveRecord::Schema.define(version: 20150929020533) do
     t.integer  "merchant_id"
     t.string   "address"
     t.datetime "appointment"
-    t.integer  "skill_id"
-    t.integer  "brand_id"
-    t.integer  "series_id"
+    t.integer  "skill_cd"
+    t.integer  "brand_cd"
+    t.integer  "series_cd"
     t.integer  "quoted_price"
     t.integer  "price"
     t.text     "remark"

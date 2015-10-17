@@ -1,10 +1,7 @@
 <h3 class="page-header col-md-12">预约技师</h3>
 
 <%
-series_map = Series.all.to_a.
-  group_by(&:brand_id).
-  map {|key, value|[key, value.map {|obj| [ obj.name, obj.id ]}]}.
-  to_h
+  series_map = types_option_pairs Series, :brand_id
 %>
 
 <%= bootstrap_simple_form_for([ :merchants, @order ]) do |f| %>
@@ -20,10 +17,10 @@ series_map = Series.all.to_a.
       </div>
     <% end %>
 
-    <%= f.association :skill %>
+    <%= f.input :skill_cd, collection: Skill.all %>
 
-    <%= f.input :brand_id, collection: Brand.all %>
-    <%= f.input :series_id, collection: series_map[@order.brand_id] || [] %>
+    <%= f.input :brand_cd, collection: Brand.all %>
+    <%= f.input :series_cd, collection: series_map[@order.brand_cd] || [] %>
 
     <%= f.input :quoted_price %>
     <%= f.input :remark, input_html: { rows: 4 } %>
@@ -42,9 +39,9 @@ series_map = Series.all.to_a.
         <%= f.radio_button :mechanic_id, mechanic.id %>
       <% end %>
       <%= i.attribute :user_nickname %>
-      <%= i.attribute :province, with: :name, if_raise: nil %>
-      <%= i.attribute :city, with: :name, if_raise: nil %>
-      <%= i.attribute :district, with: :name, if_raise: nil %>
+      <%= i.attribute :province %>
+      <%= i.attribute :city %>
+      <%= i.attribute :district %>
       <%= i.attribute :orders_count %>
       <%= i.attribute :professionality_average %>
       <%= i.attribute :timeliness_average %>
@@ -58,8 +55,8 @@ series_map = Series.all.to_a.
   $(document).ready(function() {
     var seriesMap = <%= raw series_map.to_json %>
 
-    var $brand = $("#order_brand_id");
-    var $series = $("#order_series_id");
+    var $brand = $("#order_brand_cd");
+    var $series = $("#order_series_cd");
     $brand.change(function() {
       $series.removeOptions();
       $series.appendOptions(seriesMap[$brand.val()]);

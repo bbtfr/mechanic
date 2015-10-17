@@ -164,8 +164,8 @@ class Merchants::OrdersController < Merchants::ApplicationController
     end
 
     def order_params
-      params.require(:order).permit(:address, :appointment, :skill_id,
-        :brand_id, :series_id, :quoted_price, :remark, :lbs_id, :professionality,
+      params.require(:order).permit(:address, :appointment, :skill_cd,
+        :brand_cd, :series_cd, :quoted_price, :remark, :lbs_id, :professionality,
         :timeliness, :review, :contact_mobile, :contact_nickname, :mechanic_id)
     end
 

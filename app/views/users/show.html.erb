@@ -46,7 +46,7 @@
   </li>
   <% if current_user.mechanic? %>
     <li class="table-view-cell">
-      <%= link_to "擅长技能：#{current_user.mechanic.skills.map(&:name).join("、")}", edit_user_path, class: "navigate-right" %>
+      <%= link_to "擅长技能：#{current_user.mechanic.skills.join("、")}", edit_user_path, class: "navigate-right" %>
     </li>
     <li class="table-view-cell">
       <%= link_to "地区：#{current_user.mechanic.location_name}", edit_user_path, class: "navigate-right" %>

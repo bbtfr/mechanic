@@ -17,11 +17,11 @@
 
     <%= i.fields_for :mechanic do |ii| %>
       <%= ii.attribute :skills do |mechanic| %>
-        <%= mechanic.skills.map(&:name).join("、") %>
+        <%= mechanic.skills.join("、") %>
       <% end %>
-      <%= ii.attribute :province, with: :name, if_raise: nil %>
-      <%= ii.attribute :city, with: :name, if_raise: nil %>
-      <%= ii.attribute :district, with: :name, if_raise: nil %>
+      <%= ii.attribute :province %>
+      <%= ii.attribute :city %>
+      <%= ii.attribute :district %>
       <%= ii.attribute :orders_count %>
       <%= ii.attribute :total_income %>
       <%= ii.attribute :professionality_average %>
@@ -29,4 +29,3 @@
     <% end %>
   <% end %>
 </div>
-

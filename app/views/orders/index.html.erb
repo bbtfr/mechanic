@@ -10,7 +10,7 @@
   </div>
 </nav>
 
-<% @orders = @orders.includes(:skill, mechanic: :user).order(id: :desc) %>
+<% @orders = @orders.includes(mechanic: :user).order(id: :desc) %>
 
 <ul class="table-view">
   <% @orders.each do |order| %>

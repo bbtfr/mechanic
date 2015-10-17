@@ -7,7 +7,7 @@ GIT
       rest-client (>= 1.7)
 
 GEM
-  remote: http://ruby.taobao.org/
+  remote: https://ruby.taobao.org/
   specs:
     actionmailer (4.2.3)
       actionpack (= 4.2.3)
@@ -141,7 +141,7 @@ GEM
     mimemagic (0.3.0)
     mini_magick (4.2.10)
     mini_portile (0.6.2)
-    minitest (5.8.0)
+    minitest (5.8.1)
     multi_json (1.11.2)
     multi_xml (0.5.5)
     net-scp (1.2.1)
@@ -225,8 +225,12 @@ GEM
       json (~> 1.0)
       redis (~> 3.2, >= 3.2.1)
       redis-namespace (~> 1.5, >= 1.5.2)
-    simple_enum (2.2.1)
+    simple_enum (2.3.0)
       activesupport (>= 4.0.0)
+    simple_enum-multiple (0.1.2)
+      simple_enum (~> 2.2)
+    simple_enum-persistence (0.1.1)
+      simple_enum (~> 2.2)
     simple_form (3.1.0)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
@@ -308,6 +312,8 @@ DEPENDENCIES
   sdoc (~> 0.4.0)
   sidekiq
   simple_enum
+  simple_enum-multiple
+  simple_enum-persistence
   simple_form
   sqlite3
   turbolinks

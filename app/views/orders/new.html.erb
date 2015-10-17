@@ -3,10 +3,7 @@
 <% end %>
 
 <%
-series_map = Series.all.to_a.
-  group_by(&:brand_id).
-  map {|key, value|[key, value.map {|obj| [ obj.name, obj.id ]}]}.
-  to_h
+  series_map = types_option_pairs Series, :brand_id
 %>
 
 <%= simple_form_for(@order) do |f| %>
@@ -21,10 +18,10 @@ series_map = Series.all.to_a.
 
     <%= f.input :address %>
     <%= f.input :appointment %>
-    <%= f.association :skill %>
+    <%= f.input :skill_cd, collection: Skill.all %>
 
-    <%= f.input :brand_id, collection: Brand.all %>
-    <%= f.input :series_id, collection: series_map[@order.brand_id] || [] %>
+    <%= f.input :brand_cd, collection: Brand.all %>
+    <%= f.input :series_cd, collection: series_map[@order.brand_cd] || [] %>
 
     <%= f.input :quoted_price %>
     <%= f.input :remark, input_html: { rows: 4 } %>
@@ -36,8 +33,8 @@ series_map = Series.all.to_a.
 <script type="text/javascript">
   var seriesMap = <%= raw series_map.to_json %>
 
-  var brand = order_brand_id;
-  var series = order_series_id;
+  var brand = order_brand_cd;
+  var series = order_series_cd;
   var brandCallback = function() {
     removeOptions(series.querySelectorAll("option"));
     appendOptions(series, seriesMap[brand.value]);

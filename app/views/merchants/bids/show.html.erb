@@ -16,7 +16,7 @@
     <% end %>
     <%= i.fields_for :order do |ii| %>
       <%= ii.attribute :appointment, format: :short %>
-      <%= ii.attribute :skill, with: :name %>
+      <%= ii.attribute :skill %>
       <%= ii.attribute :quoted_price %>
     <% end %>
     <%= i.attribute :markup_price %>

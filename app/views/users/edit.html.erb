@@ -3,14 +3,8 @@
 <% end %>
 
 <% if @user.mechanic?
-  city_map = City.all.to_a.
-    group_by(&:province_id).
-    map {|key, value|[key, value.map {|obj| [ obj.name, obj.id ]}]}.
-    to_h
-  district_map = District.all.to_a.
-    group_by(&:city_id).
-    map {|key, value|[key, value.map {|obj| [ obj.name, obj.id ]}]}.
-    to_h
+  city_map = types_option_pairs City, :province_id
+  district_map = types_option_pairs District, :city_id
 end %>
 
 <%= simple_form_for(@user, url: user_path) do |f| %>
@@ -32,11 +26,11 @@ end %>
 
     <% if @user.mechanic? %>
       <%= f.fields_for :mechanic do |ff| %>
-        <%= ff.input :skill_ids, as: :check_boxes, collection: Skill.all %>
+        <%= ff.input :skill_cds, as: :check_boxes, collection: Skill.all %>
 
-        <%= ff.input :province_id, collection: Province.all %>
-        <%= ff.input :city_id, collection: city_map[ff.object.province_id] || [] %>
-        <%= ff.input :district_id, collection: district_map[ff.object.city_id] || [] %>
+        <%= ff.input :province_cd, collection: Province.all %>
+        <%= ff.input :city_cd, collection: city_map[ff.object.province_cd] || [] %>
+        <%= ff.input :district_cd, collection: district_map[ff.object.city_cd] || [] %>
 
         <%= ff.input :description, as: :text, input_html: { rows: 4 } %>
       <% end %>
@@ -51,9 +45,9 @@ end %>
     var cityMap = <%= raw city_map.to_json %>
     var districtMap = <%= raw district_map.to_json %>
 
-    var province = user_mechanic_attributes_province_id;
-    var city = user_mechanic_attributes_city_id;
-    var district = user_mechanic_attributes_district_id;
+    var province = user_mechanic_attributes_province_cd;
+    var city = user_mechanic_attributes_city_cd;
+    var district = user_mechanic_attributes_district_cd;
 
     var provinceCallback = function() {
       removeOptions(city.querySelectorAll("option"));
