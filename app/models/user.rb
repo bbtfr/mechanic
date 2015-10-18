@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
   scope :location_scope, -> (location) { joins(:mechanic).where(mechanics: location.to_scope) }
   scope :skill_scope, -> (skill) { joins(:mechanic).
     joins(%{INNER JOIN "mechanics_skills" ON "mechanics"."id" = "mechanics_skills"."mechanic_id"}).
-    where(%{"mechanics_skills"."skill_cd" = ?}, Mechanic.skills.value(skill))
+    where(%{"mechanics_skills"."skill_id" = ?}, Mechanic.skills.value(skill))
   }
 
   validates_presence_of :nickname, :gender, :address, if: :confirmed
