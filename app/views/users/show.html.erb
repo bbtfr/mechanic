@@ -44,6 +44,12 @@
   <li class="table-view-cell">
     <%= link_to "账户余额：#{number_with_delimiter(current_user.balance || 0)} 元", new_withdrawal_path, class: "navigate-right" %>
   </li>
+  <li class="table-view-cell">
+    <%= link_to "订单管理", orders_path, class: "navigate-right" %>
+  </li>
+  <li class="table-view-cell">
+    <%= link_to "堂主", settings_user_path, class: "navigate-right" %>
+  </li>
   <% if current_user.mechanic? %>
     <li class="table-view-cell">
       <%= link_to "擅长技能：#{current_user.mechanic.skills.join("、")}", edit_user_path, class: "navigate-right" %>
@@ -60,16 +66,10 @@
       <%= link_to "个人简介：#{current_user.mechanic.description}", edit_user_path, class: "navigate-right" %>
     </li>
   <% end %>
-  <li class="table-view-cell">
-    <%= link_to "订单管理", orders_path, class: "navigate-right" %>
-  </li>
   <% unless current_user.mechanic? %>
     <li class="table-view-cell">
       <%= link_to "收藏技师", mechanics_path, class: "navigate-right" %>
     </li>
   <% end %>
-  <li class="table-view-cell">
-    <%= link_to "设置", settings_user_path, class: "navigate-right" %>
-  </li>
 </ul>
 

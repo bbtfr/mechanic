@@ -4,6 +4,8 @@ class OrdersController < ApplicationController
   before_filter :redirect_pending, only: [ :new, :create ]
   before_filter :redirect_mechanic, only: [ :update, :confirm ]
 
+  helper_method :order_klass
+
   def index
     @state = if %w(pendings paids workings finisheds).include? params[:state]
         params[:state].to_sym

@@ -31,6 +31,8 @@ class Order < ActiveRecord::Base
     state_cd > SETTLED_GREATER_THAN
   end
 
+  scope :state_scope, -> (state) { where(state_cd: states.value(state)) }
+
   has_attached_file :mechanic_attach_1, styles: { medium: "300x300>", thumb: "100x100#" }
   validates_attachment_content_type :mechanic_attach_1, :content_type => /\Aimage\/.*\Z/
   has_attached_file :mechanic_attach_2, styles: { medium: "300x300>", thumb: "100x100#" }

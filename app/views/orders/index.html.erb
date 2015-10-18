@@ -2,13 +2,26 @@
   订单列表
 <% end %>
 
-<nav class="bar bar-nav bar-standard">
+<%
+  def order_state_link_to state, text
+    class_name = "control-item"
+    class_name << " active" if @state == state
+    link_to orders_path(state: state), class: class_name do
+      count = order_klass.state_scope(state.to_s.singularize).count
+      content = text
+      content << %{ <span class="badge">#{count}</span>} if count != 0
+      content.html_safe
+    end
+  end
+%>
+
+<div class="content-padded">
   <div class="segmented-control">
-    <%= link_to "待服务", orders_path(state: :paids), class: "control-item#{" active" if @state == :paids}" %>
-    <%= link_to "服务中", orders_path(state: :workings), class: "control-item#{" active" if @state == :workings}" %>
-    <%= link_to "待评价", orders_path(state: :finisheds), class: "control-item#{" active" if @state == :finisheds}" %>
+    <%= order_state_link_to :paids, "待服务" %>
+    <%= order_state_link_to :workings, "服务中" %>
+    <%= order_state_link_to :finisheds, "待评价" %>
   </div>
-</nav>
+</div>
 
 <% @orders = @orders.includes(mechanic: :user).order(id: :desc) %>
 
