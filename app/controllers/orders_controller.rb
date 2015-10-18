@@ -7,7 +7,7 @@ class OrdersController < ApplicationController
   helper_method :order_klass
 
   def index
-    @state = if %w(pendings paids workings finisheds).include? params[:state]
+    @state = if %w(pendings paids workings settleds).include? params[:state]
         params[:state].to_sym
       else
         :paids

@@ -7,7 +7,7 @@
     class_name = "control-item"
     class_name << " active" if @state == state
     link_to orders_path(state: state), class: class_name do
-      count = order_klass.state_scope(state.to_s.singularize).count
+      count = order_klass.send(state).count
       content = text
       content << %{ <span class="badge">#{count}</span>} if count != 0
       content.html_safe
@@ -19,7 +19,7 @@
   <div class="segmented-control">
     <%= order_state_link_to :paids, "待服务" %>
     <%= order_state_link_to :workings, "服务中" %>
-    <%= order_state_link_to :finisheds, "待评价" %>
+    <%= order_state_link_to :settleds, "已完成" %>
   </div>
 </div>
 
