@@ -48,7 +48,11 @@
     <%= link_to "订单管理", orders_path, class: "navigate-right" %>
   </li>
   <li class="table-view-cell">
-    <%= link_to "堂主", settings_user_path, class: "navigate-right" %>
+    <% if current_user.owner_user_group %>
+      <%= link_to "我的分堂", user_group_path, class: "navigate-right" %>
+    <% else %>
+      <%= link_to "申请堂主", new_user_group_path, class: "navigate-right" %>
+    <% end %>
   </li>
   <% if current_user.mechanic? %>
     <li class="table-view-cell">

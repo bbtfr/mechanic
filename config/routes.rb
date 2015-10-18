@@ -61,9 +61,7 @@ Rails.application.routes.draw do
   end
 
   mount WeixinRailsMiddleware::Engine, at: "/"
-  resource :user do
-    get :settings
-  end
+  resource :user
   resource :user_session, path: "session" do
     post :verification_code
   end

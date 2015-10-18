@@ -8,7 +8,7 @@ class UserGroupsController < ApplicationController
   def create
     @user_group = user_group_klass.new(user_group_params)
     if @user_group.save
-      redirect_to settings_user_path
+      redirect_to user_path
     else
       render :new
     end
@@ -17,7 +17,7 @@ class UserGroupsController < ApplicationController
   def update
     @user_group = user_group_klass.first
     if @user_group.update_attributes(user_group_params)
-      redirect_to settings_user_path
+      redirect_to user_path
     else
       render :new
     end
