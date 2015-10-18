@@ -1,5 +1,5 @@
 class Merchants::Admin::MerchantsController < Merchants::Admin::ApplicationController
-  before_filter :find_merchant, only: [ :show, :edit, :update, :destroy ]
+  before_filter :find_merchant, except: [ :index, :new, :create ]
 
   def index
     @merchants = merchant_klass.all
@@ -25,6 +25,16 @@ class Merchants::Admin::MerchantsController < Merchants::Admin::ApplicationContr
     else
       render :new
     end
+  end
+
+  def active
+    @merchant.active!
+    redirect_to request.referer
+  end
+
+  def inactive
+    @merchant.inactive!
+    redirect_to request.referer
   end
 
   def destroy

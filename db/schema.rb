@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151015161529) do
+ActiveRecord::Schema.define(version: 20151018043142) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 20151015161529) do
     t.integer  "role_cd",             default: 0
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.boolean  "active",              default: true
   end
 
   add_index "merchants", ["mobile"], name: "index_merchants_on_mobile", unique: true

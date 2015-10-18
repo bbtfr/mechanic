@@ -13,7 +13,11 @@
   <%= i.actions do |a| %>
     <%= a.action_link :edit %>
     <% if current_merchant != i.object %>
-      <%= a.action_link :destroy %>
+      <% if i.object.active %>
+        <%= a.action_link :inactive, url: inactive_merchants_admin_merchant_path(i.object), method: :post, confirm: "你确定要锁定这个账户？" %>
+      <% else %>
+        <%= a.action_link :active, url: active_merchants_admin_merchant_path(i.object), method: :post, confirm: "你确定要激活这个账户？" %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

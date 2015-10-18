@@ -47,7 +47,12 @@ Rails.application.routes.draw do
     end
 
     namespace :admin do
-      resources :merchants
+      resources :merchants do
+        member do
+          post :active
+          post :inactive
+        end
+      end
       resources :orders
 
     end

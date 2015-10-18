@@ -2,7 +2,7 @@ class Merchants::Admin::OrdersController < Merchants::Admin::ApplicationControll
   before_filter :find_order, except: [ :index ]
 
   def index
-    @orders = order_klass.all
+    @orders = order_klass.settleds
   end
 
   private

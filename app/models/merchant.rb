@@ -13,4 +13,12 @@ class Merchant < ActiveRecord::Base
 
   delegate :nickname, :mobile, :address, to: :user, prefix: true
 
+  def inactive!
+    update_attribute(:active, false)
+  end
+
+  def active!
+    update_attribute(:active, true)
+  end
+
 end
