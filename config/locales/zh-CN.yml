@@ -85,7 +85,7 @@ zh-CN:
         city: 城市
         district_cd: 区县
         district: 区县
-        check: 选中技师
+        _check: 选中技师
       merchant:
         nickname: 姓名
         mobile: 手机号码

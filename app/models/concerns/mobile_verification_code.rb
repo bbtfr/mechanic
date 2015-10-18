@@ -19,8 +19,14 @@ module MobileVerificationCode
 
   def send_verification_code
     return unless mobile =~ /\d{11}/
+    return if @skip_send_verification_code
     result = SMSMailer.confirmation(self).deliver
     errors.add :base, result[:error] unless result[:success]
+  end
+
+  def skip_send_verification_code
+    @skip_send_verification_code = true
+    self.confirmed = true
   end
 
   def confirm!

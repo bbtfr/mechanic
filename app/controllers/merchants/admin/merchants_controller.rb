@@ -11,6 +11,7 @@ class Merchants::Admin::MerchantsController < Merchants::Admin::ApplicationContr
 
   def create
     @merchant = merchant_klass.new(merchant_params)
+    @merchant.skip_send_verification_code
     if @merchant.save
       redirect_to merchants_admin_merchants_path
     else
