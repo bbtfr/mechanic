@@ -26,8 +26,8 @@ class User < ActiveRecord::Base
     reject_if: :reject_create_mechanic
 
   def reject_create_mechanic attributes
-    return true if ["0", 0, false].include? attributes[:_create]
-    mechanic!
+    return true if ["0", 0, false].include? attributes["_create"]
+    mechanic! if ["1", 1, true].include? attributes["_create"]
     false
   end
 

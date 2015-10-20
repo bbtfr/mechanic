@@ -155,4 +155,8 @@ EOS
     def handle_templatesendjobfinish_event
       info("Template send job finish event")
     end
+
+    def handle_kf_create_session_event
+      info("KF create session event")
+    end
 end
