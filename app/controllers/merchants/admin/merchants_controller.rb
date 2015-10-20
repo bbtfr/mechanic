@@ -37,11 +37,6 @@ class Merchants::Admin::MerchantsController < Merchants::Admin::ApplicationContr
     redirect_to request.referer
   end
 
-  def destroy
-    @merchant.destroy
-    redirect_to merchants_admin_merchants_path
-  end
-
   private
 
     def find_merchant

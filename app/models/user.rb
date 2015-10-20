@@ -22,13 +22,12 @@ class User < ActiveRecord::Base
   has_many :followed_mechanics, through: :fellowships, source: :mechanic
 
   has_one :mechanic, autosave: true
-  accepts_nested_attributes_for :mechanic, update_only: true,
-    reject_if: :reject_create_mechanic
+  accepts_nested_attributes_for :mechanic, update_only: true
 
-  def reject_create_mechanic attributes
-    return true if ["0", 0, false].include? attributes["_create"]
+  def mechanic_attributes= attributes
+    return if ["0", 0, false].include? attributes["_create"]
     mechanic! if ["1", 1, true].include? attributes["_create"]
-    false
+    super
   end
 
   has_one :merchant

@@ -41,6 +41,10 @@ class UserSessionsController < ApplicationController
     end
   end
 
+  def show
+    redirect_to new_user_session_path
+  end
+
   def destroy
     current_user_session.destroy
     redirect_to new_user_session_path
