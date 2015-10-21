@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :mechanic, update_only: true
 
   def mechanic_attributes= attributes
-    return if ["0", 0, false].include? attributes["_create"]
+    client! && return if ["0", 0, false].include? attributes["_create"]
     mechanic! if ["1", 1, true].include? attributes["_create"]
     super
   end

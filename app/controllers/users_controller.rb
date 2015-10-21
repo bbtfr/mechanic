@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_filter :find_user, only: [ :new, :create, :edit, :update ]
 
   def new
-    @user.build_mechanic
+    @user.build_mechanic unless @user.mechanic
   end
 
   def create
