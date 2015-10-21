@@ -15,6 +15,18 @@ class Mechanic < ActiveRecord::Base
 
   attr_accessor :_check, :_create
 
+  before_create do |record|
+    Rails.logger.info "Mechanic#before_create #{record.inspect}"
+  end
+
+  before_update do |record|
+    Rails.logger.info "Mechanic#before_update #{record.inspect}"
+  end
+
+  before_destroy do |record|
+    Rails.logger.info "Mechanic#before_destroy #{record.inspect}"
+  end
+
   def professionality_average
     (orders.average(:professionality) || 4).round(2)
   end
