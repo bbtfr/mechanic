@@ -180,7 +180,8 @@ class Order < ActiveRecord::Base
   end
 
   def commission
-    @commission ||= (price * Setting.commission_percent.to_f / 100).round(2)
+    @commission ||= (price * (mobile? ? Setting.mobile_commission_percent.to_f :
+      Setting.commission_percent.to_f) / 100).round(2)
   end
 
   def mechanic_income

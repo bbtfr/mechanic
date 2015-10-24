@@ -29,6 +29,7 @@ class Admin::WithdrawalsController < Admin::ApplicationController
     end
 
     def setting_params
-      params.require(:setting).permit(:commission_percent, :client_commission_percent, :mechanic_commission_percent)
+      params.require(:setting).permit(:commission_percent, :mobile_commission_percent,
+        :client_commission_percent, :mechanic_commission_percent)
     end
 end

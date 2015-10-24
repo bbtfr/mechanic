@@ -52,7 +52,8 @@ zh-CN:
   simple_form:
     labels:
       defaults:
-        commission_percent: 每笔交易佣金比例
+        commission_percent: 网页端每笔交易佣金比例
+        mobile_commission_percent: 手机单每笔交易佣金比例
         client_commission_percent: 车主堂主佣金比例
         mechanic_commission_percent: 技师堂主佣金比例
   activerecord:
