@@ -23,6 +23,11 @@ class UserGroupsController < ApplicationController
     end
   end
 
+  def show
+    @user_group = user_group_klass.first
+    redirect_to user_path unless @user_group
+  end
+
   private
 
     def user_group_klass
