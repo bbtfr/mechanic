@@ -113,15 +113,16 @@ class Merchants::OrdersController < Merchants::ApplicationController
   end
 
   def refund
-    if @order.paid?
+    if @order.paid? || @order.working?
+      reason = @order.paid? ? :user_cancel : :merchant_revoke
       if @order.pay_type_alipay?
         flash[:notice] = "退款申请已提交，等待管理员审核..."
-        @order.refunding!
+        @order.refunding! reason
       elsif @order.pay_type_weixin?
         response = Weixin.refund @order
         if response.success?
           flash[:notice] = "退款申请已提交，支付款将在3个工作日内退回您的账户..."
-          @order.refund!
+          @order.refund! reason
         else
           flash[:error] = response["return_msg"]
         end

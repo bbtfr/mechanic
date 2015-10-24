@@ -34,9 +34,7 @@
   <script type="text/javascript">
     var verificationCodeTimeout = 60;
     var verificationCodeButton = user_session_verification_code_button;
-    verificationCodeButton.disabled = true;
-
-    var interval = setInterval(function() {
+    var verificationCodeCallback = function() {
       if (verificationCodeTimeout > 0) {
         verificationCodeButton.value = "重新发送 " + verificationCodeTimeout;
         verificationCodeTimeout -= 1;
@@ -45,6 +43,11 @@
         verificationCodeButton.disabled = false;
         verificationCodeButton.value = "重新发送";
       }
-    }, 1000);
+    };
+
+    verificationCodeButton.disabled = true;
+    verificationCodeCallback();
+
+    var interval = setInterval(verificationCodeCallback, 1000);
   </script>
 <% end %>

@@ -48,7 +48,10 @@ zh-CN:
       paying_timeout: 支付超时
       user_abstain: 未选择技师
       user_cancel: 用户取消
-      refunded: 已退款
+    refund:
+      user_cancel: 用户退款
+      merchant_revoke: 商户撤单
+
   simple_form:
     labels:
       defaults:

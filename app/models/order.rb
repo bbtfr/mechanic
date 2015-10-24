@@ -17,6 +17,7 @@ class Order < ActiveRecord::Base
   as_enum :state, pending: 0, paying: 1, canceled: 2, refunding: 3, refunded: 4, paid: 5, working: 6,
     confirming: 7, finished: 8, reviewed: 9
   as_enum :cancel, pending_timeout: 0, paying_timeout: 1, user_abstain: 2, user_cancel: 3
+  as_enum :refund, user_cancel: 0, merchant_revoke: 1
   as_enum :pay_type, { weixin: 0, alipay: 1 }, prefix: true
 
   AVAILABLE_GREATER_THAN = 4
@@ -126,15 +127,17 @@ class Order < ActiveRecord::Base
     Rails.logger.error "#{error.class}: #{error.message} from Order#pay!"
   end
 
-  def refunding!
-    return false unless paid?
+  def refunding! reason = :user_cancel
+    return false unless paid? || working?
+    update_attribute(:refund, Order.cancels[reason])
     update_attribute(:state, Order.states[:refunding])
-    user.increase_total_cost!(-price)
   end
 
-  def refund!
-    return false unless paid? || refunding?
+  def refund! reason = :user_cancel
+    return false unless refunding? || paid? || working?
+    update_attribute(:refund, Order.cancels[reason]) unless refunding?
     update_attribute(:state, Order.states[:refunded])
+    user.increase_total_cost!(-price)
   end
 
   def work!

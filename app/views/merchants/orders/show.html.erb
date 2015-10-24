@@ -44,13 +44,14 @@
     <%= link_to "支付宝支付", pay_merchants_orders_path(@order, format: :alipay), class: "btn btn-primary" %>
     <%= link_to "取消订单", cancel_merchants_order_path(@order), class: "btn btn-danger" %>
   </div>
-<% when :paid %>
+<% when :paid, :working %>
+  <% text = @order.paid? ? "申请退款" : "申请撤单" %>
   <div class="pull-right">
-    <span class="btn btn-danger" id="refund_order_button">申请退款</span>
+    <span class="btn btn-danger" id="refund_order_button"><%= text %></span>
   </div>
   <script type="text/javascript">
     $("#refund_order_button").click(function() {
-      if (confirm("您确定要申请退款？")) {
+      if (confirm("您确定要<%= text %>？")) {
         window.location.href = "<%= refund_merchants_order_path(@order) %>";
       }
     });
