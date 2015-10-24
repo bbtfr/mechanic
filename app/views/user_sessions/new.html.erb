@@ -29,3 +29,22 @@
     <li>服务完成<br>确认付款、评价技师。</li>
   </ol>
 </div>
+
+<% if @user && @user.verification_code_sent %>
+  <script type="text/javascript">
+    var verificationCodeTimeout = 60;
+    var verificationCodeButton = user_session_verification_code_button;
+    verificationCodeButton.disabled = true;
+
+    var interval = setInterval(function() {
+      if (verificationCodeTimeout > 0) {
+        verificationCodeButton.value = "重新发送 " + verificationCodeTimeout;
+        verificationCodeTimeout -= 1;
+      } else {
+        clearInterval(interval);
+        verificationCodeButton.disabled = false;
+        verificationCodeButton.value = "重新发送";
+      }
+    }, 1000);
+  </script>
+<% end %>

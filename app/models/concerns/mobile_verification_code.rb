@@ -12,6 +12,8 @@ module MobileVerificationCode
     validates_uniqueness_of :mobile
     validate :send_verification_code, if: :verification_code_changed?
 
+    attr_accessor :verification_code_sent
+
     def reset_verification_code
       self.verification_code = "%06d" % SecureRandom.random_number(1000000)
     end
@@ -21,7 +23,11 @@ module MobileVerificationCode
     return unless mobile =~ /\d{11}/
     return if @skip_send_verification_code
     result = SMSMailer.confirmation(self).deliver
-    errors.add :base, result[:error] unless result[:success]
+    if result[:success]
+      self.verification_code_sent = true
+    else
+      errors.add :base, result[:error]
+    end
   end
 
   def skip_send_verification_code
