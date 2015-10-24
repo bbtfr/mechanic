@@ -5,14 +5,14 @@
     <h4 class="col-sm-offset-1">交易信息</h4>
 
     <%= show_for @order, class: "dl-horizontal" do |i| %>
-      <% if @order.merchant_id %>
+      <% if @order.mobile? %>
+        <%= i.attribute :user_nickname %>
+        <%= i.attribute :user_mobile %>
+      <% else %>
         <%= i.attribute :merchant_nickname %>
         <%= i.attribute :merchant_mobile %>
         <%= i.attribute :contact_nickname %>
         <%= i.attribute :contact_mobile %>
-      <% else %>
-        <%= i.attribute :user_nickname %>
-        <%= i.attribute :user_mobile %>
       <% end %>
 
       <%= i.attribute :skill %>

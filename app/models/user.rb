@@ -47,19 +47,15 @@ class User < ActiveRecord::Base
 
   validates_presence_of :nickname, :gender, :address, if: :confirmed
 
-  def balance
-    super.round(2)
-  end
-
   def increase_balance! amount
-    update_attribute(:balance, (balance || 0) + amount)
+    increment!(:balance, amount)
   end
 
-  def total_cost
-    orders.availables.sum(:price) || 0
+  def increase_total_cost! amount
+    increment!(:total_cost, amount)
   end
 
-  def orders_count
+  def available_orders_count
     orders.availables.count
   end
 end

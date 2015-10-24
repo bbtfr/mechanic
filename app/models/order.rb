@@ -31,6 +31,10 @@ class Order < ActiveRecord::Base
     state_cd > SETTLED_GREATER_THAN
   end
 
+  def mobile?
+    !merchant_id
+  end
+
   scope :state_scope, -> (state) { where(state_cd: states.value(state)) }
 
   has_attached_file :mechanic_attach_1, styles: { medium: "300x300>", thumb: "100x100#" }
@@ -116,6 +120,7 @@ class Order < ActiveRecord::Base
     update_attribute(:pay_type, Order.pay_types[pay_type])
     update_attribute(:trade_no, trade_no) if trade_no
     update_attribute(:state, Order.states[:paid])
+    user.increase_total_cost!(price)
     Weixin.send_paid_order_message self
   rescue => error
     Rails.logger.error "#{error.class}: #{error.message} from Order#pay!"
@@ -124,6 +129,7 @@ class Order < ActiveRecord::Base
   def refunding!
     return false unless paid?
     update_attribute(:state, Order.states[:refunding])
+    user.increase_total_cost!(-price)
   end
 
   def refund!
@@ -148,14 +154,19 @@ class Order < ActiveRecord::Base
 
   def confirm!
     return false unless confirming?
-    user = mechanic.user
-    user.increase_balance!(price - commission)
 
-    client_chief = user.user_group.user rescue nil
-    client_chief.increase_balance!(client_commission) if client_chief
+    mechanic.user.increase_balance!(mechanic_income)
+    mechanic.increase_total_income!(mechanic_income)
 
-    mechanic_chief = mechanic.user.user_group.user rescue nil
-    mechanic_chief.increase_balance!(mechanic_commission) if mechanic_chief
+    if client_user_group = user.user_group
+      client_user_group.user.increase_balance!(client_commission)
+      client_user_group.increase_total_commission!(client_commission)
+    end
+
+    if mechanic_user_group = mechanic.user_group
+      mechanic_user_group.user.increase_balance!(mechanic_commission)
+      mechanic_user_group.increase_total_commission!(mechanic_commission)
+    end
 
     update_attribute(:state, Order.states[:finished])
   end
@@ -170,6 +181,10 @@ class Order < ActiveRecord::Base
 
   def commission
     @commission ||= (price * Setting.commission_percent.to_f / 100).round(2)
+  end
+
+  def mechanic_income
+    price - commission
   end
 
   def client_commission

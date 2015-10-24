@@ -6,6 +6,8 @@ class Mechanic < ActiveRecord::Base
   has_many :fellowships
   has_many :followed_users, through: :fellowships, source: :user
 
+  has_one :user_group, through: :user
+
   as_enum :province, Province, persistence: true
   as_enum :city, City, persistence: true
   as_enum :district, District, persistence: true
@@ -15,16 +17,8 @@ class Mechanic < ActiveRecord::Base
 
   attr_accessor :_check, :_create
 
-  before_create do |record|
-    Rails.logger.info "Mechanic#before_create #{record.inspect}"
-  end
-
-  before_update do |record|
-    Rails.logger.info "Mechanic#before_update #{record.inspect}"
-  end
-
-  before_destroy do |record|
-    Rails.logger.info "Mechanic#before_destroy #{record.inspect}"
+  def increase_total_income! amount
+    increment!(:total_income, amount)
   end
 
   def professionality_average
@@ -35,11 +29,7 @@ class Mechanic < ActiveRecord::Base
     (orders.average(:timeliness) || 4).round(2)
   end
 
-  def total_income
-    ((orders.settleds.sum(:price) || 0) * (100 - Setting.commission_percent.to_f) / 100).round(2)
-  end
-
-  def orders_count
+  def available_orders_count
     orders.availables.count
   end
 

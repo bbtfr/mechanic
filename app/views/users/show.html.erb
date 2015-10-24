@@ -15,7 +15,7 @@
     <div class="item">
       专业 <%= current_user.mechanic.professionality_average %> 分<br><br>
 
-      <h2><%= number_with_delimiter(current_user.mechanic.orders_count) %></h2>
+      <h2><%= number_with_delimiter(current_user.mechanic.available_orders_count) %></h2>
       <p>预约次数</p>
     </div>
     <div class="item">
@@ -29,7 +29,7 @@
 <% else %>
   <div class="hero segmented-items segmented-items-bordered text-center">
     <div class="item">
-      <h2><%= number_with_delimiter(current_user.orders_count) %></h2>
+      <h2><%= number_with_delimiter(current_user.available_orders_count) %></h2>
       <p>用人次数</p>
     </div>
     <div class="item">

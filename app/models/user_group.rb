@@ -13,28 +13,15 @@ class UserGroup < ActiveRecord::Base
   scope :confirmeds, -> { where(confirmed: true) }
   scope :unconfirmeds, -> { where.not(confirmed: true) }
 
+  def increase_total_commission! amount
+    increment!(:total_commission, amount)
+  end
+
   def confirm!
     update_attribute(:confirmed, true)
   end
 
-  def total_cost
-    orders.settleds.sum(:price) || 0
-  end
-
-  def total_income
-    mechanic_orders.settleds.sum(:price) || 0
-  end
-
-  def total_turnover
-    total_cost + total_income
-  end
-
-  def total_commission
-    (total_cost * Setting.commission_percent.to_f / 100 * Setting.client_commission_percent.to_f / 100 +
-      total_income * Setting.commission_percent.to_f / 100 * Setting.mechanic_commission_percent.to_f / 100).round(2)
-  end
-
-  def orders_count
+  def settled_orders_count
     orders.settleds.count + mechanic_orders.settleds.count
   end
 

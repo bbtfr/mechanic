@@ -20,7 +20,7 @@
         <td class="attr_avatar"><%= image_tag bid.mechanic.user.avatar.url(:thumb) %></td>
         <td><%= bid.mechanic.user_nickname %></td>
         <td><%= bid.markup_price %></td>
-        <td><%= bid.mechanic.orders_count %></td>
+        <td><%= bid.mechanic.available_orders_count %></td>
         <td><%= bid.mechanic.professionality_average %></td>
         <td><%= bid.mechanic.timeliness_average %></td>
         <td><%= link_to "详情", merchants_order_bid_path(@order, bid) %></td>

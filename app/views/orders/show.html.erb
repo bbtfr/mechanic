@@ -8,7 +8,7 @@
       <%= i.attribute :user do |order| %>
         <%= order.user_nickname %> <%= tel_link_to order.user_mobile %>
       <% end %>
-      <% if @order.merchant_id %>
+      <% unless @order.mobile? %>
         <%= i.attribute :contact do |order| %>
           <%= order.contact_nickname %> <%= tel_link_to order.contact_mobile %>
         <% end %>
@@ -35,7 +35,7 @@
           <%= @order.mechanic.user_nickname %>
         </div>
         <div class="media-block">
-          <p class="pull-right">接单 <%= @order.mechanic.orders_count %> 次</p>
+          <p class="pull-right">接单 <%= @order.mechanic.available_orders_count %> 次</p>
           <p>专业 <%= @order.mechanic.professionality_average %> 分 守时 <%= @order.mechanic.timeliness_average %> 分</p>
         </div>
       </div>

@@ -38,7 +38,7 @@ class Store < ActiveRecord::Base
     orders.availables.sum(:price) || 0
   end
 
-  def orders_count
+  def available_orders_count
     orders.availables.count
   end
 

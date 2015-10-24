@@ -4,8 +4,7 @@ class Withdrawal < ActiveRecord::Base
   as_enum :state, pending: 0, canceled: 1, paid: 2
 
   after_create do
-    user.balance -= amount
-    user.save
+    user.increase_balance!(-amount)
   end
 
   validates_numericality_of :amount, greater_than: 1
@@ -23,8 +22,7 @@ class Withdrawal < ActiveRecord::Base
 
   def cancel!
     return false unless pending?
-    user.balance += amount
-    user.save
+    user.increase_balance!(amount)
     update_attribute(:state, Withdrawal.states[:canceled])
   end
 

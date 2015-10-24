@@ -61,7 +61,7 @@ zh-CN:
         avatar: 头像
         nickname: 姓名
         weixin_openid: 微信号
-        orders_count: 预约次数
+        available_orders_count: 预约次数
         total_cost: 总支出
         gender: 性别
         address: 地址
@@ -73,7 +73,7 @@ zh-CN:
         user_mobile: 手机号码
         user_address: 地址
         description: 详情
-        orders_count: 接单次数
+        available_orders_count: 接单次数
         total_income: 总收入
         professionality_average: 专业
         timeliness_average: 守时
@@ -96,7 +96,7 @@ zh-CN:
         role: 系统角色
       store:
         nickname: 店铺名称
-        orders_count: 预约次数
+        available_orders_count: 预约次数
         total_cost: 总支出
         qq: QQ
       user_group:
@@ -104,7 +104,7 @@ zh-CN:
         user_nickname: 堂主
         user_role: 类型
         description: 申请简介
-        orders_count: 分堂业绩
+        settled_orders_count: 分堂业绩
         total_commission: 分堂佣金
         users_count: 分堂成员
         weixin_qr_code_url: 二维码

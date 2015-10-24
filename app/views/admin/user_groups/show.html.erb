@@ -2,7 +2,7 @@
 
 <%= show_for @user_group, class: "dl-horizontal" do |i| %>
   <%= i.attribute :nickname %>
-  <%= i.attribute :orders_count %>
+  <%= i.attribute :settled_orders_count %>
   <%= i.attribute :total_commission %>
   <%= i.attribute :users_count %>
   <%= i.attribute :weixin_qr_code_url do |user_group| %>
