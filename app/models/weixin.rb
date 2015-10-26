@@ -66,8 +66,8 @@ module Weixin
         {
           first: format_template_data("#{order.user.nickname} 刚刚发布了新订单"),
           keyword1: format_template_data(I18n.l(order.appointment, format: :long)),
-          keyword2: format_template_data(order.skill.try :name),
-          keyword3: format_template_data("#{order.brand.try :name} #{order.series.try :name}"),
+          keyword2: format_template_data(order.skill),
+          keyword3: format_template_data("#{order.brand} #{order.series}"),
           keyword4: format_template_data("#{order.quoted_price} 元"),
           keyword5: format_template_data(order.remark.presence || "无"),
           remark: format_template_data("点击详情去接单！")
@@ -83,8 +83,8 @@ module Weixin
         {
           first: format_template_data("#{order.user.nickname} 刚刚指派了新订单"),
           keyword1: format_template_data(I18n.l(order.appointment, format: :long)),
-          keyword2: format_template_data(order.skill.try :name),
-          keyword3: format_template_data("#{order.brand.try :name} #{order.series.try :name}"),
+          keyword2: format_template_data(order.skill),
+          keyword3: format_template_data("#{order.brand} #{order.series}"),
           keyword4: format_template_data("#{order.price} 元"),
           keyword5: format_template_data(order.remark.presence || "无"),
           remark: format_template_data("\r\n点击查看订单详情！")
@@ -97,10 +97,10 @@ module Weixin
         "#{BaseURL}/orders/#{order.id}",
         TemplateTopColor,
         {
-          first: format_template_data("您成功预约技师 #{order.mechanic.user_nickname} 为您 #{order.skill.try :name}"),
+          first: format_template_data("您成功预约技师 #{order.mechanic.user_nickname} 为您 #{order.skill}"),
           keyword1: format_template_data(I18n.l(order.appointment, format: :long)),
-          keyword2: format_template_data(order.skill.try :name),
-          keyword3: format_template_data("#{order.brand.try :name} #{order.series.try :name}"),
+          keyword2: format_template_data(order.skill),
+          keyword3: format_template_data("#{order.brand} #{order.series}"),
           keyword4: format_template_data("#{order.price} 元"),
           keyword5: format_template_data(order.remark.presence || "无"),
           remark: format_template_data("\r\n点击查看订单详情！")
@@ -117,8 +117,8 @@ module Weixin
         {
           first: format_template_data("#{order.mechanic.user_nickname} 刚刚完成了施工"),
           keyword1: format_template_data(I18n.l(order.appointment, format: :long)),
-          keyword2: format_template_data(order.skill.try :name),
-          keyword3: format_template_data("#{order.brand.try :name} #{order.series.try :name}"),
+          keyword2: format_template_data(order.skill),
+          keyword3: format_template_data("#{order.brand} #{order.series}"),
           keyword4: format_template_data("#{order.price} 元"),
           keyword5: format_template_data(order.remark.presence || "无"),
           remark: format_template_data("\r\n点击详情去确认完工！")
