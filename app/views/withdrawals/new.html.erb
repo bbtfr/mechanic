@@ -2,7 +2,6 @@
   提现申请
 <% end %>
 
-
 <%= simple_form_for(@withdrawal) do |f| %>
   <%= f.error_messages %>
 
@@ -11,3 +10,34 @@
     <%= f.button :submit, "确定", class: "btn-block btn-positive" %>
   </div>
 <% end %>
+
+<%
+  def withdrawal_state_link_to state, text
+    class_name = "control-item"
+    class_name << " active" if @state == state
+    link_to new_withdrawal_path(state: state), class: class_name do
+      count = withdrawal_klass.send(state).count
+      content = text
+      content << %{ <span class="badge">#{count}</span>} if count != 0
+      content.html_safe
+    end
+  end
+%>
+
+<div class="content-padded">
+  <div class="segmented-control">
+    <%= withdrawal_state_link_to :pendings, "提现中" %>
+    <%= withdrawal_state_link_to :paids, "已提现" %>
+  </div>
+</div>
+
+<% @withdrawals = @withdrawals.order(id: :desc) %>
+
+<ul class="table-view">
+  <% @withdrawals.each do |withdrawal| %>
+    <li class="table-view-cell">
+      <%= l withdrawal.created_at, format: :short %>
+      <span class="pull-right"><%= withdrawal.amount %> 元</span>
+    </li>
+  <% end %>
+</ul>

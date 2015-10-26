@@ -7,7 +7,7 @@ class Withdrawal < ActiveRecord::Base
     user.increase_balance!(-amount)
   end
 
-  validates_numericality_of :amount, greater_than: 1
+  validates_numericality_of :amount, greater_than_or_equal_to: 1
   validates_presence_of :amount
   validate :validate_amount
 

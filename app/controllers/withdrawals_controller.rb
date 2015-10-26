@@ -1,4 +1,8 @@
 class WithdrawalsController < ApplicationController
+  before_filter :find_withdrawals_by_state
+
+  helper_method :withdrawal_klass
+
   def new
     @withdrawal = withdrawal_klass.new
   end
@@ -14,6 +18,15 @@ class WithdrawalsController < ApplicationController
   end
 
   private
+
+    def find_withdrawals_by_state
+      @state = if %w(pendings paids canceleds).include? params[:state]
+          params[:state].to_sym
+        else
+          :pendings
+        end
+      @withdrawals = withdrawal_klass.send(@state)
+    end
 
     def withdrawal_klass
       Withdrawal.where(user_id: current_user)
