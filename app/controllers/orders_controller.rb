@@ -99,7 +99,7 @@ class OrdersController < ApplicationController
   end
 
   def finish
-    if @order.update_attributes(finish_order_params)
+    if !params.key?(:order) || @order.update_attributes(finish_order_params)
       @order.finish!
       flash[:success] = "成功提交完工信息！<br>等待用户确认..."
       redirect_to order_path(@order)

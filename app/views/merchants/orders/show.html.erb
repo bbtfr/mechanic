@@ -1,4 +1,4 @@
-<h3 class="page-header col-md-12">订单详情</h3>
+<h3 class="page-header">订单详情</h3>
 
 <div class="col-sm-offset-3 col-sm-9">
   <%= show_for @order, class: "dl-horizontal" do |i| %>
@@ -18,7 +18,7 @@
 
 <% if @order.mechanic_id %>
 
-  <h3 class="page-header col-md-12">技师信息</h3>
+  <h3 class="page-header">技师信息</h3>
 
   <div class="col-sm-3 text-right">
     <%= image_tag(@order.mechanic.user.avatar.url(:thumb)) %>
@@ -57,7 +57,7 @@
     });
   </script>
 <% when :confirming %>
-  <h3 class="page-header col-md-12">确认完工 <small>点击施工照片查看原图</small></h3>
+  <h3 class="page-header">确认完工 <small>点击施工照片查看原图</small></h3>
   <% if @order.mechanic_attach_1 || @order.mechanic_attach_2 %>
     <div class="images">
       <%= link_to @order.mechanic_attach_1.url(:original) do %>

@@ -6,6 +6,7 @@
 
 $(document).on 'ready page:load', ->
   $(".table.data-tables").dataTable
+    aaSorting: [] # Do not sort by default
     sPaginationType: "bs_normal"
     oLanguage:
       sLengthMenu: "每页显示 _MENU_ 条记录"
