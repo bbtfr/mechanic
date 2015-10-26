@@ -129,13 +129,13 @@ class Order < ActiveRecord::Base
 
   def refunding! reason = :user_cancel
     return false unless paid? || working?
-    update_attribute(:refund, Order.cancels[reason])
+    update_attribute(:refund, Order.refunds[reason])
     update_attribute(:state, Order.states[:refunding])
   end
 
   def refund! reason = :user_cancel
     return false unless refunding? || paid? || working?
-    update_attribute(:refund, Order.cancels[reason]) unless refunding?
+    update_attribute(:refund, Order.refunds[reason]) unless refunding?
     update_attribute(:state, Order.states[:refunded])
     user.increase_total_cost!(-price)
   end
