@@ -6,38 +6,40 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-# Skill.destroy_all
+Skill.destroy_all
 %w(贴膜 安导航 等等).each do |skill|
   Skill.create(name: skill)
 end
 
+ActiveRecord::Base.transaction do
+  Province.destroy_all
+  City.destroy_all
+  District.destroy_all
+end
 
-# Province.destroy_all
-# City.destroy_all
-# District.destroy_all
 DistrictList = LBS.district_list["result"]
 
 def create_province pd
-  p = Province.create(name: pd["name"] || pd["fullname"], lbs_id: pd["id"])
+  p = Province.create(name: pd["name"] || pd["fullname"], fullname: pd["fullname"], lbs_id: pd["id"])
   DistrictList[1][pd["cidx"][0]..pd["cidx"][1]].each do |cd|
     if cd["cidx"]
       create_city cd, p
     else
-      c = City.where(name: pd["name"] || pd["fullname"], province_id: p.id, lbs_id: pd["id"]).first_or_create
+      c = City.where(name: pd["name"] || pd["fullname"], fullname: pd["fullname"], province_id: p.id, lbs_id: pd["id"]).first_or_create
       create_district cd, c
     end
   end
 end
 
 def create_city cd, p
-  c = City.create(name: cd["name"] || cd["fullname"], province_id: p.id, lbs_id: cd["id"])
+  c = City.create(name: cd["name"] || cd["fullname"], fullname: cd["fullname"], province_id: p.id, lbs_id: cd["id"])
   DistrictList[2][cd["cidx"][0]..cd["cidx"][1]].each do |dd|
     create_district dd, c
   end
 end
 
 def create_district dd, c
-  District.create(name: dd["name"] || dd["fullname"], city_id: c.id, lbs_id: dd["id"])
+  District.create(name: dd["name"] || dd["fullname"], fullname: dd["fullname"], city_id: c.id, lbs_id: dd["id"])
 end
 
 ActiveRecord::Base.transaction do

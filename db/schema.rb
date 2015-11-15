@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151024115117) do
+ActiveRecord::Schema.define(version: 20151115070209) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -32,8 +32,10 @@ ActiveRecord::Schema.define(version: 20151024115117) do
     t.string  "name"
     t.integer "province_id"
     t.integer "lbs_id"
+    t.string  "fullname"
   end
 
+  add_index "cities", ["fullname"], name: "index_cities_on_fullname"
   add_index "cities", ["lbs_id"], name: "index_cities_on_lbs_id"
   add_index "cities", ["province_id"], name: "index_cities_on_province_id"
 
@@ -41,9 +43,11 @@ ActiveRecord::Schema.define(version: 20151024115117) do
     t.string  "name"
     t.integer "city_id"
     t.integer "lbs_id"
+    t.string  "fullname"
   end
 
   add_index "districts", ["city_id"], name: "index_districts_on_city_id"
+  add_index "districts", ["fullname"], name: "index_districts_on_fullname"
   add_index "districts", ["lbs_id"], name: "index_districts_on_lbs_id"
 
   create_table "fellowships", force: :cascade do |t|
@@ -171,8 +175,10 @@ ActiveRecord::Schema.define(version: 20151024115117) do
   create_table "provinces", force: :cascade do |t|
     t.string  "name"
     t.integer "lbs_id"
+    t.string  "fullname"
   end
 
+  add_index "provinces", ["fullname"], name: "index_provinces_on_fullname"
   add_index "provinces", ["lbs_id"], name: "index_provinces_on_lbs_id"
 
   create_table "series", force: :cascade do |t|

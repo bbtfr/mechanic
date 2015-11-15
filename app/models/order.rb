@@ -59,8 +59,17 @@ class Order < ActiveRecord::Base
   def validate_lbs_id
     return if lbs_id.present?
     result = LBS.geocoder address
+
+    province_name = result["result"]["address_components"]["province"]
+    city_name = result["result"]["address_components"]["city"]
     district_name = result["result"]["address_components"]["district"]
-    district = District.where(name: district_name).first
+
+    district = District.joins(city: [:province]).where(
+      provinces: { fullname: province_name },
+      cities: { fullname: city_name },
+      districts: { fullname: district_name }
+    ).first!
+
     self.lbs_id = district.lbs_id
   rescue
     errors.add(:address, "无法定位，请打开GPS定位或输入更详细的地址") unless lbs_id.present?
