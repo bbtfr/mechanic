@@ -1,12 +1,22 @@
 <h3 class="page-header">订单管理</h3>
 
-<%= index_for [ :merchants, :admin, @orders ], class: "table table-hover data-tables" do |i| %>
-  <%= i.attribute :merchant, with: :nickname %>
-  <%= i.attribute :contact %>
-  <%= i.attribute :appointment, format: :short %>
-  <%= i.attribute :skill %>
-  <%= i.attribute :price %>
-  <%= i.attribute :mechanic, with: :user_nickname, if_raise: nil %>
+<div class="col-md-2 col-xs-4">
+  <ul class="nav nav-pills nav-stacked">
+    <li class="<%= "active" if @state == :paids %>"><%= link_to "待服务", merchants_admin_orders_path(state: :paids) %></li>
+    <li class="<%= "active" if @state == :workings %>"><%= link_to "服务中", merchants_admin_orders_path(state: :workings) %></li>
+    <li class="<%= "active" if @state == :settleds %>"><%= link_to "已完成", merchants_admin_orders_path(state: :settleds) %></li>
+  </ul>
+</div>
 
-  <%= i.actions :show %>
-<% end %>
+<div class="col-md-10 col-xs-8">
+  <%= index_for [ :merchants, :admin, @orders ], class: "table table-hover data-tables" do |i| %>
+    <%= i.attribute :merchant, with: :nickname %>
+    <%= i.attribute :contact %>
+    <%= i.attribute :appointment, format: :short %>
+    <%= i.attribute :skill %>
+    <%= i.attribute :price %>
+    <%= i.attribute :mechanic, with: :user_nickname, if_raise: nil %>
+
+    <%= i.actions :show %>
+  <% end %>
+</div>
