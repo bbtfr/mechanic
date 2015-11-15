@@ -107,6 +107,23 @@ module Weixin
         }
     end
 
+    def send_rework_order_message order
+      weixin_authorize_client_send :send_template_msg,
+        order.mechanic.user_weixin_openid,
+        OrderTemplate,
+        "#{BaseURL}/orders/#{order.id}",
+        TemplateTopColor,
+        {
+          first: format_template_data("#{order.user.nickname} 刚刚申请返工"),
+          keyword1: format_template_data(I18n.l(order.appointment, format: :long)),
+          keyword2: format_template_data(order.skill),
+          keyword3: format_template_data("#{order.brand} #{order.series}"),
+          keyword4: format_template_data("#{order.price} 元"),
+          keyword5: format_template_data(order.remark.presence || "无"),
+          remark: format_template_data("\r\n点击查看订单详情！")
+        }
+    end
+
     def send_confirm_order_message order
       return unless order.user.weixin_openid
       weixin_authorize_client_send :send_template_msg,

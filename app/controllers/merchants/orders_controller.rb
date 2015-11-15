@@ -135,6 +135,13 @@ class Merchants::OrdersController < Merchants::ApplicationController
     redirect_to merchants_order_path(@order)
   end
 
+  def rework
+    @order.rework!
+    flash[:notice] = "订单申请返工！"
+    redirect_to merchants_order_path(@order)
+  end
+
+
   def confirm
     @order.confirm!
     flash[:notice] = "订单确认完工！"

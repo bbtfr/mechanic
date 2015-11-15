@@ -174,6 +174,14 @@ class Order < ActiveRecord::Base
     update_attribute(:state, Order.states[:finished])
   end
 
+  def rework!
+    return false unless confirming?
+    update_attribute(:state, Order.states[:paid])
+    Weixin.send_rework_order_message self
+  rescue => error
+    Rails.logger.error "#{error.class}: #{error.message} from Order#finish!"
+  end
+
   def review!
     update_attribute(:state, Order.states[:reviewed])
   end

@@ -32,6 +32,7 @@ Rails.application.routes.draw do
         get :result
 
         get :confirm
+        get :rework
 
         get :review
       end
