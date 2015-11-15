@@ -1,6 +1,16 @@
 <h3 class="page-header">提现详情 #<%= @withdrawal.id %></h3>
 
 <%= show_for @withdrawal, class: "dl-horizontal" do |i| %>
-  <%= i.attribute :user, with: :nickname %>
+  <%= i.fields_for :user do |ii| %>
+    <%= ii.attribute :nickname %>
+    <%= ii.attribute :mobile %>
+  <% end %>
+
   <%= i.attribute :amount %>
+<% end %>
+
+<% unless @withdrawal.paid? %>
+  <div class="pull-right">
+    <%= link_to "批准申请", confirm_admin_withdrawal_path(@withdrawal), class: "btn btn-primary", method: :post, confirm: "你确定要通过这条申请？" %>
+  </div>
 <% end %>
