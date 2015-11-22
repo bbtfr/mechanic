@@ -44,6 +44,12 @@
     <%= link_to "支付宝支付", pay_merchants_orders_path(@order, format: :alipay), class: "btn btn-primary" %>
     <%= link_to "取消订单", cancel_merchants_order_path(@order), class: "btn btn-danger" %>
   </div>
+<% when :pended %>
+  <div class="pull-right">
+    <%= link_to "微信支付", pay_merchants_orders_path(@order, format: :weixin), class: "btn btn-primary" %>
+    <%= link_to "支付宝支付", pay_merchants_orders_path(@order, format: :alipay), class: "btn btn-primary" %>
+    <%= link_to "取消订单", cancel_merchants_order_path(@order), class: "btn btn-danger" %>
+  </div>
 <% when :paid, :working %>
   <% text = @order.paid? ? "申请退款" : "申请撤单" %>
   <div class="pull-right">

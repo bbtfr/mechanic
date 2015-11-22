@@ -82,6 +82,45 @@ ActiveRecord::Base.transaction do
   nil
 end
 
+ActiveRecord::Base.transaction do
+  Mechanic.all.each do |m|
+    Province.table_name = "provinces_bak"
+    p1 = Province.where(id: m.province_cd).first
+    next unless p1
+    Province.table_name = "provinces"
+    p2 = Province.where(fullname: p1.fullname).first
+    next unless p2
+    next if p1.id == p2.id
+    m.province_cd = p2.id
+    m.save
+  end
+
+  Mechanic.all.each do |m|
+    City.table_name = "cities_bak"
+    c1 = City.where(id: m.city_cd).first
+    next unless c1
+    City.table_name = "cities"
+    c2 = City.where(fullname: c1.fullname).first
+    next unless c2
+    next if c1.id == c2.id
+    m.city_cd = c2.id
+    m.save
+  end
+
+  Mechanic.all.each do |m|
+    District.table_name = "districts_bak"
+    d1 = District.where(id: m.district_cd).first
+    next unless d1
+    District.table_name = "districts"
+    d2 = District.where(fullname: d1.fullname).first
+    next unless d2
+    next if d1.id == d2.id
+    m.district_cd = d2.id
+    m.save
+  end
+  nil
+end
+
 doc = Nokogiri::HTML open("http://www.ebaoyang.cn/basic/car/show_brand").read
 doc.css(".choose_list a").each do |brand|
   ActiveRecord::Base.transaction do

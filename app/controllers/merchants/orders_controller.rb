@@ -38,6 +38,12 @@ class Merchants::OrdersController < Merchants::ApplicationController
     end
   end
 
+  def pend
+    @order.pend!
+    flash[:notice] = "订单延后付款！"
+    redirect_to merchants_order_path(@order)
+  end
+
   def cancel
     @order.cancel!
     flash[:notice] = "订单已取消！"

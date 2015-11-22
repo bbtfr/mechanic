@@ -17,19 +17,19 @@ class Order < ActiveRecord::Base
   as_enum :province, Province, persistence: true
   as_enum :city, City, persistence: true
 
-  as_enum :state, pending: 0, paying: 1, canceled: 2, refunding: 3, refunded: 4, paid: 5, working: 6,
-    confirming: 7, finished: 8, reviewed: 9
+  as_enum :state, pending: 0, paying: 1, pended: 2, canceled: 3, refunding: 4, refunded: 5,
+    paid: 6, working: 7, confirming: 8, finished: 9, reviewed: 10
   as_enum :cancel, pending_timeout: 0, paying_timeout: 1, user_abstain: 2, user_cancel: 3
   as_enum :refund, user_cancel: 0, merchant_revoke: 1
   as_enum :pay_type, { weixin: 0, alipay: 1 }, prefix: true
 
-  AVAILABLE_GREATER_THAN = 4
+  AVAILABLE_GREATER_THAN = 5
   scope :availables, -> { where('"orders"."state_cd" > ?', AVAILABLE_GREATER_THAN) }
   def available?
     state_cd > AVAILABLE_GREATER_THAN
   end
 
-  SETTLED_GREATER_THAN = 7
+  SETTLED_GREATER_THAN = 8
   scope :settleds, -> { where('"orders"."state_cd" > ?', SETTLED_GREATER_THAN) }
   def settled?
     state_cd > SETTLED_GREATER_THAN
@@ -97,11 +97,16 @@ class Order < ActiveRecord::Base
     if mechanic_id
       pick!
     else
-      pend!
+      pending!
     end
   end
 
   def pend!
+    return false unless paying?
+    update_attribute(:state, Order.states[:pended])
+  end
+
+  def pending!
     UpdateOrderStateJob.set(wait: PendingTimeout).perform_later(self)
   end
 
@@ -121,13 +126,13 @@ class Order < ActiveRecord::Base
   end
 
   def cancel! reason = :user_cancel
-    return false unless pending? || paying?
+    return false unless pending? || paying? || pended?
     update_attribute(:cancel, Order.cancels[reason])
     update_attribute(:state, Order.states[:canceled])
   end
 
   def pay! pay_type = :weixin, trade_no = nil
-    return false unless paying? || canceled?
+    return false unless paying? || pended? || canceled?
     update_attribute(:pay_type, Order.pay_types[pay_type])
     update_attribute(:trade_no, trade_no) if trade_no
     update_attribute(:state, Order.states[:paid])
