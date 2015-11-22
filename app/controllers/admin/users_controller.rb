@@ -8,8 +8,12 @@ class Admin::UsersController < Admin::ApplicationController
   def mechanicize
     @user.mechanic!
     @user.build_mechanic unless @user.mechanic
-    @user.save
-    redirect_to request.referer
+    if @user.save
+      flash[:error] = "帐号信息不完整，无法转换"
+      redirect_to request.referer
+    else
+      redirect_to admin_mechanic_path(@user)
+    end
   end
 
   private
