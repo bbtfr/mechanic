@@ -34,17 +34,31 @@
   <div class="col-md-12">
     <h5 class="text-muted">指派技师 <a href="#" id="clean_mechanic">取消选中技师</a></h5>
 
-    <%= index_for [ :merchants, current_merchant.store.followed_mechanics ], class: "table table-hover data-tables" do |i| %>
+    <% followed_mechanics = current_merchant.store.followed_mechanics %>
+    <% mechanics = Mechanic.includes(:user).where(users: { role_cd: User.roles[:mechanic] }) %>
+    <%= index_for [ :merchants, mechanics ], class: "table table-hover data-tables" do |i| %>
       <%= i.attribute :_check do |mechanic| %>
         <%= f.radio_button :mechanic_id, mechanic.id %>
       <% end %>
+
       <%= i.attribute :user_nickname %>
+      <%= i.attribute :user_mobile %>
+
       <%= i.attribute :province %>
       <%= i.attribute :city %>
       <%= i.attribute :district %>
       <%= i.attribute :available_orders_count %>
       <%= i.attribute :professionality_average %>
       <%= i.attribute :timeliness_average %>
+
+      <%= i.actions :show do |a| %>
+        <% if followed_mechanics.include? i.object %>
+          <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
+        <% else %>
+          <%= a.action_link :follow, method: :post %>
+        <% end %>
+      <% end %>
+
     <% end %>
 
     <%= f.button :submit, "确定", class: "btn-primary pull-right" %>

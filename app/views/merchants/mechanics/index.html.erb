@@ -7,7 +7,7 @@
   <%= i.attribute :timeliness_average %>
   <%= i.attribute :available_orders_count %>
 
-  <%= i.actions do |a| %>
+  <%= i.actions :show do |a| %>
     <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
   <% end %>
 <% end %>

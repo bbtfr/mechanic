@@ -7,6 +7,7 @@ class Admin::UsersController < Admin::ApplicationController
 
   def mechanicize
     @user.mechanic!
+    @user.build_mechanic unless @user.mechanic
     @user.save
     redirect_to request.referer
   end

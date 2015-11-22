@@ -133,6 +133,8 @@ class Order < ActiveRecord::Base
     update_attribute(:state, Order.states[:paid])
     user.increase_total_cost!(price)
     Weixin.send_paid_order_message self
+    SMSMailer.mechanic_notification(self).deliver
+    SMSMailer.contact_notification(self).deliver if contact_mobile
   rescue => error
     Rails.logger.error "#{error.class}: #{error.message} from Order#pay!"
   end

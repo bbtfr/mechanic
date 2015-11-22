@@ -76,7 +76,7 @@ zh-CN:
         user_nickname: 姓名
         user_mobile: 手机号码
         user_address: 地址
-        description: 详情
+        description: 简介
         available_orders_count: 接单次数
         total_income: 总收入
         professionality_average: 专业

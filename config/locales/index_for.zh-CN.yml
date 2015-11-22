@@ -13,6 +13,7 @@ zh-CN:
       destroy: 删除
       confirm: 批准申请
       unfollow: 取消关注
+      follow: 关注
       inactive: 锁定
       active: 取消锁定
       confirmation: "你确定要删除这条记录？"

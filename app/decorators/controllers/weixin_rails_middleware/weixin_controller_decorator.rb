@@ -159,4 +159,8 @@ EOS
     def handle_kf_create_session_event
       info("KF create session event")
     end
+
+    def handle_kf_close_session_event
+      info("KF close session event")
+    end
 end

@@ -1,4 +1,8 @@
 class Merchants::MechanicsController < Merchants::ApplicationController
+  def show
+    @mechanic = Mechanic.find(params[:id]).user
+  end
+
   def follow
     current_merchant.store.follow!(params[:id])
     redirect_to request.referer
