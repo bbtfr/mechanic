@@ -4,7 +4,7 @@ class SendCreateOrderMessageJob < ActiveJob::Base
   def perform(order)
     users = User.mechanics
 
-    location = LBS.find(order.lbs_id).parent
+    location = LBS.find(order.lbs_id)
     users = users.location_scope(location)
 
     users = users.skill_scope(order.skill)

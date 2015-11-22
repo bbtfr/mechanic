@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151115070209) do
+ActiveRecord::Schema.define(version: 20151122015905) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -161,6 +161,8 @@ ActiveRecord::Schema.define(version: 20151115070209) do
     t.datetime "refunded_at"
     t.string   "trade_no"
     t.integer  "refund_cd",                      default: 0
+    t.integer  "province_cd"
+    t.integer  "city_cd"
   end
 
   add_index "orders", ["bid_id"], name: "index_orders_on_bid_id"

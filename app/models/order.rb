@@ -14,6 +14,9 @@ class Order < ActiveRecord::Base
   as_enum :brand, Brand, persistence: true
   as_enum :series, Series, persistence: true
 
+  as_enum :province, Province, persistence: true
+  as_enum :city, City, persistence: true
+
   as_enum :state, pending: 0, paying: 1, canceled: 2, refunding: 3, refunded: 4, paid: 5, working: 6,
     confirming: 7, finished: 8, reviewed: 9
   as_enum :cancel, pending_timeout: 0, paying_timeout: 1, user_abstain: 2, user_cancel: 3
@@ -62,15 +65,13 @@ class Order < ActiveRecord::Base
 
     province_name = result["result"]["address_components"]["province"]
     city_name = result["result"]["address_components"]["city"]
-    district_name = result["result"]["address_components"]["district"]
 
-    district = District.joins(city: [:province]).where(
-      provinces: { fullname: province_name },
-      cities: { fullname: city_name },
-      districts: { fullname: district_name }
-    ).first!
+    province = Province.where(fullname: province_name).first!
+    city = province.cities.where(fullname: city_name).first!
 
-    self.lbs_id = district.lbs_id
+    self.lbs_id = city.lbs_id
+    self.province_cd = province.id
+    self.city_cd = city.id
   rescue
     errors.add(:address, "无法定位，请打开GPS定位或输入更详细的地址") unless lbs_id.present?
   end

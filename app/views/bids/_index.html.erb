@@ -1,4 +1,4 @@
-<span class="alert alert-block alert-success">正在向 <%= @order.mechanic_sent_count %> 位技师发送用人信息...</span>
+<span class="alert alert-block alert-success">正在向 <%= @order.province %>  <%= @order.city %> 的 <%= @order.mechanic_sent_count %> 位技师发送用人信息...</span>
 
 <% bids = @order.bids.includes(mechanic: :user) %>
 
