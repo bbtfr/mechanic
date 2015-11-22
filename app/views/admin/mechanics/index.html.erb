@@ -3,7 +3,6 @@
 <%= index_for [ :admin, @mechanics ], class: "table table-hover data-tables" do |i| %>
   <%= i.attribute :nickname %>
   <%= i.attribute :mobile %>
-  <%= i.attribute :weixin_openid %>
   <%= i.fields_for :mechanic, model: Mechanic do |ii| %>
     <%= ii.attribute :province %>
     <%= ii.attribute :city %>

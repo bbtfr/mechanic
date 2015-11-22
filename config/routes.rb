@@ -115,9 +115,17 @@ Rails.application.routes.draw do
         post :confirm
       end
     end
-    resources :users
+    resources :users do
+      member do
+        post :mechanicize
+      end
+    end
     resources :user_groups, concerns: [:confirm]
-    resources :mechanics
+    resources :mechanics do
+      member do
+        post :clientize
+      end
+    end
     resources :merchants, concerns: [:confirm] do
       member do
         post :active

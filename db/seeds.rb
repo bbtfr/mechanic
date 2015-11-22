@@ -12,29 +12,62 @@ Skill.destroy_all
 end
 
 ActiveRecord::Base.transaction do
-  Province.destroy_all
-  City.destroy_all
-  District.destroy_all
+  # Province.destroy_all
+  # City.destroy_all
+  # District.destroy_all
+
+  ActiveRecord::Migration.rename_table :provinces, :provinces_bak
+  ActiveRecord::Migration.rename_table :cities, :cities_bak
+  ActiveRecord::Migration.rename_table :districts, :districts_bak
+
+  ActiveRecord::Migration.create_table :provinces do |t|
+    t.string  :name
+    t.string  :fullname
+    t.index   :fullname
+    t.integer :lbs_id
+    t.index   :lbs_id
+  end
+  ActiveRecord::Migration.create_table :cities do |t|
+    t.string  :name
+    t.string  :fullname
+    t.index   :fullname
+    t.integer :province_id
+    t.index   :province_id
+    t.integer :lbs_id
+    t.index   :lbs_id
+  end
+  ActiveRecord::Migration.create_table :districts do |t|
+    t.string  :name
+    t.string  :fullname
+    t.index   :fullname
+    t.integer :city_id
+    t.index   :city_id
+    t.integer :lbs_id
+    t.index   :lbs_id
+  end
 end
 
 DistrictList = LBS.district_list["result"]
+Municipalities = %w(北京 上海 天津 重庆 香港 澳门)
 
 def create_province pd
   p = Province.create(name: pd["name"] || pd["fullname"], fullname: pd["fullname"], lbs_id: pd["id"])
   DistrictList[1][pd["cidx"][0]..pd["cidx"][1]].each do |cd|
-    if cd["cidx"]
-      create_city cd, p
-    else
+    if Municipalities.include? pd["name"]
       c = City.where(name: pd["name"] || pd["fullname"], fullname: pd["fullname"], province_id: p.id, lbs_id: pd["id"]).first_or_create
       create_district cd, c
+    else
+      create_city cd, p
     end
   end
 end
 
 def create_city cd, p
   c = City.create(name: cd["name"] || cd["fullname"], fullname: cd["fullname"], province_id: p.id, lbs_id: cd["id"])
-  DistrictList[2][cd["cidx"][0]..cd["cidx"][1]].each do |dd|
-    create_district dd, c
+  if cd["cidx"]
+    DistrictList[2][cd["cidx"][0]..cd["cidx"][1]].each do |dd|
+      create_district dd, c
+    end
   end
 end
 
@@ -46,6 +79,7 @@ ActiveRecord::Base.transaction do
   DistrictList[0].each do |pd|
     create_province pd
   end
+  nil
 end
 
 doc = Nokogiri::HTML open("http://www.ebaoyang.cn/basic/car/show_brand").read

@@ -5,6 +5,12 @@ class Admin::UsersController < Admin::ApplicationController
     @users = User.clients
   end
 
+  def mechanicize
+    @user.mechanic!
+    @user.save
+    redirect_to request.referer
+  end
+
   private
 
     def find_user
