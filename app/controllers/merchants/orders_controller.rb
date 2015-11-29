@@ -4,10 +4,10 @@ class Merchants::OrdersController < Merchants::ApplicationController
   before_filter :redirect_pending, only: [ :new, :create, :index ]
 
   def index
-    @state = if %w(paids workings finisheds).include? params[:state]
+    @state = if %w(pendeds paids workings finisheds).include? params[:state]
         params[:state].to_sym
       else
-        :paids
+        :pendeds
       end
     @orders = order_klass.send(@state)
   end

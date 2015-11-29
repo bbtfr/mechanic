@@ -2,10 +2,10 @@ class Merchants::Admin::OrdersController < Merchants::Admin::ApplicationControll
   before_filter :find_order, except: [ :index ]
 
   def index
-    @state = if %w(paids workings settleds).include? params[:state]
+    @state = if %w(pendeds paids workings settleds).include? params[:state]
         params[:state].to_sym
       else
-        :paids
+        :pendeds
       end
     @orders = order_klass.send(@state)
   end

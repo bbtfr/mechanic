@@ -1,10 +1,19 @@
 <h3 class="page-header">我的订单</h3>
 
+<%
+  def order_state_link_to state, text
+    link = link_to text, merchants_orders_path(state: state)
+    class_name = (@state == state) ? "active" : ""
+    %{<li class="#{class_name}">#{link}</li>}.html_safe
+  end
+%>
+
 <div class="col-md-2 col-xs-4">
   <ul class="nav nav-pills nav-stacked">
-    <li class="<%= "active" if @state == :paids %>"><%= link_to "待服务", merchants_orders_path(state: :paids) %></li>
-    <li class="<%= "active" if @state == :workings %>"><%= link_to "服务中", merchants_orders_path(state: :workings) %></li>
-    <li class="<%= "active" if @state == :finisheds %>"><%= link_to "待评价", merchants_orders_path(state: :finisheds) %></li>
+    <%= order_state_link_to :pendeds, "待付款" %>
+    <%= order_state_link_to :paids, "待服务" %>
+    <%= order_state_link_to :workings, "服务中" %>
+    <%= order_state_link_to :finisheds, "待评价" %>
   </ul>
 </div>
 
