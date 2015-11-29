@@ -10,7 +10,7 @@ class Admin::WithdrawalsController < Admin::ApplicationController
     if response.success?
       @withdrawal.pay!
     else
-      flash[:error] = response["return_msg"]
+      flash[:error] = "微信支付：#{response["err_code_des"]}"
     end
     redirect_to request.referer
   end

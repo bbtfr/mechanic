@@ -62,7 +62,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
         flash.now[:notice] = "正在创建支付订单..."
       else
         @order.pay! :weixin if response["err_code"] == "ORDERPAID"
-        flash[:error] = response["return_msg"]
+        flash[:error] = "微信支付：#{response["err_code_des"]}"
         redirect_to merchants_order_path(@order)
       end
     else
@@ -130,7 +130,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
           flash[:notice] = "退款申请已提交，支付款将在3个工作日内退回您的账户..."
           @order.refund! reason
         else
-          flash[:error] = response["return_msg"]
+          flash[:error] = "微信支付：#{response["err_code_des"]}"
         end
       else
         flash[:error] = "未知支付类型"

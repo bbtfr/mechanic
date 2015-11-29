@@ -10,9 +10,9 @@ class SendCreateOrderMessageJob < ActiveJob::Base
     users = users.skill_scope(order.skill)
     users.load
 
-    Rails.logger.info "Send order##{order.id} template message to #{users.size} users, skill_cd = #{order.skill_cd}, lbs_id = #{order.lbs_id} (#{location.try :name})"
+    Rails.logger.info "Send order##{order.id} template message to #{users.size} users, skill = #{order.skill_cd}, location = #{location.to_scope} (#{location.try :name})"
     users.each do |user|
-      Rails.logger.info "Send order##{order.id} template message to user##{user.id}"
+      # Rails.logger.info "Send order##{order.id} template message to user##{user.id}"
       response = Weixin.send_create_order_message user, order rescue nil
       if response && response.code == 0
         order.mechanic_sent_count += 1

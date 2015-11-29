@@ -232,13 +232,19 @@ class Order < ActiveRecord::Base
     contact_mobile || user.mobile
   end
 
-  def out_trade_no update_timestamp = true
-    update_attribute(:paid_at, Time.now) if update_timestamp
+  def update_timestamp column, update, force
+    if force || (!send(column) && update)
+      update_attribute(:column, Time.now)
+    end
+  end
+
+  def out_trade_no update = true, force = false
+    update_timestamp :paid_at, update, force
     "#{paid_at.strftime("%Y%m%d")}#{"%06d" % id}"
   end
 
-  def out_refund_no update_timestamp = true
-    update_attribute(:refunded_at, Time.now) if update_timestamp
+  def out_refund_no update = true, force = false
+    update_timestamp :refunded_at, update, force
     "#{refunded_at.strftime("%Y%m%d")}#{"%06d" % id}"
   end
 
