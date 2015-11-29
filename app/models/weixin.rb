@@ -251,7 +251,7 @@ module Weixin
     end
 
     def audit_subscribe_event keyword, weixin_openid
-      if keyword =~ /(\w+)(\d+)/
+      if keyword =~ /(\w+?)_(\d+)/
         type, id = $1.to_sym, $2.to_i
         Rails.logger.info "  Audit: #{type}, #{weixin_openid}, #{id} "
         WeixinAuthorize.weixin_redis.hset type, weixin_openid, id
@@ -262,7 +262,7 @@ module Weixin
       group_id = WeixinAuthorize.weixin_redis.hget "qrscene_user_group", weixin_openid
       return unless group_id
       WeixinAuthorize.weixin_redis.hdel "qrscene_user_group", weixin_openid
-      Rails.logger.info "  Audit: qrscene_user_group, #{weixin_openid}, #{group_id} "
+      Rails.logger.info "  Audit: qrscene_user_group, #{weixin_openid}, #{group_id}"
       user.update_attribute(:user_group_id, group_id)
     end
 

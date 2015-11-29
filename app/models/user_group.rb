@@ -31,7 +31,7 @@ class UserGroup < ActiveRecord::Base
 
   def weixin_qr_code_url
     unless weixin_qr_code_ticket
-      ticket = Weixin.create_qr_limit_str_scene(scene_str: "user_group#{id}").result["ticket"]
+      ticket = Weixin.create_qr_limit_str_scene(scene_str: "user_group_#{id}").result["ticket"]
       if ticket
         update_attribute(:weixin_qr_code_ticket, ticket)
       else
