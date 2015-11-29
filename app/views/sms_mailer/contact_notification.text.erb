@@ -1,1 +1,7 @@
-恭喜您，成功预约技师 <%= @order.mechanic.user_nickname %> 为您 <%= @user.skill %> ，请尽快登录微信公众号查看详情！
+技师姓名：<%= @order.mechanic.user.nickname %>；
+手机号码：<%= @order.mechanic.user.mobile %>；
+地址：<%= @order.mechanic.user.address %>；
+接单次数：<%= @order.mechanic.available_orders_count %>；
+专业：<%= @order.mechanic.professionality_average %>；
+守时：<%= @order.mechanic.timeliness_average %>；
+施工前先预约技师时间。施工前确认产品无损。施工中遇到问题及时联系卖家。

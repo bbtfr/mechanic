@@ -234,7 +234,7 @@ class Order < ActiveRecord::Base
 
   def update_timestamp column, update, force
     if force || (!send(column) && update)
-      update_attribute(:column, Time.now)
+      update_attribute(column, Time.now)
     end
   end
 

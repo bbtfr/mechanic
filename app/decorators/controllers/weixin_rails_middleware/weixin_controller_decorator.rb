@@ -85,14 +85,18 @@ WeixinRailsMiddleware::WeixinController.class_eval do
       send("handle_#{event_type.downcase}_event")
     end
 
-    # 关注公众账号
-    def handle_subscribe_event
+    def handle_scan_keyword
       if @keyword.present?
         # # 扫描带参数二维码事件: 1. 用户未关注时，进行关注后的事件推送
         # info("Subscribe event: 1. User unsubscribed, keyword: #{@keyword}")
         Weixin.audit_subscribe_event @keyword, @weixin_message["FromUserName"]
       end
-      # info("Subscribe")
+    end
+
+    # 关注公众账号
+    def handle_subscribe_event
+      handle_scan_keyword
+      info("Subscribe")
       reply_text_message <<-EOS
 欢迎关注汽车堂助手。我是你贴身的汽车服务小伙伴。致力于提供更专业、更靠谱的服务。
 
@@ -109,6 +113,7 @@ EOS
 
     # 扫描带参数二维码事件: 2. 用户已关注时的事件推送
     def handle_scan_event
+      handle_scan_keyword
       info("Scan event: 2. User subscribed, keyword: #{@keyword}")
     end
 

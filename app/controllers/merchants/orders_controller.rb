@@ -170,7 +170,15 @@ class Merchants::OrdersController < Merchants::ApplicationController
     end
 
     def find_order
-      @order = order_klass.find(params[:id])
+      @order = if current_merchant.admin?
+          admin_order_klass.find(params[:id])
+        else
+          order_klass.find(params[:id])
+        end
+    end
+
+    def admin_order_klass
+      Order.where(user_id: current_merchant.store)
     end
 
     def order_klass
