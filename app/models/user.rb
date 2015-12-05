@@ -55,7 +55,7 @@ class User < ActiveRecord::Base
     increment!(:total_cost, amount)
   end
 
-  def available_orders_count
+  def raw_available_orders_count
     orders.availables.count
   end
 end

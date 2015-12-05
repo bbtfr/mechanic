@@ -7,6 +7,8 @@
   </ul>
 </div>
 
+<% @merchants = @merchants.includes(:merchant) %>
+
 <div class="col-md-10 col-xs-8">
   <%= index_for [ :admin, @merchants ], class: "table table-hover data-tables" do |i| %>
     <%= i.fields_for :merchant, model: Merchant do |ii| %>

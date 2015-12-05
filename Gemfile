@@ -13,6 +13,8 @@ gem 'sidekiq'
 gem 'authlogic', '~> 3.4.6'
 gem 'rails-settings-cached'
 
+gem 'activerecord-redundancy'
+
 gem 'simple_enum'
 gem 'simple_enum-multiple'
 gem 'simple_enum-persistence'

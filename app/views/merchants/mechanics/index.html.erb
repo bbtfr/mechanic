@@ -1,6 +1,8 @@
 <h3 class="page-header">我的技师</h3>
 
-<%= index_for [ :merchants, current_merchant.store.followed_mechanics ], class: "table table-hover data-tables" do |i| %>
+<% @mechanics = current_merchant.store.followed_mechanics.includes(:user) %>
+
+<%= index_for [ :merchants, @mechanics ], class: "table table-hover data-tables" do |i| %>
   <%= i.attribute :user_nickname %>
   <%= i.attribute :user_mobile %>
   <%= i.attribute :professionality_average %>

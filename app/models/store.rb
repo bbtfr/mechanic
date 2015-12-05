@@ -11,6 +11,7 @@ class Store < ActiveRecord::Base
   has_many :fellowships, foreign_key: :user_id
   has_many :followed_mechanics, through: :fellowships, source: :mechanic
   has_many :merchants, foreign_key: :user_id
+  has_one :merchant, foreign_key: :user_id
   has_many :orders, foreign_key: :user_id
 
   scope :confirmeds, -> { where(confirmed: true) }
@@ -28,10 +29,6 @@ class Store < ActiveRecord::Base
 
   def active!
     update_attribute(:active, true)
-  end
-
-  def merchant
-    merchants.first
   end
 
   def total_cost

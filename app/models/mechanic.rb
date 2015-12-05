@@ -21,15 +21,15 @@ class Mechanic < ActiveRecord::Base
     increment!(:total_income, amount)
   end
 
-  def professionality_average
+  def raw_professionality_average
     (orders.average(:professionality) || 4).round(2)
   end
 
-  def timeliness_average
+  def raw_timeliness_average
     (orders.average(:timeliness) || 4).round(2)
   end
 
-  def available_orders_count
+  def raw_available_orders_count
     orders.availables.count
   end
 

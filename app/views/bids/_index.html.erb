@@ -1,9 +1,9 @@
 <span class="alert alert-block alert-success">正在向 <%= @order.province %>  <%= @order.city %> 的 <%= @order.mechanic_sent_count %> 位技师发送用人信息...</span>
 
-<% bids = @order.bids.includes(mechanic: :user) %>
+<% @bids = @order.bids.includes(mechanic: :user) %>
 
 <ul class="table-view">
-  <% bids.each do |bid| %>
+  <% @bids.each do |bid| %>
     <li class="table-view-cell media">
       <%= link_to order_bid_path(@order, bid), class: "navigate-right" do %>
         <%= image_tag bid.mechanic.user.avatar.url(:thumb), class: "media-object pull-left" %>

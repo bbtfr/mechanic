@@ -7,6 +7,8 @@
   </ul>
 </div>
 
+<% @user_groups = @user_groups.includes(:user) %>
+
 <div class="col-md-10 col-xs-8">
   <%= index_for [ :admin, @user_groups ], class: "table table-hover data-tables" do |i| %>
     <%= i.attribute :nickname %>

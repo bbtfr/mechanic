@@ -17,6 +17,8 @@
   </ul>
 </div>
 
+<% @orders = @orders.includes(mechanic: :user) %>
+
 <div class="col-md-10 col-xs-8">
   <%= index_for [ :merchants, @orders ], class: "table table-hover data-tables" do |i| %>
     <%= i.attribute :appointment, format: :short %>

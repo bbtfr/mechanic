@@ -59,6 +59,11 @@ class Order < ActiveRecord::Base
   delegate :nickname, :mobile, to: :user, prefix: true
   delegate :nickname, :mobile, to: :merchant, prefix: true
 
+  cache_method :user, :available_orders_count
+  cache_method :mechanic, :available_orders_count
+  cache_method :mechanic, :professionality_average
+  cache_method :mechanic, :timeliness_average
+
   def validate_lbs_id
     return if lbs_id.present?
     result = LBS.geocoder address

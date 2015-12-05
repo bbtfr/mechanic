@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151122015905) do
+ActiveRecord::Schema.define(version: 20151205062922) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -30,9 +30,9 @@ ActiveRecord::Schema.define(version: 20151122015905) do
 
   create_table "cities", force: :cascade do |t|
     t.string  "name"
+    t.string  "fullname"
     t.integer "province_id"
     t.integer "lbs_id"
-    t.string  "fullname"
   end
 
   add_index "cities", ["fullname"], name: "index_cities_on_fullname"
@@ -41,9 +41,9 @@ ActiveRecord::Schema.define(version: 20151122015905) do
 
   create_table "districts", force: :cascade do |t|
     t.string  "name"
+    t.string  "fullname"
     t.integer "city_id"
     t.integer "lbs_id"
-    t.string  "fullname"
   end
 
   add_index "districts", ["city_id"], name: "index_districts_on_city_id"
@@ -72,6 +72,9 @@ ActiveRecord::Schema.define(version: 20151122015905) do
     t.float    "timeliness_average",                               default: 4.0
     t.decimal  "total_income",            precision: 10, scale: 2, default: 0.0
     t.integer  "available_orders_count",                           default: 0
+    t.string   "user_nickname"
+    t.string   "user_mobile"
+    t.string   "user_address"
   end
 
   add_index "mechanics", ["city_cd"], name: "index_mechanics_on_city_cd"
@@ -108,6 +111,9 @@ ActiveRecord::Schema.define(version: 20151122015905) do
     t.datetime "last_login_at"
     t.string   "current_login_ip"
     t.string   "last_login_ip"
+    t.string   "user_nickname"
+    t.string   "user_mobile"
+    t.string   "user_address"
   end
 
   add_index "merchants", ["mobile"], name: "index_merchants_on_mobile", unique: true
@@ -163,6 +169,12 @@ ActiveRecord::Schema.define(version: 20151122015905) do
     t.integer  "refund_cd",                      default: 0
     t.integer  "province_cd"
     t.integer  "city_cd"
+    t.string   "user_nickname"
+    t.string   "user_mobile"
+    t.string   "mechanic_nickname"
+    t.string   "mechanic_mobile"
+    t.string   "merchant_nickname"
+    t.string   "merchant_mobile"
   end
 
   add_index "orders", ["bid_id"], name: "index_orders_on_bid_id"
@@ -176,8 +188,8 @@ ActiveRecord::Schema.define(version: 20151122015905) do
 
   create_table "provinces", force: :cascade do |t|
     t.string  "name"
-    t.integer "lbs_id"
     t.string  "fullname"
+    t.integer "lbs_id"
   end
 
   add_index "provinces", ["fullname"], name: "index_provinces_on_fullname"

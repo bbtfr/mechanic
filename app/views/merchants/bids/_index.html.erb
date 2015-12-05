@@ -1,5 +1,6 @@
 <div class="alert alert-success">正在向 <%= @order.province %>  <%= @order.city %> 的 <%= @order.mechanic_sent_count %> 位技师发送用人信息...</div>
-<% bids = @order.bids.includes(mechanic: :user) %>
+
+<% @bids = @order.bids.includes(mechanic: :user) %>
 
 <table class="table">
   <thead>
@@ -14,7 +15,7 @@
     </tr>
   </thead>
   <tbody>
-    <% bids.each do |bid| %>
+    <% @bids.each do |bid| %>
       <tr>
         <td class="attr_avatar"><%= image_tag bid.mechanic.user.avatar.url(:thumb) %></td>
         <td><%= bid.mechanic.user_nickname %></td>

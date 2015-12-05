@@ -1,5 +1,7 @@
 <h3 class="page-header">技师管理</h3>
 
+<% @mechanics = @mechanics.includes(:mechanic) %>
+
 <%= index_for [ :admin, @mechanics ], class: "table table-hover data-tables" do |i| %>
   <%= i.attribute :nickname %>
   <%= i.attribute :mobile %>
