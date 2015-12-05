@@ -56,6 +56,7 @@ Rails.application.routes.draw do
         end
       end
       resources :orders
+      resource :store
 
     end
 

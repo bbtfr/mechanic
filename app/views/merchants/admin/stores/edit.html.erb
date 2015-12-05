@@ -1,0 +1,12 @@
+<h3 class="page-header">编辑店铺信息</h3>
+
+<div class="col-md-7">
+  <%= bootstrap_simple_form_for(current_store, url: merchants_admin_store_path) do |f| %>
+    <%= f.error_messages %>
+
+    <%= f.input :nickname %>
+    <%= f.input :qq %>
+
+    <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+  <% end %>
+</div>

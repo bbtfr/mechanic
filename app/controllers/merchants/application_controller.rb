@@ -5,7 +5,7 @@ class Merchants::ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :current_merchant_session, :current_merchant
+  helper_method :current_merchant_session, :current_merchant, :current_store
   before_filter :authenticate!
 
   private
@@ -18,6 +18,11 @@ class Merchants::ApplicationController < ActionController::Base
     def current_merchant
       return @current_merchant if defined?(@current_merchant)
       @current_merchant = current_merchant_session && current_merchant_session.merchant
+    end
+
+    def current_store
+      return @current_store if defined?(@current_store)
+      @current_store = current_merchant && current_merchant.store
     end
 
     def authenticate!

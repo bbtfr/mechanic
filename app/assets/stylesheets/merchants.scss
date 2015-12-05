@@ -54,15 +54,8 @@
   border-color: #0b0b0b;
 }
 
-.custom-service-modal {
-  top: initial;
-  left: initial;
-  right: 36px;
-  bottom: 0px;
-
-  overflow: visible!important;
-
-  .modal-dialog {
-    width: 210px;
+.footer {
+  .popover {
+    width: 250px;
   }
 }
