@@ -29,7 +29,7 @@
     <%= show_for @order, class: "dl-horizontal" do |i| %>
       <%= i.attribute :price, label: "总价" %>
       <%= i.attribute :quoted_price %>
-      <%= i.attribute :"bid.markup_price" %>
+      <%= i.attribute :markup_price %>
     <% end %>
   </div>
 
