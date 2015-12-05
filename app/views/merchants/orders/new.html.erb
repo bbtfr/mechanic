@@ -34,11 +34,17 @@
   <div class="col-md-12">
     <h5 class="text-muted">指派技师 <a href="#" id="clean_mechanic">取消选中技师</a></h5>
 
-    <% followed_mechanic_ids = current_merchant.store.followed_mechanic_ids %>
-    <% mechanics = Mechanic.includes(:user).where(users: { role_cd: User.roles[:mechanic] }) %>
-    <%= index_for [ :merchants, mechanics ], class: "table table-hover data-tables" do |i| %>
+    <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\"></option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name), class: "form-control", id: "mechanics_skills_select" %></label>
+
+    <% @followed_mechanic_ids = current_merchant.store.followed_mechanic_ids %>
+    <% @mechanics = Mechanic.includes(:user).where(users: { role_cd: User.roles[:mechanic] }) %>
+    <%= index_for [ :merchants, @mechanics ], class: "table table-hover" do |i| %>
       <%= i.attribute :_check do |mechanic| %>
         <%= f.radio_button :mechanic_id, mechanic.id %>
+      <% end %>
+
+      <%= i.attribute :skills do |mechanic| %>
+        <%= mechanic.skills.join("、") %>
       <% end %>
 
       <%= i.attribute :user_nickname %>
@@ -52,7 +58,7 @@
       <%= i.attribute :timeliness_average %>
 
       <%= i.actions :show do |a| %>
-        <% if followed_mechanic_ids.include? i.object.id %>
+        <% if @followed_mechanic_ids.include? i.object.id %>
           <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
         <% else %>
           <%= a.action_link :follow, method: :post %>
@@ -67,7 +73,36 @@
 
 <script type="text/javascript">
   $(document).ready(function() {
-    var seriesMap = <%= raw series_map.to_json %>
+    var dataTable = $("#mechanics").DataTable({
+      order: [], // Do not sort by default
+      pagingType: 'full_numbers',
+      language: {
+        lengthMenu: "每页显示 _MENU_ 条记录",
+        info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+        infoEmpty: "没有数据",
+        infoFiltered: "(从 _MAX_ 条数据中检索)",
+        zeroRecords: "没有检索到数据",
+        search: "搜索：",
+        paginate: {
+          first: "首页",
+          previous: "前一页",
+          next: "后一页",
+          last: "尾页"
+        }
+      }
+    });
+
+    var skillColumn = dataTable.column(1);
+    skillColumn.visible(false);
+
+    $("#mechanics_skills").prependTo($("#mechanics_filter"));
+    $("#mechanics_skills_select").change(function() {
+      skillColumn.search($(this).val());
+      dataTable.draw();
+    });
+
+
+    var seriesMap = <%= raw series_map.to_json %>;
 
     var $brand = $("#order_brand_cd");
     var $series = $("#order_series_cd");
@@ -81,5 +116,5 @@
       event.preventDefault();
       $("input[type=radio][name=order\\[mechanic_id\\]]").attr("checked", false);
     });
-  })
+  });
 </script>

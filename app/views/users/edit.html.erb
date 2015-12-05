@@ -42,8 +42,8 @@ end %>
 
 <script type="text/javascript">
   <% if @user.mechanic? %>
-    var cityMap = <%= raw city_map.to_json %>
-    var districtMap = <%= raw district_map.to_json %>
+    var cityMap = <%= raw city_map.to_json %>;
+    var districtMap = <%= raw district_map.to_json %>;
 
     var province = user_mechanic_attributes_province_cd;
     var city = user_mechanic_attributes_city_cd;
