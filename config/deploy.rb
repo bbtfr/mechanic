@@ -17,7 +17,7 @@ set :deploy_to, '/var/www/mechanic'
 # set :format, :pretty
 
 # Default value for :log_level is :debug
-# set :log_level, :info
+set :log_level, :info
 
 # Default value for :pty is false
 # set :pty, true
@@ -28,13 +28,15 @@ set :linked_files, %w{.env}
 
 # Default value for linked_dirs is []
 # set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
-set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system db/backups}
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+
+set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
 
 namespace :deploy do
 

@@ -108,6 +108,7 @@ GEM
       timers (>= 4.1.1)
     celluloid-supervision (0.20.5)
       timers (>= 4.1.1)
+    chronic (0.10.2)
     chunky_png (1.3.5)
     climate_control (0.0.3)
       activesupport (>= 3.0)
@@ -304,6 +305,8 @@ GEM
       rails (>= 3.1)
       railties (>= 3.1)
       roxml
+    whenever (0.9.4)
+      chronic (>= 0.6.3)
     yajl-ruby (1.2.1)
 
 PLATFORMS
@@ -346,6 +349,7 @@ DEPENDENCIES
   web-console (~> 2.0)
   weixin_authorize
   weixin_rails_middleware
+  whenever
   wx_pay!
 
 BUNDLED WITH

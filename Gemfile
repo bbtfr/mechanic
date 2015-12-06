@@ -9,6 +9,8 @@ gem 'rails', '4.2.3'
 
 gem 'sidekiq'
 
+gem 'whenever'
+
 # Use authlogic for authentication
 gem 'authlogic', '~> 3.4.6'
 gem 'rails-settings-cached'
