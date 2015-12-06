@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 20151205123455) do
     t.string   "user_nickname"
     t.string   "user_mobile"
     t.string   "user_address"
-    t.integer  "revoke_orders_count"
+    t.integer  "revoke_orders_count",                              default: 0
   end
 
   add_index "mechanics", ["city_cd"], name: "index_mechanics_on_city_cd"

@@ -51,7 +51,7 @@
     <%= link_to "支付宝支付", pay_merchants_orders_path(@order, format: :alipay), class: "btn btn-primary" %>
     <%= link_to "取消订单", cancel_merchants_order_path(@order), class: "btn btn-danger" %>
   </div>
-<% when :paid, :working %>
+<% when :paid %>
   <div class="pull-right">
     <span class="btn btn-danger" id="refund_order_button">申请退款</span>
   </div>
@@ -62,7 +62,7 @@
       }
     });
   </script>
-<% when :paid, :working %>
+<% when :working %>
   <div class="pull-right">
     <%= link_to "申请撤单", revoke_merchants_order_path(@order), class: "btn btn-danger" %>
   </div>

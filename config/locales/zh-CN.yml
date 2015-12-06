@@ -79,6 +79,7 @@ zh-CN:
         user_address: 地址
         description: 简介
         available_orders_count: 接单次数
+        revoke_orders_count: 被撤单次数
         total_income: 总收入
         professionality_average: 专业
         timeliness_average: 守时

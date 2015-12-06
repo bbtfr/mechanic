@@ -5,9 +5,15 @@
 <%= index_for [ :merchants, @mechanics ], class: "table table-hover data-tables" do |i| %>
   <%= i.attribute :user_nickname %>
   <%= i.attribute :user_mobile %>
+
+  <%= i.attribute :province %>
+  <%= i.attribute :city %>
+  <%= i.attribute :district %>
+
+  <%= i.attribute :available_orders_count %>
+  <%= i.attribute :revoke_orders_count %>
   <%= i.attribute :professionality_average %>
   <%= i.attribute :timeliness_average %>
-  <%= i.attribute :available_orders_count %>
 
   <%= i.actions :show do |a| %>
     <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>

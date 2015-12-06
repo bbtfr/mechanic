@@ -199,10 +199,10 @@ class Order < ActiveRecord::Base
 
   def rework!
     return false unless confirming?
-    update_attribute(:state, Order.states[:paid])
+    update_attribute(:state, Order.states[:working])
     Weixin.send_rework_order_message self
   rescue => error
-    Rails.logger.error "#{error.class}: #{error.message} from Order#finish!"
+    Rails.logger.error "#{error.class}: #{error.message} from Order#rework!"
   end
 
   def review!
