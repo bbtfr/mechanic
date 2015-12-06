@@ -47,7 +47,8 @@ class User < ActiveRecord::Base
 
   validates_presence_of :nickname, :gender, :address, if: :confirmed
 
-  def increase_balance! amount
+  def increase_balance! amount, reason = "", source = nil
+    Metric.audit self, source, :balance, reason: reason, amount: amount
     increment!(:balance, amount)
   end
 
