@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151205062922) do
+ActiveRecord::Schema.define(version: 20151205123455) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(version: 20151205062922) do
     t.string   "user_nickname"
     t.string   "user_mobile"
     t.string   "user_address"
+    t.integer  "revoke_orders_count"
   end
 
   add_index "mechanics", ["city_cd"], name: "index_mechanics_on_city_cd"

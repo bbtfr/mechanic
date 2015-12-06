@@ -37,7 +37,7 @@
     <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\"></option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name), class: "form-control", id: "mechanics_skills_select" %></label>
 
     <% @followed_mechanic_ids = current_merchant.store.followed_mechanic_ids %>
-    <% @mechanics = Mechanic.includes(:user).where(users: { role_cd: User.roles[:mechanic] }) %>
+    <% @mechanics = Mechanic.includes(:user, :skills).where(users: { role_cd: User.roles[:mechanic] }) %>
     <%= index_for [ :merchants, @mechanics ], class: "table table-hover" do |i| %>
       <%= i.attribute :_check do |mechanic| %>
         <%= f.radio_button :mechanic_id, mechanic.id %>

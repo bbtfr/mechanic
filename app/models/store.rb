@@ -11,7 +11,7 @@ class Store < ActiveRecord::Base
   has_many :fellowships, foreign_key: :user_id
   has_many :followed_mechanics, through: :fellowships, source: :mechanic
   has_many :merchants, foreign_key: :user_id
-  has_one :merchant, foreign_key: :user_id
+  has_one :merchant, -> { order(id: :asc) }, foreign_key: :user_id
   has_many :orders, foreign_key: :user_id
 
   scope :confirmeds, -> { where(confirmed: true) }

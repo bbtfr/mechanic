@@ -1,0 +1,52 @@
+<h3 class="page-header">商户撤单</h3>
+
+<% @order.professionality = 2 %>
+<% @order.timeliness = 2 %>
+
+<div class="col-md-7">
+  <%= bootstrap_simple_form_for([ :merchants, @order ], url: refund_merchants_order_path(@order)) do |f| %>
+    <%= f.error_messages %>
+
+    <%= f.input :professionality do %>
+      <div class="stars">
+        <% @order.professionality.times do %>
+          <span class="glyphicon glyphicon-star"></span>
+        <% end %>
+        <% (5 - @order.professionality).times do %>
+          <span class="glyphicon glyphicon-star-empty"></span>
+        <% end %>
+        <%= f.hidden_field :professionality %>
+      </div>
+    <% end %>
+    <%= f.input :timeliness do %>
+      <div class="stars">
+        <% @order.timeliness.times do %>
+          <span class="glyphicon glyphicon-star"></span>
+        <% end %>
+        <% (5 - @order.timeliness).times do %>
+          <span class="glyphicon glyphicon-star-empty"></span>
+        <% end %>
+        <%= f.hidden_field :timeliness %>
+      </div>
+    <% end %>
+    <%= f.input :review, input_html: { rows: 4 } %>
+
+    <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    var $elements = $(".stars .glyphicon");
+    $elements.click(function() {
+      var $parent = $(this).parent();
+      var $icons = $parent.find(".glyphicon");
+      var $hiddenInput = $parent.find("input[type=hidden]");
+      var value = $icons.index(this) + 1;
+
+      $hiddenInput.val(value);
+      $icons.slice(0, value).removeClass("glyphicon-star-empty").addClass("glyphicon-star");
+      $icons.slice(value, $icons.length).removeClass("glyphicon-star").addClass("glyphicon-star-empty");
+    });
+  });
+</script>

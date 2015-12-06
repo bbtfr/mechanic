@@ -11,7 +11,10 @@ class Mechanic < ActiveRecord::Base
   as_enum :province, Province, persistence: true
   as_enum :city, City, persistence: true
   as_enum :district, District, persistence: true
-  as_enum :skills, Skill, persistence: true, accessor: :join_table
+
+  has_and_belongs_to_many :skills
+  alias_attribute :skill_cds, :skill_ids
+  as_enum :skills, Skill, persistence: true, accessor: :multiple
 
   delegate :nickname, :mobile, :address, :weixin_openid, to: :user, prefix: true
 
@@ -31,6 +34,10 @@ class Mechanic < ActiveRecord::Base
 
   def raw_available_orders_count
     orders.availables.count
+  end
+
+  def raw_revoke_orders_count
+    orders.merchant_revokes.count
   end
 
   def regular_client? user

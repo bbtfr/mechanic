@@ -29,12 +29,14 @@ Rails.application.routes.draw do
         get :cancel
 
         get :refund
+        patch :refund
         match :notify, via: [:get, :post]
         get :result
 
         get :confirm
         get :rework
 
+        get :revoke
         get :review
       end
     end

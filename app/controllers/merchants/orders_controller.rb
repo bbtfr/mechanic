@@ -120,7 +120,13 @@ class Merchants::OrdersController < Merchants::ApplicationController
 
   def refund
     if @order.paid? || @order.working?
-      reason = @order.paid? ? :user_cancel : :merchant_revoke
+      if @order.paid?
+        reason = :user_cancel
+      else
+        reason = :merchant_revoke
+        @order.update_attributes(order_params)
+      end
+
       if @order.pay_type_alipay?
         flash[:notice] = "退款申请已提交，等待管理员审核..."
         @order.refunding! reason

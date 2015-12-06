@@ -61,6 +61,7 @@ class Order < ActiveRecord::Base
 
   cache_method :user, :available_orders_count
   cache_method :mechanic, :available_orders_count
+  cache_method :mechanic, :revoke_orders_count
   cache_method :mechanic, :professionality_average
   cache_method :mechanic, :timeliness_average
 

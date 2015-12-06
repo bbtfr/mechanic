@@ -52,17 +52,20 @@
     <%= link_to "取消订单", cancel_merchants_order_path(@order), class: "btn btn-danger" %>
   </div>
 <% when :paid, :working %>
-  <% text = @order.paid? ? "申请退款" : "申请撤单" %>
   <div class="pull-right">
-    <span class="btn btn-danger" id="refund_order_button"><%= text %></span>
+    <span class="btn btn-danger" id="refund_order_button">申请退款</span>
   </div>
   <script type="text/javascript">
     $("#refund_order_button").click(function() {
-      if (confirm("您确定要<%= text %>？")) {
+      if (confirm("您确定要申请退款？")) {
         window.location.href = "<%= refund_merchants_order_path(@order) %>";
       }
     });
   </script>
+<% when :paid, :working %>
+  <div class="pull-right">
+    <%= link_to "申请撤单", revoke_merchants_order_path(@order), class: "btn btn-danger" %>
+  </div>
 <% when :confirming %>
   <h3 class="page-header">确认完工 <small>点击施工照片查看原图</small></h3>
   <% if @order.mechanic_attach_1 || @order.mechanic_attach_2 %>
