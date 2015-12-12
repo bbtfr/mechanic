@@ -33,25 +33,29 @@
 .chart {
   position: relative;
 
+  canvas {
+    width: 100%;
+  }
+
   .legend {
     position: absolute;
     top: 20px;
     left: 50px;
-  }
 
-  ul.line-legend {
-    list-style-type: none;
-    background: white;
-    color: #777;
-    box-shadow: 0 0 10px 10px white;
-    padding: 0;
+    ul {
+      list-style-type: none;
+      background: white;
+      color: #777;
+      box-shadow: 0 0 10px 10px white;
+      padding: 0;
 
-    span {
-      display: inline-block;
-      margin-right: 10px;
-      width: 10px;
-      height: 10px;
-      border-radius: 5px;
+      span {
+        display: inline-block;
+        margin-right: 10px;
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+      }
     }
   }
 }

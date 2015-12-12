@@ -1,8 +1,8 @@
-<% @skilled_orders = @mechanic.skilled_orders(params[:skill]).all %>
+<% @skilled_orders = @mechanic.skilled_orders(params[:skill]).order(created_at: :asc).all %>
 <% if @skilled_orders.count > 2 %>
   <% @data = @skilled_orders.map do |o| { x: o.created_at.to_i * 1000, y: o.price } end %>
   <div class="chart">
-    <canvas id="chart" class="col-sm-12"></canvas>
+    <canvas id="chart"></canvas>
     <div id="legend" class="legend"></div>
   </div>
   <script type="text/javascript">
@@ -20,7 +20,9 @@
     };
 
     var options = {
-      scaleDateFormat: "yy/mm",
+      scaleTimeFormat: "HH:MM",
+      scaleDateFormat: "mm/dd",
+      scaleDateTimeFormat: "yyyy/mm/dd HH:MM",
       scaleType: "date",
       scaleLabel: "<%%= value %>元",
     };

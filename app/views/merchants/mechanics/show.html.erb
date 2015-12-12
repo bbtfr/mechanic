@@ -54,7 +54,7 @@
     <dt>累计评论</dt>
     <dd>
       <div class="reviews col-sm-8">
-        <% @raw_mechanic.orders.revieweds.each do |order| %>
+        <% @raw_mechanic.orders.revieweds.order(reviewed_at: :desc).each do |order| %>
           <div class="media review">
             <div class="media-left">
               <a href="#">
