@@ -17,6 +17,7 @@ class Withdrawal < ActiveRecord::Base
 
   def pay!
     return false unless pending?
+    update_attribute(:paid_at, Time.now)
     update_attribute(:state, Withdrawal.states[:paid])
   end
 

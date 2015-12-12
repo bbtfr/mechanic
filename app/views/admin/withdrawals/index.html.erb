@@ -17,6 +17,7 @@
     <% end %>
 
     <%= i.attribute :amount %>
+    <%= i.attribute :created_at, format: :long %>
 
     <% if i.object.paid? %>
       <%= i.actions :show %>

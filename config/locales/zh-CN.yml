@@ -159,3 +159,5 @@ zh-CN:
       withdrawal:
         user: 用户
         amount: 金额
+        created_at: 申请日期
+        paid_at: 提现日期

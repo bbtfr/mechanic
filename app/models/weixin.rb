@@ -25,7 +25,7 @@ module Weixin
       sub_button: [
       {
         type: "view",
-        name: "派单教程",
+        name: "工费结算",
         url: "http://mp.weixin.qq.com/s?__biz=MzA3MjYwNzYxMA==&mid=207851238&idx=1&sn=92226aa626e8e9ab45ff5e6c90e58d23#rd"
       }, {
         type: "view",
