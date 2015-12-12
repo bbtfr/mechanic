@@ -17,4 +17,8 @@ class Merchants::MechanicsController < Merchants::ApplicationController
     @mechanic = Mechanic.find(params[:id])
     @reviews = @mechanic.orders
   end
+
+  def skill
+    @mechanic = Mechanic.find(params[:id])
+  end
 end

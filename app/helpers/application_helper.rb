@@ -15,4 +15,33 @@ module ApplicationHelper
       [key, values]
     end.to_h
   end
+
+  def icon_stars stars, total, icon_filled, icon_empty, delimiter = " "
+    text = []
+    stars.times do
+      text << "<span class=\"#{icon_filled}\"></span>"
+    end
+    (total - stars).times do
+      text << "<span class=\"#{icon_empty}\"></span>"
+    end
+    text.join(delimiter).html_safe
+  end
+
+  def ratchet_icon_stars stars, total = 5
+    icon_stars stars, total, "icon icon-star-filled", "icon icon-star"
+  end
+
+  def bootstrap_icon_stars stars, total = 5
+    icon_stars stars, total, "glyphicon glyphicon-star", "glyphicon glyphicon-star-empty"
+  end
+
+  def bootstrap_icon_stars_field stars, total = 5
+    text = icon_stars stars.to_i, total, "glyphicon glyphicon-star", "glyphicon glyphicon-star-empty", ""
+    text << " #{stars}"
+    text
+  end
+
+  IndexFor.format :bootstrap_icon_stars do |stars|
+    bootstrap_icon_stars_field stars
+  end
 end

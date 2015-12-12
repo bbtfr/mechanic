@@ -9,23 +9,13 @@
 
     <%= f.input :professionality do %>
       <div class="stars">
-        <% @order.professionality.times do %>
-          <span class="glyphicon glyphicon-star"></span>
-        <% end %>
-        <% (5 - @order.professionality).times do %>
-          <span class="glyphicon glyphicon-star-empty"></span>
-        <% end %>
+        <%= bootstrap_icon_stars @order.professionality %>
         <%= f.hidden_field :professionality %>
       </div>
     <% end %>
     <%= f.input :timeliness do %>
       <div class="stars">
-        <% @order.timeliness.times do %>
-          <span class="glyphicon glyphicon-star"></span>
-        <% end %>
-        <% (5 - @order.timeliness).times do %>
-          <span class="glyphicon glyphicon-star-empty"></span>
-        <% end %>
+        <%= bootstrap_icon_stars @order.timeliness %>
         <%= f.hidden_field :timeliness %>
       </div>
     <% end %>

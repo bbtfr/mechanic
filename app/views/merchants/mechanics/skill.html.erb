@@ -1,0 +1,39 @@
+<% @skilled_orders = @mechanic.skilled_orders(params[:skill]).all %>
+<% if @skilled_orders.count > 2 %>
+  <% @data = @skilled_orders.map do |o| { x: o.created_at.to_i * 1000, y: o.price } end %>
+  <div class="chart">
+    <canvas id="chart" class="col-sm-12"></canvas>
+    <div id="legend" class="legend"></div>
+  </div>
+  <script type="text/javascript">
+    var data = {
+      datasets: [{
+        label: "接单价格",
+        fillColor: "rgba(151,187,205,0.2)",
+        strokeColor: "rgba(151,187,205,1)",
+        pointColor: "rgba(151,187,205,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(151,187,205,1)",
+        data: <%= raw @data.to_json %>
+      }]
+    };
+
+    var options = {
+      scaleDateFormat: "yy/mm",
+      scaleType: "date",
+      scaleLabel: "<%%= value %>元",
+    };
+
+    var ctx = document.getElementById("chart").getContext("2d");
+    var chart = new Chart(ctx).Scatter(data, options);
+
+    //then you just need to generate the legend
+    var legend = chart.generateLegend();
+
+    //and append it to your page somewhere
+    document.getElementById("legend").innerHTML = legend;
+  </script>
+<% else %>
+  <div class="alert alert-danger">数据过少无法绘制图表</div>
+<% end %>

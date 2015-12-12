@@ -14,7 +14,7 @@
     <%= i.attribute :address %>
 
     <%= i.fields_for :mechanic do |ii| %>
-      <%= ii.attribute :skills do |mechanic| %>
+      <%= ii.attribute :skills do |mechanic, skills| %>
         <%= mechanic.skills.join("、") %>
       <% end %>
       <%= ii.attribute :province %>
@@ -27,4 +27,52 @@
       <%= ii.attribute :description %>
     <% end %>
   <% end %>
+</div>
+
+<% @raw_mechanic = @mechanic.mechanic %>
+
+<div class="pull-right">
+  <% if Fellowship.where(mechanic_id: @raw_mechanic.id, user_id: current_merchant.user_id).any? %>
+    <%= link_to "取消关注", unfollow_merchants_mechanic_path(@raw_mechanic.id), method: :post, confirm: "你确定要取消关注？", class: "btn btn-danger" %>
+  <% else %>
+    <%= link_to "关注", follow_merchants_mechanic_path(@raw_mechanic.id), method: :post, class: "btn btn-primary" %>
+  <% end %>
+</div>
+
+<div class="col-sm-12">
+  <dl class="dl-horizontal">
+    <dt>接单记录</dt>
+    <dd>
+      <% @raw_mechanic.skills.each do |skill| %>
+        <% skill_cd = Mechanic.skills[skill] %>
+        <%= link_to skill_merchants_mechanic_path(@raw_mechanic.id, skill: skill_cd) do %>
+          <%= skill %>[<%= @raw_mechanic.skilled_orders(skill_cd).count %>单]
+        <% end %>
+        &nbsp;
+      <% end %>
+    </dd>
+    <dt>累计评论</dt>
+    <dd>
+      <div class="reviews col-sm-8">
+        <% @raw_mechanic.orders.revieweds.each do |order| %>
+          <div class="media review">
+            <div class="media-left">
+              <a href="#">
+                <%= image_tag order.user.avatar.url(:thumb), class: "media-object" %>
+              </a>
+            </div>
+            <div class="media-body">
+              <strong><%= order.user.nickname %>：</strong>
+              <span class="text-muted pull-right">
+                专业<%= order.professionality %>分 &nbsp;
+                守时<%= order.timeliness %>分 &nbsp;
+                <%= l order.reviewed_at, format: :long %>
+              </span>
+              <p><%= order.review %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </dd>
+  </dl>
 </div>

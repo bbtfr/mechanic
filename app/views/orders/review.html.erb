@@ -7,21 +7,11 @@
 
   <div class="content-padded">
     <%= f.input :professionality do %>
-      <% @order.professionality.times do %>
-        <span class="icon icon-star-filled"></span>
-      <% end %>
-      <% (5 - @order.professionality).times do %>
-        <span class="icon icon-star"></span>
-      <% end %>
+      <%= ratchet_icon_stars @order.professionality %>
       <%= f.hidden_field :professionality %>
     <% end %>
     <%= f.input :timeliness do %>
-      <% @order.timeliness.times do %>
-        <span class="icon icon-star-filled"></span>
-      <% end %>
-      <% (5 - @order.timeliness).times do %>
-        <span class="icon icon-star"></span>
-      <% end %>
+      <%= ratchet_icon_stars @order.timeliness %>
       <%= f.hidden_field :timeliness %>
     <% end %>
     <%= f.input :review, input_html: { rows: 4 } %>

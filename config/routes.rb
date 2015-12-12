@@ -47,6 +47,7 @@ Rails.application.routes.draw do
         post :follow
         post :unfollow
         get :reviews
+        get :"skills/:skill", action: :skill, as: :skill
       end
     end
 

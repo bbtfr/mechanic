@@ -24,6 +24,10 @@ class Mechanic < ActiveRecord::Base
     increment!(:total_income, amount)
   end
 
+  def skilled_orders skill_cd
+    orders.availables.where(skill_cd: skill_cd)
+  end
+
   def raw_professionality_average
     (orders.average(:professionality) || 4).round(2)
   end
