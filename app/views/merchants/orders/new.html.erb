@@ -17,10 +17,10 @@
       </div>
     <% end %>
 
-    <%= f.input :skill_cd, collection: Skill.all %>
+    <%= f.input :skill_cd, collection: Skill.all, input_html: { class: "select2" } %>
 
-    <%= f.input :brand_cd, collection: Brand.all %>
-    <%= f.input :series_cd, collection: series_map[@order.brand_cd] || [] %>
+    <%= f.input :brand_cd, collection: Brand.all, input_html: { class: "select2" } %>
+    <%= f.input :series_cd, collection: series_map[@order.brand_cd] || [], input_html: { class: "select2" } %>
 
     <%= f.input :quoted_price %>
     <%= f.input :remark, input_html: { rows: 4 } %>

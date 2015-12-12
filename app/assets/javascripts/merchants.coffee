@@ -4,6 +4,7 @@
 #= require bootstrap/popover
 #= require Chart
 #= require Chart.Scatter
+#= require select2
 
 $.fn.extend
   removeOptions: ->
@@ -19,3 +20,6 @@ $(document).on 'ready page:load', ->
     viewport:
       selector: 'body'
       padding: 30
+
+  $('.select2').select2
+    theme: 'bootstrap'

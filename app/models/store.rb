@@ -8,7 +8,8 @@ class Store < ActiveRecord::Base
     self.role = :merchant
   end
 
-  has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100#" }
+  has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100#" },
+    url: "/system/users/:attachment/:id_partition/:style/:filename"
   validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
 
   has_many :fellowships, foreign_key: :user_id
