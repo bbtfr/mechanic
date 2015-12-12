@@ -1,6 +1,7 @@
 //= require select2
 //= require select2-bootstrap
 @import "admin";
+@import "dropzone/dropzone";
 
 .form-control.datetime {
   max-width: 18%;
@@ -23,17 +24,25 @@
     max-height: 100px;
   }
 
-  .help-block {
-    vertical-align: middle;
-    display: inline-block;
+  span.text-muted {
     margin-left: 15px;
   }
+}
+
+.dropzone {
+  border: 2px dashed #CCC;
+  border-radius: 5px;
+  background: white;
 }
 
 .reviews {
   .review {
     padding-top: 15px;
     border-top: solid 1px #CCC;
+
+    .media-left {
+      padding-right: 15px;
+    }
 
     .media-object {
       width: 50px;
@@ -49,12 +58,13 @@
   position: relative;
 
   canvas {
+    margin-top: 30px;
     width: 100%;
   }
 
   .legend {
     position: absolute;
-    top: 20px;
+    top: 50px;
     left: 50px;
 
     ul {

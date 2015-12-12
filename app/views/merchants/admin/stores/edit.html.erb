@@ -9,9 +9,9 @@
     <div class="form-group file optional store_avatar">
       <label class="file optional control-label" for="store_avatar">头像</label>
       <%= f.file_field :avatar, style: "display: none;" %>
-      <div id="store_avatar_thumb">
+      <div id="store_avatar_thumb" class="dropzone dz-clickable">
         <%= image_tag(current_store.avatar.url(:thumb)) %>
-        <span class="help-block">点击更换头像</span>
+        <span class="text-muted dz-message">点击或拖拽文件到此处更换头像</span>
       </div>
     </div>
 
@@ -21,10 +21,23 @@
 
 <script type="text/javascript">
   var $store_avatar_thumb = $("#store_avatar_thumb");
-  var $store_avatar = $("#store_avatar")
+  var $store_avatar = $("#store_avatar");
 
   $store_avatar_thumb.click(function() {
     $store_avatar.trigger("click");
+  }).on("dragover", function(event) {
+     event.preventDefault();
+     event.stopPropagation();
+     $store_avatar_thumb.addClass('dz-drag-hover');
+  }).on("dragleave", function() {
+     event.preventDefault();
+     event.stopPropagation();
+     $store_avatar_thumb.removeClass('dz-drag-hover');
+  }).on("drop", function() {
+     event.preventDefault();
+     event.stopPropagation();
+     $store_avatar_thumb.removeClass('dz-drag-hover');
+     $store_avatar[0].files = event.dataTransfer.files;
   });
 
   $store_avatar.change(function() {

@@ -1,9 +1,11 @@
-<% @skilled_orders = @mechanic.skilled_orders(params[:skill]).order(created_at: :asc).all %>
+<% skill_cd = params[:skill].to_i %>
+<% @skilled_orders = @mechanic.skilled_orders(skill_cd).order(created_at: :asc).all %>
 <% if @skilled_orders.count > 2 %>
   <% @data = @skilled_orders.map do |o| { x: o.created_at.to_i * 1000, y: o.price } end %>
-  <div class="chart">
+  <div class="chart text-center">
     <canvas id="chart"></canvas>
     <div id="legend" class="legend"></div>
+    <strong><%= Mechanic.skills.key(skill_cd) %>[<%= @skilled_orders.count %>单]</strong>
   </div>
   <script type="text/javascript">
     var data = {

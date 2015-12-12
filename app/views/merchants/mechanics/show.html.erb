@@ -39,7 +39,7 @@
   <% end %>
 </div>
 
-<div class="col-sm-12">
+<div class="col-sm-10">
   <dl class="dl-horizontal">
     <dt>接单记录</dt>
     <dd>
@@ -53,7 +53,7 @@
     </dd>
     <dt>累计评论</dt>
     <dd>
-      <div class="reviews col-sm-8">
+      <div class="reviews">
         <% @raw_mechanic.orders.revieweds.order(reviewed_at: :desc).each do |order| %>
           <div class="media review">
             <div class="media-left">
