@@ -194,6 +194,7 @@ class Order < ActiveRecord::Base
       mechanic_user_group.increase_total_commission!(mechanic_commission)
     end
 
+    update_attribute(:finish_working_at, Time.now)
     update_attribute(:state, Order.states[:finished])
   end
 
@@ -206,6 +207,7 @@ class Order < ActiveRecord::Base
   end
 
   def review!
+    update_attribute(:reviewed_at, Time.now)
     update_attribute(:state, Order.states[:reviewed])
   end
 
