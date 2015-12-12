@@ -101,6 +101,7 @@ zh-CN:
         password_confirmation: 确认密码
         role: 系统角色
       store:
+        avatar: 头像
         nickname: 店铺名称
         available_orders_count: 预约次数
         total_cost: 总支出

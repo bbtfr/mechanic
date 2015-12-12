@@ -6,7 +6,31 @@
 
     <%= f.input :nickname %>
     <%= f.input :qq %>
+    <div class="form-group file optional store_avatar">
+      <label class="file optional control-label" for="store_avatar">头像</label>
+      <%= f.file_field :avatar, style: "display: none;" %>
+      <div id="store_avatar_thumb">
+        <%= image_tag(current_store.avatar.url(:thumb)) %>
+        <span class="help-block">点击更换头像</span>
+      </div>
+    </div>
 
     <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
   <% end %>
 </div>
+
+<script type="text/javascript">
+  var $store_avatar_thumb = $("#store_avatar_thumb");
+  var $store_avatar = $("#store_avatar")
+
+  $store_avatar_thumb.click(function() {
+    $store_avatar.trigger("click");
+  });
+
+  $store_avatar.change(function() {
+    var URL = window.URL || window.webkitURL;
+    var src = URL.createObjectURL(this.files[0]);
+    $store_avatar_thumb.find("img").attr("src", src);
+  });
+
+</script>

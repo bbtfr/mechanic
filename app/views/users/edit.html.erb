@@ -68,7 +68,7 @@ end %>
   var preview = user_avatar_preview;
 
   input.addEventListener("change", function() {
-    URL = window.URL || window.webkitURL;
+    var URL = window.URL || window.webkitURL;
     var src = URL.createObjectURL(input.files[0]);
     preview.src = src;
   }, false);
