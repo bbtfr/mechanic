@@ -5,6 +5,7 @@
 #= require Chart
 #= require Chart.Scatter
 #= require select2
+#= require select2_locale_zh-CN
 
 $.fn.extend
   removeOptions: ->
@@ -23,3 +24,4 @@ $(document).on 'ready page:load', ->
 
   $('.select2').select2
     theme: 'bootstrap'
+    language: 'zh-CN'
