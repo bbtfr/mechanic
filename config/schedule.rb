@@ -19,6 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
+env :PATH, ENV['PATH']
 set :output, File.expand_path("../../log/crontab.log", __FILE__)
 
 every 1.day, :at => '4:30 am' do
