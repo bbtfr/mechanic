@@ -8,10 +8,10 @@ class Admin::MechanicsController < Admin::ApplicationController
   def clientize
     @mechanic.client!
     if @mechanic.save
+      redirect_to admin_user_path(@mechanic)
+    else
       flash[:error] = "帐号信息不完整，无法转换"
       redirect_to request.referer
-    else
-      redirect_to admin_user_path(@mechanic)
     end
   end
 
