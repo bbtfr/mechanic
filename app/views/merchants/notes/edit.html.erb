@@ -1,0 +1,26 @@
+<h3 class="page-header">编辑记事本</h3>
+
+<div class="col-md-6">
+  <%= bootstrap_simple_form_for([:merchants, @note]) do |f| %>
+    <%= f.error_messages %>
+
+    <%= f.input :content, input_html: { class: "tinymce", rows: 4 }, label: false %>
+
+    <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+  <% end %>
+</div>
+
+<div class="col-md-6" id="preview">
+  <%= raw @note.content %>
+</div>
+
+<script type="text/javascript">
+  window.tinymceSetup = function(editor) {
+    var $preview = $("#preview");
+    var updatePreview = function() {
+      $preview.html(editor.getContent());
+    };
+
+    editor.on("change blur drop undo redo", updatePreview);
+  };
+</script>
