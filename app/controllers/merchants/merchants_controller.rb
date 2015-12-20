@@ -1,6 +1,6 @@
 class Merchants::MerchantsController < Merchants::ApplicationController
   before_filter :authenticate!, except: [ :new, :create, :forget_password, :verification_code, :confirm ]
-  before_filter :find_merchant, only: [ :edit, :update, :change_password, :password ]
+  before_filter :find_merchant, only: [ :edit, :update, :password, :update_password ]
 
   def new
     @merchant = Merchant.new
@@ -62,17 +62,17 @@ class Merchants::MerchantsController < Merchants::ApplicationController
     end
   end
 
-  def password
+  def update_password
     if @merchant.valid_password?(merchant_params[:current_password])
       if @merchant.update_attributes(merchant_params)
         flash[:success] = "修改密码成功"
         redirect_to merchants_root_path
       else
-        render :change_password
+        render :password
       end
     else
       @merchant.errors.add :current_password, "错误"
-      render :change_password
+      render :password
     end
   end
 

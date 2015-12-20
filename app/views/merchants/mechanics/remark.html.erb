@@ -1,0 +1,13 @@
+<h3 class="page-header">添加备注</h3>
+
+<% @fellowship = Fellowship.where(mechanic_id: @mechanic.id, user_id: current_merchant.user_id).first %>
+
+<div class="col-md-7">
+  <%= bootstrap_simple_form_for([ :merchants, @fellowship ], url: remark_merchants_mechanic_path(@mechanic)) do |f| %>
+    <%= f.error_messages %>
+
+    <%= f.input :remark, input_html: { rows: 4 } %>
+
+    <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+  <% end %>
+</div>

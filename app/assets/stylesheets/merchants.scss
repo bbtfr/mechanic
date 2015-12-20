@@ -2,6 +2,7 @@
 //= require select2-bootstrap
 @import "admin";
 @import "dropzone/dropzone";
+@import "tinymce-override";
 
 .form-control.datetime {
   max-width: 18%;

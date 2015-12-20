@@ -35,13 +35,14 @@
         <ul class="nav navbar-nav">
           <li class="<%= "active" if controller_name == "orders" and action_name == "new" or controller_name == "bids" %>"><%= link_to "预约技师", new_merchants_order_path %></li>
           <li class="<%= "active" if controller_path == "merchants/orders" and action_name != "new" %>"><%= link_to "我的订单", merchants_orders_path %></li>
+          <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "我的技师", merchants_mechanics_path %></li>
 
           <% if current_merchant.admin? %>
             <li class="<%= "active" if controller_path == "merchants/admin/orders" %>"><%= link_to "订单管理", merchants_admin_orders_path %></li>
             <li class="<%= "active" if controller_path == "merchants/admin/merchants" %>"><%= link_to "员工管理", merchants_admin_merchants_path %></li>
           <% end %>
 
-          <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "我的技师", merchants_mechanics_path %></li>
+          <li class="<%= "active" if controller_name == "notes" %>"><%= link_to "记事本", merchants_note_path %></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
@@ -49,7 +50,7 @@
           <% if current_merchant.admin? %>
             <li class="<%= "active" if controller_name == "stores" and action_name == "edit" %>"><%= link_to "编辑店铺信息", edit_merchants_admin_store_path %></li>
           <% end %>
-          <li class="<%= "active" if controller_name == "merchants" and action_name == "change_password" %>"><%= link_to "修改密码", change_password_merchants_merchant_path %></li>
+          <li class="<%= "active" if controller_name == "merchants" and action_name == "password" %>"><%= link_to "修改密码", password_merchants_merchant_path %></li>
           <li><%= link_to "退出登录", merchants_merchant_session_path, method: :delete %></li>
         </ul>
       </div><!-- /.navbar-collapse -->

@@ -9,9 +9,11 @@ Rails.application.routes.draw do
       match :verification_code, via: [:get, :post, :patch]
       match :confirm, via: [:post, :patch]
 
-      get :change_password
-      patch :password
+      get :password
+      patch :password, action: :update_password
     end
+
+    resource :note
 
     resources :orders do
       resources :bids do
@@ -46,6 +48,8 @@ Rails.application.routes.draw do
       member do
         post :follow
         post :unfollow
+        get :remark
+        patch :remark, action: :update_remark
         get :reviews
         get :"skills/:skill", action: :skill, as: :skill
       end

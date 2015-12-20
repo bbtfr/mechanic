@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151212030529) do
+ActiveRecord::Schema.define(version: 20151220021200) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 20151212030529) do
     t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.text     "remark"
   end
 
   add_index "fellowships", ["mechanic_id"], name: "index_fellowships_on_mechanic_id"
@@ -133,6 +134,15 @@ ActiveRecord::Schema.define(version: 20151212030529) do
 
   add_index "metrics", ["source_type", "source_id"], name: "index_metrics_on_source_type_and_source_id"
   add_index "metrics", ["user_id"], name: "index_metrics_on_user_id"
+
+  create_table "notes", force: :cascade do |t|
+    t.integer  "merchant_id"
+    t.text     "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "notes", ["merchant_id"], name: "index_notes_on_merchant_id"
 
   create_table "orders", force: :cascade do |t|
     t.integer  "user_id"

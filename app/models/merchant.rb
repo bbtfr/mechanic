@@ -9,6 +9,8 @@ class Merchant < ActiveRecord::Base
   belongs_to :store, foreign_key: :user_id, autosave: true
   accepts_nested_attributes_for :store, update_only: true
 
+  has_many :notes
+
   validates_presence_of :nickname
 
   delegate :nickname, :mobile, :address, to: :user, prefix: true

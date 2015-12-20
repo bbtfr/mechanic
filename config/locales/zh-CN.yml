@@ -162,3 +162,7 @@ zh-CN:
         amount: 金额
         created_at: 申请日期
         paid_at: 提现日期
+      fellowship:
+        remark: 备注
+      note:
+        content: 内容

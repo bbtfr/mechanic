@@ -1,52 +1,54 @@
 <h3 class="page-header">技师详情 #<%= @mechanic.id %></h3>
 
 <div class="col-sm-3 text-right">
-  <%= image_tag(@mechanic.avatar.url(:thumb)) %>
+  <%= image_tag(@mechanic.user.avatar.url(:thumb)) %>
 </div>
 
 <div class="col-sm-9">
   <%= show_for @mechanic, class: "dl-horizontal" do |i| %>
-    <%= i.attribute :nickname %>
-    <%= i.attribute :mobile %>
-    <%= i.attribute :gender do |user| %>
-      <%= te user, :gender %>
-    <% end %>
-    <%= i.attribute :address %>
-
-    <%= i.fields_for :mechanic do |ii| %>
-      <%= ii.attribute :skills do |mechanic, skills| %>
-        <%= mechanic.skills.join("、") %>
+    <%= i.fields_for :user do |ii| %>
+      <%= ii.attribute :nickname %>
+      <%= ii.attribute :mobile %>
+      <%= ii.attribute :gender do |user| %>
+        <%= te user, :gender %>
       <% end %>
-      <%= ii.attribute :province %>
-      <%= ii.attribute :city %>
-      <%= ii.attribute :district %>
-      <%= ii.attribute :available_orders_count %>
-      <%= ii.attribute :revoke_orders_count %>
-      <%= ii.attribute :professionality_average %>
-      <%= ii.attribute :timeliness_average %>
-      <%= ii.attribute :description %>
+      <%= ii.attribute :address %>
     <% end %>
+
+    <%= i.attribute :skills do |mechanic, skills| %>
+      <%= mechanic.skills.join("、") %>
+    <% end %>
+    <%= i.attribute :province %>
+    <%= i.attribute :city %>
+    <%= i.attribute :district %>
+    <%= i.attribute :available_orders_count %>
+    <%= i.attribute :revoke_orders_count %>
+    <%= i.attribute :professionality_average %>
+    <%= i.attribute :timeliness_average %>
+    <%= i.attribute :description %>
   <% end %>
 </div>
 
-<% @raw_mechanic = @mechanic.mechanic %>
-
+<% @fellowship = Fellowship.where(mechanic_id: @mechanic.id, user_id: current_merchant.user_id).first %>
 <div class="pull-right">
-  <% if Fellowship.where(mechanic_id: @raw_mechanic.id, user_id: current_merchant.user_id).any? %>
-    <%= link_to "取消关注", unfollow_merchants_mechanic_path(@raw_mechanic.id), method: :post, confirm: "你确定要取消关注？", class: "btn btn-danger" %>
+  <% if @fellowship %>
+    <%= link_to "添加备注", remark_merchants_mechanic_path(@mechanic), class: "btn btn-primary" %>
+    <%= link_to "取消关注", unfollow_merchants_mechanic_path(@mechanic), method: :post, confirm: "你确定要取消关注？", class: "btn btn-danger" %>
   <% else %>
-    <%= link_to "关注", follow_merchants_mechanic_path(@raw_mechanic.id), method: :post, class: "btn btn-primary" %>
+    <%= link_to "关注", follow_merchants_mechanic_path(@mechanic), method: :post, class: "btn btn-primary" %>
   <% end %>
 </div>
 
 <div class="col-sm-10">
   <dl class="dl-horizontal">
+    <dt>备注</dt>
+    <dd><%= @fellowship.remark if @fellowship %></dd>
     <dt>接单记录</dt>
     <dd>
-      <% @raw_mechanic.skills.each do |skill| %>
+      <% @mechanic.skills.each do |skill| %>
         <% skill_cd = Mechanic.skills[skill] %>
-        <%= link_to skill_merchants_mechanic_path(@raw_mechanic.id, skill: skill_cd) do %>
-          <%= skill %>[<%= @raw_mechanic.skilled_orders(skill_cd).count %>单]
+        <%= link_to skill_merchants_mechanic_path(@mechanic.id, skill: skill_cd) do %>
+          <%= skill %>[<%= @mechanic.skilled_orders(skill_cd).count %>单]
         <% end %>
         &nbsp;
       <% end %>
@@ -54,7 +56,7 @@
     <dt>累计评论</dt>
     <dd>
       <div class="reviews">
-        <% @raw_mechanic.orders.revieweds.order(reviewed_at: :desc).each do |order| %>
+        <% @mechanic.orders.revieweds.order(reviewed_at: :desc).each do |order| %>
           <div class="media review">
             <div class="media-left">
               <a href="#">

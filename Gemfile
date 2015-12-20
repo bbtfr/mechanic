@@ -47,6 +47,7 @@ gem 'jquery-datatables-rails'
 gem 'chart-js-rails'
 gem 'dropzonejs-rails'
 gem 'select2-rails'
+gem 'tinymce-rails'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks', github: 'rails/turbolinks'
