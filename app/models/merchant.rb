@@ -1,6 +1,5 @@
 class Merchant < ActiveRecord::Base
   include MobileVerificationCode
-  include RailsSettings::Extend
 
   attr_accessor :current_password
 

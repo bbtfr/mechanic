@@ -139,6 +139,8 @@ Rails.application.routes.draw do
       member do
         post :active
         post :inactive
+        get :settings
+        post :settings, action: :update_settings
       end
     end
     resources :orders

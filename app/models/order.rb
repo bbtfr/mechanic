@@ -215,9 +215,17 @@ class Order < ActiveRecord::Base
     contact_nickname.presence
   end
 
+  def settings
+    if merchant
+      merchant.settings
+    else
+      Setting
+    end
+  end
+
   def commission
-    @commission ||= (price * (mobile? ? Setting.mobile_commission_percent.to_f :
-      Setting.commission_percent.to_f) / 100).round(2)
+    @commission ||= (price * (mobile? ? settings.mobile_commission_percent.to_f :
+      settings.commission_percent.to_f) / 100).round(2)
   end
 
   def mechanic_income
@@ -225,11 +233,11 @@ class Order < ActiveRecord::Base
   end
 
   def client_commission
-    (commission * Setting.client_commission_percent.to_f / 100).round(2)
+    (commission * settings.client_commission_percent.to_f / 100).round(2)
   end
 
   def mechanic_commission
-    (commission * Setting.mechanic_commission_percent.to_f / 100).round(2)
+    (commission * settings.mechanic_commission_percent.to_f / 100).round(2)
   end
 
   def title

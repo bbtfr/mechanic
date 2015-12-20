@@ -1,5 +1,6 @@
 class Store < ActiveRecord::Base
   include Followable
+  include RailsSettings::Extend
 
   self.table_name = "users"
 

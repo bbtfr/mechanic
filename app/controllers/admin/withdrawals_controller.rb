@@ -16,8 +16,10 @@ class Admin::WithdrawalsController < Admin::ApplicationController
   end
 
   def update_settings
-    setting_params.each do |key, value|
-      ::Setting[key] = value
+    ActiveRecord::Base.transaction do
+      setting_params.each do |key, value|
+        ::Setting[key] = value
+      end
     end
     redirect_to settings_admin_withdrawals_path
   end
