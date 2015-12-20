@@ -216,11 +216,7 @@ class Order < ActiveRecord::Base
   end
 
   def settings
-    if merchant
-      merchant.settings
-    else
-      Setting
-    end
+    merchant ? merchant.store.settings : Setting
   end
 
   def commission

@@ -133,3 +133,8 @@ doc.css(".choose_list a").each do |brand|
     end
   end
 end
+
+Setting[:commission_percent] = 5
+Setting[:mobile_commission_percent] = 5
+Setting[:client_commission_percent] = 30
+Setting[:mechanic_commission_percent] = 30

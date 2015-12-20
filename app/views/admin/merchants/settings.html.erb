@@ -25,9 +25,9 @@
 
   <script type="text/javascript">
     $(document).ready(function() {
-      $("#rails_settings_scoped_settings_use_system_commission_percent").change(function(event) {
+      $("#store_scoped_settings_use_system_commission_percent").change(function(event) {
         var use_system_commission_percent = $(this).is(":checked");
-        $("#rails_settings_scoped_settings_commission_percent, #rails_settings_scoped_settings_mobile_commission_percent, #rails_settings_scoped_settings_client_commission_percent, #rails_settings_scoped_settings_mechanic_commission_percent").attr("readonly", use_system_commission_percent);
+        $("#store_scoped_settings_commission_percent, #store_scoped_settings_mobile_commission_percent, #store_scoped_settings_client_commission_percent, #store_scoped_settings_mechanic_commission_percent").attr("readonly", use_system_commission_percent);
       })
     });
   </script>
