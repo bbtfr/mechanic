@@ -18,6 +18,8 @@ class Store < ActiveRecord::Base
   has_one :merchant, -> { order(id: :asc) }, foreign_key: :user_id
   has_many :orders, foreign_key: :user_id
 
+  has_many :notes
+
   scope :confirmeds, -> { where(confirmed: true) }
   scope :unconfirmeds, -> { where(confirmed: false) }
 

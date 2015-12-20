@@ -13,7 +13,7 @@ class Merchants::NotesController < Merchants::ApplicationController
   private
 
     def find_note
-      @note = current_merchant.notes.first_or_create
+      @note = current_store.notes.first_or_create
     end
 
     def note_params

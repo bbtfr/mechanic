@@ -84,7 +84,7 @@
   </div>
 <% when :finished %>
   <div class="pull-right">
-    <% if current_merchant.store.follow? @order.mechanic %>
+    <% if current_store.follow? @order.mechanic %>
       <%= link_to "取消收藏技师", unfollow_merchants_mechanic_path(@order.mechanic), method: :post, class: "btn btn-danger" %>
     <% else %>
       <%= link_to "收藏技师", follow_merchants_mechanic_path(@order.mechanic), method: :post, class: "btn btn-primary" %>
@@ -93,7 +93,7 @@
   </div>
 <% when :reviewed %>
   <div class="pull-right">
-    <% if current_merchant.store.follow? @order.mechanic %>
+    <% if current_store.follow? @order.mechanic %>
       <%= link_to "取消收藏技师", unfollow_merchants_mechanic_path(@order.mechanic), method: :post, class: "btn btn-danger" %>
     <% else %>
       <%= link_to "收藏技师", follow_merchants_mechanic_path(@order.mechanic), method: :post, class: "btn btn-primary" %>

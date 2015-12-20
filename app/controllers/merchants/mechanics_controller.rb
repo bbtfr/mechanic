@@ -2,12 +2,12 @@ class Merchants::MechanicsController < Merchants::ApplicationController
   before_filter :find_mechanic, only: [:show, :reviews, :remark, :update_remark, :skill]
 
   def follow
-    current_merchant.store.follow!(params[:id])
+    current_store.follow!(params[:id])
     redirect_to request.referer
   end
 
   def unfollow
-    current_merchant.store.unfollow!(params[:id])
+    current_store.unfollow!(params[:id])
     redirect_to request.referer
   end
 

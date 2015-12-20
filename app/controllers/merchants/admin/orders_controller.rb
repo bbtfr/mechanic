@@ -17,6 +17,6 @@ class Merchants::Admin::OrdersController < Merchants::Admin::ApplicationControll
     end
 
     def order_klass
-      Order.where(user_id: current_merchant.store)
+      Order.where(user_id: current_store)
     end
 end

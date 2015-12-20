@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151220021200) do
+ActiveRecord::Schema.define(version: 20151220043002) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -136,13 +136,13 @@ ActiveRecord::Schema.define(version: 20151220021200) do
   add_index "metrics", ["user_id"], name: "index_metrics_on_user_id"
 
   create_table "notes", force: :cascade do |t|
-    t.integer  "merchant_id"
+    t.integer  "store_id"
     t.text     "content"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "notes", ["merchant_id"], name: "index_notes_on_merchant_id"
+  add_index "notes", ["store_id"], name: "index_notes_on_store_id"
 
   create_table "orders", force: :cascade do |t|
     t.integer  "user_id"

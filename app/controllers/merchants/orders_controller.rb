@@ -184,11 +184,11 @@ class Merchants::OrdersController < Merchants::ApplicationController
     end
 
     def admin_order_klass
-      Order.where(user_id: current_merchant.store)
+      Order.where(user_id: current_store)
     end
 
     def order_klass
-      Order.where(user_id: current_merchant.store, merchant_id: current_merchant)
+      Order.where(user_id: current_store, merchant_id: current_merchant)
     end
 
     def order_params

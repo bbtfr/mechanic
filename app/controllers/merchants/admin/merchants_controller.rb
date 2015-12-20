@@ -44,7 +44,7 @@ class Merchants::Admin::MerchantsController < Merchants::Admin::ApplicationContr
     end
 
     def merchant_klass
-      Merchant.where(user_id: current_merchant.store)
+      Merchant.where(user_id: current_store)
     end
 
     def merchant_params
