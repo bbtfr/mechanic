@@ -8,24 +8,26 @@
   end
 %>
 
-<div class="col-md-2 col-xs-4">
-  <ul class="nav nav-pills nav-stacked">
-    <%= order_state_link_to :pendeds, "待付款" %>
-    <%= order_state_link_to :paids, "待服务" %>
-    <%= order_state_link_to :workings, "服务中" %>
-    <%= order_state_link_to :finisheds, "待评价" %>
-  </ul>
-</div>
+<div class="row">
+  <div class="col-md-2 col-xs-4">
+    <ul class="nav nav-pills nav-stacked">
+      <%= order_state_link_to :pendeds, "待付款" %>
+      <%= order_state_link_to :paids, "待服务" %>
+      <%= order_state_link_to :workings, "服务中" %>
+      <%= order_state_link_to :finisheds, "待评价" %>
+    </ul>
+  </div>
 
-<% @orders = @orders.includes(mechanic: :user) %>
+  <% @orders = @orders.includes(mechanic: :user) %>
 
-<div class="col-md-10 col-xs-8">
-  <%= index_for [ :merchants, @orders ], class: "table table-hover data-tables" do |i| %>
-    <%= i.attribute :appointment, format: :short %>
-    <%= i.attribute :skill  %>
-    <%= i.attribute :price %>
-    <%= i.attribute :mechanic, with: :user_nickname %>
+  <div class="col-md-10 col-xs-8">
+    <%= index_for [ :merchants, @orders ], class: "table table-hover data-tables" do |i| %>
+      <%= i.attribute :appointment, format: :short %>
+      <%= i.attribute :skill  %>
+      <%= i.attribute :price %>
+      <%= i.attribute :mechanic, with: :user_nickname %>
 
-    <%= i.actions :show %>
-  <% end %>
+      <%= i.actions :show %>
+    <% end %>
+  </div>
 </div>

@@ -1,32 +1,34 @@
 <h3 class="page-header">技师详情 #<%= @mechanic.id %></h3>
 
-<div class="col-sm-3 text-right">
-  <%= image_tag(@mechanic.user.avatar.url(:thumb)) %>
-</div>
+<div class="row">
+  <div class="col-sm-3 text-right">
+    <%= image_tag(@mechanic.user.avatar.url(:thumb)) %>
+  </div>
 
-<div class="col-sm-9">
-  <%= show_for @mechanic, class: "dl-horizontal" do |i| %>
-    <%= i.fields_for :user do |ii| %>
-      <%= ii.attribute :nickname %>
-      <%= ii.attribute :mobile %>
-      <%= ii.attribute :gender do |user| %>
-        <%= te user, :gender %>
+  <div class="col-sm-9">
+    <%= show_for @mechanic, class: "dl-horizontal" do |i| %>
+      <%= i.fields_for :user do |ii| %>
+        <%= ii.attribute :nickname %>
+        <%= ii.attribute :mobile %>
+        <%= ii.attribute :gender do |user| %>
+          <%= te user, :gender %>
+        <% end %>
+        <%= ii.attribute :address %>
       <% end %>
-      <%= ii.attribute :address %>
-    <% end %>
 
-    <%= i.attribute :skills do |mechanic, skills| %>
-      <%= mechanic.skills.join("、") %>
+      <%= i.attribute :skills do |mechanic, skills| %>
+        <%= mechanic.skills.join("、") %>
+      <% end %>
+      <%= i.attribute :province %>
+      <%= i.attribute :city %>
+      <%= i.attribute :district %>
+      <%= i.attribute :available_orders_count %>
+      <%= i.attribute :revoke_orders_count %>
+      <%= i.attribute :professionality_average %>
+      <%= i.attribute :timeliness_average %>
+      <%= i.attribute :description %>
     <% end %>
-    <%= i.attribute :province %>
-    <%= i.attribute :city %>
-    <%= i.attribute :district %>
-    <%= i.attribute :available_orders_count %>
-    <%= i.attribute :revoke_orders_count %>
-    <%= i.attribute :professionality_average %>
-    <%= i.attribute :timeliness_average %>
-    <%= i.attribute :description %>
-  <% end %>
+  </div>
 </div>
 
 <% @fellowship = Fellowship.where(mechanic_id: @mechanic.id, user_id: current_merchant.user_id).first %>
@@ -39,42 +41,44 @@
   <% end %>
 </div>
 
-<div class="col-sm-10">
-  <dl class="dl-horizontal">
-    <dt>备注</dt>
-    <dd><%= @fellowship.remark if @fellowship %></dd>
-    <dt>接单记录</dt>
-    <dd>
-      <% @mechanic.skills.each do |skill| %>
-        <% skill_cd = Mechanic.skills[skill] %>
-        <%= link_to skill_merchants_mechanic_path(@mechanic.id, skill: skill_cd) do %>
-          <%= skill %>[<%= @mechanic.skilled_orders(skill_cd).count %>单]
+<div class="row">
+  <div class="col-sm-9">
+    <dl class="dl-horizontal">
+      <dt>备注</dt>
+      <dd><%= @fellowship.remark if @fellowship %></dd>
+      <dt>接单记录</dt>
+      <dd>
+        <% @mechanic.skills.each do |skill| %>
+          <% skill_cd = Mechanic.skills[skill] %>
+          <%= link_to skill_merchants_mechanic_path(@mechanic.id, skill: skill_cd) do %>
+            <%= skill %>[<%= @mechanic.skilled_orders(skill_cd).count %>单]
+          <% end %>
+          &nbsp;
         <% end %>
-        &nbsp;
-      <% end %>
-    </dd>
-    <dt>累计评论</dt>
-    <dd>
-      <div class="reviews">
-        <% @mechanic.orders.revieweds.order(reviewed_at: :desc).each do |order| %>
-          <div class="media review">
-            <div class="media-left">
-              <a href="#">
-                <%= image_tag order.user.avatar.url(:thumb), class: "media-object" %>
-              </a>
+      </dd>
+      <dt>累计评论</dt>
+      <dd>
+        <div class="reviews">
+          <% @mechanic.orders.revieweds.order(reviewed_at: :desc).each do |order| %>
+            <div class="media review">
+              <div class="media-left">
+                <a href="#">
+                  <%= image_tag order.user.avatar.url(:thumb), class: "media-object" %>
+                </a>
+              </div>
+              <div class="media-body">
+                <strong><%= order.user.nickname %>：</strong>
+                <span class="text-muted pull-right">
+                  专业<%= order.professionality %>分 &nbsp;
+                  守时<%= order.timeliness %>分 &nbsp;
+                  <%= l order.reviewed_at, format: :long %>
+                </span>
+                <p><%= order.review %></p>
+              </div>
             </div>
-            <div class="media-body">
-              <strong><%= order.user.nickname %>：</strong>
-              <span class="text-muted pull-right">
-                专业<%= order.professionality %>分 &nbsp;
-                守时<%= order.timeliness %>分 &nbsp;
-                <%= l order.reviewed_at, format: :long %>
-              </span>
-              <p><%= order.review %></p>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </dd>
-  </dl>
+          <% end %>
+        </div>
+      </dd>
+    </dl>
+  </div>
 </div>

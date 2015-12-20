@@ -1,31 +1,33 @@
 <h3 class="page-header">堂主管理</h3>
 
-<div class="col-md-2 col-xs-4">
-  <ul class="nav nav-pills nav-stacked">
-    <li class="<%= "active" unless action_name == "confirmed" %>"><%= link_to "申请列表", admin_user_groups_path %></li>
-    <li class="<%= "active" if action_name == "confirmed" %>"><%= link_to "堂主列表", confirmed_admin_user_groups_path %></li>
-  </ul>
-</div>
+<div class="row">
+  <div class="col-md-2 col-xs-4">
+    <ul class="nav nav-pills nav-stacked">
+      <li class="<%= "active" unless action_name == "confirmed" %>"><%= link_to "申请列表", admin_user_groups_path %></li>
+      <li class="<%= "active" if action_name == "confirmed" %>"><%= link_to "堂主列表", confirmed_admin_user_groups_path %></li>
+    </ul>
+  </div>
 
-<% @user_groups = @user_groups.includes(:user) %>
+  <% @user_groups = @user_groups.includes(:user) %>
 
-<div class="col-md-10 col-xs-8">
-  <%= index_for [ :admin, @user_groups ], class: "table table-hover data-tables" do |i| %>
-    <%= i.attribute :nickname %>
-    <%= i.attribute :user_role do |user_group| %>
-      <%= te user_group.user, :role %>
-    <% end %>
-    <%= i.attribute :user_nickname %>
+  <div class="col-md-10 col-xs-8">
+    <%= index_for [ :admin, @user_groups ], class: "table table-hover data-tables" do |i| %>
+      <%= i.attribute :nickname %>
+      <%= i.attribute :user_role do |user_group| %>
+        <%= te user_group.user, :role %>
+      <% end %>
+      <%= i.attribute :user_nickname %>
 
-    <% if action_name == "confirmed" %>
-      <%= i.actions :show, :destroy %>
-    <% else %>
-      <%= i.attribute :description %>
-      <%= i.actions do |a| %>
-        <%= a.action_link :show %>
-        <%= a.action_link :confirm, method: :post, confirm: "你确定要通过这条申请？" %>
-        <%= a.action_link :destroy %>
+      <% if action_name == "confirmed" %>
+        <%= i.actions :show, :destroy %>
+      <% else %>
+        <%= i.attribute :description %>
+        <%= i.actions do |a| %>
+          <%= a.action_link :show %>
+          <%= a.action_link :confirm, method: :post, confirm: "你确定要通过这条申请？" %>
+          <%= a.action_link :destroy %>
+        <% end %>
       <% end %>
     <% end %>
-  <% end %>
+  </div>
 </div>

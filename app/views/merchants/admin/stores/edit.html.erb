@@ -1,22 +1,24 @@
 <h3 class="page-header">编辑店铺信息</h3>
 
-<div class="col-md-7">
-  <%= bootstrap_simple_form_for(current_store, url: merchants_admin_store_path) do |f| %>
-    <%= f.error_messages %>
+<div class="row">
+  <div class="col-md-7">
+    <%= bootstrap_simple_form_for(current_store, url: merchants_admin_store_path) do |f| %>
+      <%= f.error_messages %>
 
-    <%= f.input :nickname %>
-    <%= f.input :qq %>
-    <div class="form-group file optional store_avatar">
-      <label class="file optional control-label" for="store_avatar">头像</label>
-      <%= f.file_field :avatar, style: "display: none;" %>
-      <div id="store_avatar_thumb" class="dropzone dz-clickable">
-        <%= image_tag(current_store.avatar.url(:thumb)) %>
-        <span class="text-muted dz-message">点击或拖拽文件到此处更换头像</span>
+      <%= f.input :nickname %>
+      <%= f.input :qq %>
+      <div class="form-group file optional store_avatar">
+        <label class="file optional control-label" for="store_avatar">头像</label>
+        <%= f.file_field :avatar, style: "display: none;" %>
+        <div id="store_avatar_thumb" class="dropzone dz-clickable">
+          <%= image_tag(current_store.avatar.url(:thumb)) %>
+          <span class="text-muted dz-message">点击或拖拽文件到此处更换头像</span>
+        </div>
       </div>
-    </div>
 
-    <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
-  <% end %>
+      <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+    <% end %>
+  </div>
 </div>
 
 <script type="text/javascript">

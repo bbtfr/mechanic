@@ -3,26 +3,28 @@
 <% @order.professionality = 2 %>
 <% @order.timeliness = 2 %>
 
-<div class="col-md-7">
-  <%= bootstrap_simple_form_for([ :merchants, @order ], url: refund_merchants_order_path(@order)) do |f| %>
-    <%= f.error_messages %>
+<div class="row">
+  <div class="col-md-7">
+    <%= bootstrap_simple_form_for([ :merchants, @order ], url: refund_merchants_order_path(@order)) do |f| %>
+      <%= f.error_messages %>
 
-    <%= f.input :professionality do %>
-      <div class="stars">
-        <%= bootstrap_icon_stars @order.professionality %>
-        <%= f.hidden_field :professionality %>
-      </div>
-    <% end %>
-    <%= f.input :timeliness do %>
-      <div class="stars">
-        <%= bootstrap_icon_stars @order.timeliness %>
-        <%= f.hidden_field :timeliness %>
-      </div>
-    <% end %>
-    <%= f.input :review, input_html: { rows: 4 } %>
+      <%= f.input :professionality do %>
+        <div class="stars">
+          <%= bootstrap_icon_stars @order.professionality %>
+          <%= f.hidden_field :professionality %>
+        </div>
+      <% end %>
+      <%= f.input :timeliness do %>
+        <div class="stars">
+          <%= bootstrap_icon_stars @order.timeliness %>
+          <%= f.hidden_field :timeliness %>
+        </div>
+      <% end %>
+      <%= f.input :review, input_html: { rows: 4 } %>
 
-    <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
-  <% end %>
+      <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+    <% end %>
+  </div>
 </div>
 
 <script type="text/javascript">

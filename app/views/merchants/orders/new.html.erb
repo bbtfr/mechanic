@@ -5,71 +5,73 @@
 %>
 
 <%= bootstrap_simple_form_for([ :merchants, @order ]) do |f| %>
-  <div class="col-md-7">
-    <%= f.error_messages %>
+  <div class="row">
+    <div class="col-md-7">
+      <%= f.error_messages %>
 
-    <h5 class="text-muted">需求信息</h5>
+      <h5 class="text-muted">需求信息</h5>
 
-    <%= f.input :address %>
-    <%= f.input :appointment do %>
-      <div class="datetime-input-group">
-        <%= f.input_field :appointment, class: "form-control" %>
-      </div>
-    <% end %>
-
-    <%= f.input :skill_cd, collection: Skill.all, input_html: { class: "select2" } %>
-
-    <%= f.input :brand_cd, collection: Brand.all, input_html: { class: "select2" } %>
-    <%= f.input :series_cd, collection: series_map[@order.brand_cd] || [], input_html: { class: "select2" } %>
-
-    <%= f.input :quoted_price %>
-    <%= f.input :remark, input_html: { rows: 4 } %>
-
-    <h5 class="text-muted">联系人信息</h5>
-
-    <%= f.input :contact_nickname %>
-    <%= f.input :contact_mobile %>
-  </div>
-
-  <div class="col-md-12">
-    <h5 class="text-muted">指派技师 <a href="#" id="clean_mechanic">取消选中技师</a></h5>
-
-    <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\"></option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name), class: "form-control", id: "mechanics_skills_select" %></label>
-
-    <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
-    <% @mechanics = Mechanic.includes(:user, :skills).where(users: { role_cd: User.roles[:mechanic] }) %>
-    <%= index_for [ :merchants, @mechanics ], class: "table table-hover" do |i| %>
-      <%= i.attribute :_check do |mechanic| %>
-        <%= f.radio_button :mechanic_id, mechanic.id %>
+      <%= f.input :address %>
+      <%= f.input :appointment do %>
+        <div class="datetime-input-group">
+          <%= f.input_field :appointment, class: "form-control" %>
+        </div>
       <% end %>
 
-      <%= i.attribute :skills do |mechanic| %>
-        <%= mechanic.skills.join("、") %>
-      <% end %>
+      <%= f.input :skill_cd, collection: Skill.all, input_html: { class: "select2" } %>
 
-      <%= i.attribute :user_nickname %>
-      <%= i.attribute :user_mobile %>
+      <%= f.input :brand_cd, collection: Brand.all, input_html: { class: "select2" } %>
+      <%= f.input :series_cd, collection: series_map[@order.brand_cd] || [], input_html: { class: "select2" } %>
 
-      <%= i.attribute :province %>
-      <%= i.attribute :city %>
-      <%= i.attribute :district %>
+      <%= f.input :quoted_price %>
+      <%= f.input :remark, input_html: { rows: 4 } %>
 
-      <%= i.attribute :available_orders_count %>
-      <%= i.attribute :revoke_orders_count %>
-      <%= i.attribute :professionality_average %>
-      <%= i.attribute :timeliness_average %>
+      <h5 class="text-muted">联系人信息</h5>
 
-      <%= i.actions :show do |a| %>
-        <% if @followed_mechanic_ids.include? i.object.id %>
-          <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
-        <% else %>
-          <%= a.action_link :follow, method: :post %>
+      <%= f.input :contact_nickname %>
+      <%= f.input :contact_mobile %>
+    </div>
+
+    <div class="col-md-12">
+      <h5 class="text-muted">指派技师 <a href="#" id="clean_mechanic">取消选中技师</a></h5>
+
+      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\"></option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name), class: "form-control", id: "mechanics_skills_select" %></label>
+
+      <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
+      <% @mechanics = Mechanic.includes(:user, :skills).where(users: { role_cd: User.roles[:mechanic] }) %>
+      <%= index_for [ :merchants, @mechanics ], class: "table table-hover" do |i| %>
+        <%= i.attribute :_check do |mechanic| %>
+          <%= f.radio_button :mechanic_id, mechanic.id %>
         <% end %>
+
+        <%= i.attribute :skills do |mechanic| %>
+          <%= mechanic.skills.join("、") %>
+        <% end %>
+
+        <%= i.attribute :user_nickname %>
+        <%= i.attribute :user_mobile %>
+
+        <%= i.attribute :province %>
+        <%= i.attribute :city %>
+        <%= i.attribute :district %>
+
+        <%= i.attribute :available_orders_count %>
+        <%= i.attribute :revoke_orders_count %>
+        <%= i.attribute :professionality_average %>
+        <%= i.attribute :timeliness_average %>
+
+        <%= i.actions :show do |a| %>
+          <% if @followed_mechanic_ids.include? i.object.id %>
+            <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
+          <% else %>
+            <%= a.action_link :follow, method: :post %>
+          <% end %>
+        <% end %>
+
       <% end %>
 
-    <% end %>
-
-    <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+      <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+    </div>
   </div>
 <% end %>
 

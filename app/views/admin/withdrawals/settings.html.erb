@@ -1,21 +1,23 @@
 <h3 class="page-header">提现管理</h3>
 
-<div class="col-md-2 col-xs-4">
-  <ul class="nav nav-pills nav-stacked">
-    <li><%= link_to "申请列表", admin_withdrawals_path %></li>
-    <li class="active"><%= link_to "佣金设置", settings_admin_withdrawals_path %></li>
-  </ul>
-</div>
+<div class="row">
+  <div class="col-md-2 col-xs-4">
+    <ul class="nav nav-pills nav-stacked">
+      <li><%= link_to "申请列表", admin_withdrawals_path %></li>
+      <li class="active"><%= link_to "佣金设置", settings_admin_withdrawals_path %></li>
+    </ul>
+  </div>
 
-<div class="col-md-7">
-  <%= bootstrap_simple_form_for(Setting, url: settings_admin_withdrawals_path) do |f| %>
-    <%= f.error_messages %>
+  <div class="col-md-7 col-xs-8">
+    <%= bootstrap_simple_form_for(Setting, url: settings_admin_withdrawals_path) do |f| %>
+      <%= f.error_messages %>
 
-    <%= f.input :commission_percent, as: :float %>
-    <%= f.input :mobile_commission_percent, as: :float %>
-    <%= f.input :client_commission_percent, as: :float %>
-    <%= f.input :mechanic_commission_percent, as: :float %>
+      <%= f.input :commission_percent, as: :float %>
+      <%= f.input :mobile_commission_percent, as: :float %>
+      <%= f.input :client_commission_percent, as: :float %>
+      <%= f.input :mechanic_commission_percent, as: :float %>
 
-    <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
-  <% end %>
+      <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+    <% end %>
+  </div>
 </div>

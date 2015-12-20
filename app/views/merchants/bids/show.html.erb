@@ -1,26 +1,28 @@
 <h3 class="page-header">选择技师</h3>
 
-<div class="col-sm-3 text-right">
-  <%= image_tag(@bid.mechanic.user.avatar.url(:thumb)) %>
-</div>
+<div class="row">
+  <div class="col-sm-3 text-right">
+    <%= image_tag(@bid.mechanic.user.avatar.url(:thumb)) %>
+  </div>
 
-<div class="col-sm-9">
-  <%= show_for @bid, class: "dl-horizontal" do |i| %>
-    <%= i.fields_for :mechanic do |ii| %>
-      <%= ii.attribute :user_nickname %>
-      <%= ii.attribute :user_address %>
-      <%= ii.attribute :description %>
-      <%= ii.attribute :available_orders_count %>
-      <%= ii.attribute :professionality_average %>
-      <%= ii.attribute :timeliness_average %>
+  <div class="col-sm-9">
+    <%= show_for @bid, class: "dl-horizontal" do |i| %>
+      <%= i.fields_for :mechanic do |ii| %>
+        <%= ii.attribute :user_nickname %>
+        <%= ii.attribute :user_address %>
+        <%= ii.attribute :description %>
+        <%= ii.attribute :available_orders_count %>
+        <%= ii.attribute :professionality_average %>
+        <%= ii.attribute :timeliness_average %>
+      <% end %>
+      <%= i.fields_for :order do |ii| %>
+        <%= ii.attribute :appointment, format: :short %>
+        <%= ii.attribute :skill %>
+        <%= ii.attribute :quoted_price %>
+      <% end %>
+      <%= i.attribute :markup_price %>
     <% end %>
-    <%= i.fields_for :order do |ii| %>
-      <%= ii.attribute :appointment, format: :short %>
-      <%= ii.attribute :skill %>
-      <%= ii.attribute :quoted_price %>
-    <% end %>
-    <%= i.attribute :markup_price %>
-  <% end %>
+  </div>
 </div>
 
 <div class="pull-right">

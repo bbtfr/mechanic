@@ -1,27 +1,29 @@
 <h3 class="page-header">商家管理</h3>
 
-<div class="col-md-2 col-xs-4">
-  <ul class="nav nav-pills nav-stacked">
-    <li class="active"><%= link_to "申请列表", admin_merchants_path %></li>
-    <li><%= link_to "商家列表", confirmed_admin_merchants_path %></li>
-  </ul>
-</div>
+<div class="row">
+  <div class="col-md-2 col-xs-4">
+    <ul class="nav nav-pills nav-stacked">
+      <li class="active"><%= link_to "申请列表", admin_merchants_path %></li>
+      <li><%= link_to "商家列表", confirmed_admin_merchants_path %></li>
+    </ul>
+  </div>
 
-<% @merchants = @merchants.includes(:merchant) %>
+  <% @merchants = @merchants.includes(:merchant) %>
 
-<div class="col-md-10 col-xs-8">
-  <%= index_for [ :admin, @merchants ], class: "table table-hover data-tables" do |i| %>
-    <%= i.fields_for :merchant, model: Merchant do |ii| %>
-      <%= ii.attribute :nickname %>
-      <%= ii.attribute :mobile %>
+  <div class="col-md-10 col-xs-8">
+    <%= index_for [ :admin, @merchants ], class: "table table-hover data-tables" do |i| %>
+      <%= i.fields_for :merchant, model: Merchant do |ii| %>
+        <%= ii.attribute :nickname %>
+        <%= ii.attribute :mobile %>
+      <% end %>
+
+      <%= i.attribute :nickname %>
+      <%= i.attribute :qq %>
+
+      <%= i.actions do |a| %>
+        <%= a.action_link :confirm, url: confirm_admin_merchant_path(i.object), method: :post, confirm: "你确定要通过这条申请？" %>
+        <%= a.action_link :destroy, url: admin_merchant_path(i.object), method: :delete, confirm: t("index_for.actions.confirmation") %>
+      <% end %>
     <% end %>
-
-    <%= i.attribute :nickname %>
-    <%= i.attribute :qq %>
-
-    <%= i.actions do |a| %>
-      <%= a.action_link :confirm, url: confirm_admin_merchant_path(i.object), method: :post, confirm: "你确定要通过这条申请？" %>
-      <%= a.action_link :destroy, url: admin_merchant_path(i.object), method: :delete, confirm: t("index_for.actions.confirmation") %>
-    <% end %>
-  <% end %>
+  </div>
 </div>

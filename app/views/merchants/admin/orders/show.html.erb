@@ -35,20 +35,22 @@
 
   <h3 class="page-header">技师信息</h3>
 
-  <div class="col-sm-3 text-right">
-    <%= image_tag(@order.mechanic.user.avatar.url(:thumb)) %>
-  </div>
+  <div class="row">
+    <div class="col-sm-3 text-right">
+      <%= image_tag(@order.mechanic.user.avatar.url(:thumb)) %>
+    </div>
 
-  <div class="col-sm-9">
-    <%= show_for @order.mechanic, class: "dl-horizontal" do |i| %>
-      <%= i.attribute :user_nickname %>
-      <%= i.attribute :user_mobile %>
-      <%= i.attribute :user_address %>
-      <%= i.attribute :description %>
-      <%= i.attribute :available_orders_count %>
-      <%= i.attribute :professionality_average %>
-      <%= i.attribute :timeliness_average %>
-    <% end %>
+    <div class="col-sm-9">
+      <%= show_for @order.mechanic, class: "dl-horizontal" do |i| %>
+        <%= i.attribute :user_nickname %>
+        <%= i.attribute :user_mobile %>
+        <%= i.attribute :user_address %>
+        <%= i.attribute :description %>
+        <%= i.attribute :available_orders_count %>
+        <%= i.attribute :professionality_average %>
+        <%= i.attribute :timeliness_average %>
+      <% end %>
+    </div>
   </div>
 <% end %>
 
