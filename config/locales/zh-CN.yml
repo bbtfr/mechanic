@@ -147,7 +147,8 @@ zh-CN:
         mechanic_attach_2: 施工照片
         mobile: 联系电话
         created_at: 订单创建
-        start_working_at: 开始服务
+        start_working_at: 开工时间
+        finish_working_at: 完工时间
         state: 状态
       bid:
         markup_price: 加价

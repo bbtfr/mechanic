@@ -26,6 +26,7 @@
       <%= i.attribute :contact_nickname %>
       <%= i.attribute :contact_mobile %>
       <%= i.attribute :appointment, format: :short %>
+      <%= i.attribute :finish_working_at, format: :short if @state == :settleds %>
       <%= i.attribute :skill %>
       <%= i.attribute :price %>
       <%= i.attribute :mechanic, with: :user_nickname, if_raise: nil %>
