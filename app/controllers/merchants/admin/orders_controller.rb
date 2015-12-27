@@ -2,12 +2,18 @@ class Merchants::Admin::OrdersController < Merchants::Admin::ApplicationControll
   before_filter :find_order, except: [ :index ]
 
   def index
-    @state = if %w(pendeds paids workings settleds).include? params[:state]
+    @state = if %w(pendeds paids workings settleds revieweds closeds).include? params[:state]
         params[:state].to_sym
       else
         :pendeds
       end
     @orders = order_klass.send(@state)
+  end
+
+  def close
+    @order.close!
+    flash[:notice] = "订单标记为已结算！"
+    redirect_to merchants_admin_order_path(@order)
   end
 
   private

@@ -4,7 +4,7 @@
   <%= render "index" %>
 </div>
 
-<%= link_to "取消订单", cancel_merchants_order_path(@order), class: "btn btn-danger pull-right" %>
+<%= link_to "取消订单", cancel_merchants_order_path(@order), method: :post, class: "btn btn-danger pull-right" %>
 
 <script type="text/javascript">
   var interval = setInterval(function() {

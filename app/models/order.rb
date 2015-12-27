@@ -18,7 +18,7 @@ class Order < ActiveRecord::Base
   as_enum :city, City, persistence: true
 
   as_enum :state, pending: 0, paying: 1, pended: 2, canceled: 3, refunding: 4, refunded: 5,
-    paid: 6, working: 7, confirming: 8, finished: 9, reviewed: 10
+    paid: 6, working: 7, confirming: 8, finished: 9, reviewed: 10, closed: 11
   as_enum :cancel, pending_timeout: 0, paying_timeout: 1, user_abstain: 2, user_cancel: 3
   as_enum :refund, user_cancel: 0, merchant_revoke: 1
   as_enum :pay_type, { weixin: 0, alipay: 1 }, prefix: true
@@ -209,6 +209,12 @@ class Order < ActiveRecord::Base
   def review!
     update_attribute(:reviewed_at, Time.now)
     update_attribute(:state, Order.states[:reviewed])
+  end
+
+  def close!
+    return false unless reviewed?
+    update_attribute(:closed_at, Time.now)
+    update_attribute(:state, Order.states[:closed])
   end
 
   def contact

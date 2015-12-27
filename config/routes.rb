@@ -27,18 +27,17 @@ Rails.application.routes.draw do
       end
 
       member do
-        get :pend
-        get :cancel
+        post :pend
+        post :cancel
 
-        get :refund
-        patch :refund
+        match :refund, via: [:get, :patch]
         match :notify, via: [:get, :post]
         get :result
 
-        get :confirm
-        get :rework
-
+        post :confirm
+        post :rework
         get :revoke
+
         get :review
         patch :review, action: :update_review
 
@@ -66,7 +65,11 @@ Rails.application.routes.draw do
           post :inactive
         end
       end
-      resources :orders
+      resources :orders do
+        member do
+          post :close
+        end
+      end
       resource :store
 
     end

@@ -51,14 +51,14 @@
   <div class="pull-right">
     <%= link_to "微信支付", pay_merchants_orders_path(@order, format: :weixin), class: "btn btn-primary" %>
     <%= link_to "支付宝支付", pay_merchants_orders_path(@order, format: :alipay), class: "btn btn-primary" %>
-    <%= link_to "延后付款", pend_merchants_order_path(@order), class: "btn btn-danger" %>
-    <%= link_to "取消订单", cancel_merchants_order_path(@order), class: "btn btn-danger" %>
+    <%= link_to "延后付款", pend_merchants_order_path(@order), method: :post, class: "btn btn-danger" %>
+    <%= link_to "取消订单", cancel_merchants_order_path(@order), method: :post, class: "btn btn-danger" %>
   </div>
 <% when :pended %>
   <div class="pull-right">
     <%= link_to "微信支付", pay_merchants_orders_path(@order, format: :weixin), class: "btn btn-primary" %>
     <%= link_to "支付宝支付", pay_merchants_orders_path(@order, format: :alipay), class: "btn btn-primary" %>
-    <%= link_to "取消订单", cancel_merchants_order_path(@order), class: "btn btn-danger" %>
+    <%= link_to "取消订单", cancel_merchants_order_path(@order), method: :post, class: "btn btn-danger" %>
   </div>
 <% when :paid %>
   <div class="pull-right">
@@ -88,8 +88,8 @@
     </div>
   <% end %>
   <div class="pull-right">
-    <%= link_to "确认完工", confirm_merchants_order_path(@order), class: "btn btn-primary" %>
-    <%= link_to "申请返工", rework_merchants_order_path(@order), class: "btn btn-primary" %>
+    <%= link_to "确认完工", confirm_merchants_order_path(@order), method: :post, class: "btn btn-primary" %>
+    <%= link_to "申请返工", rework_merchants_order_path(@order), method: :post, class: "btn btn-primary" %>
   </div>
 <% when :finished %>
   <div class="pull-right">
