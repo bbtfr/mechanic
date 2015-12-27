@@ -40,6 +40,10 @@ Rails.application.routes.draw do
 
         get :revoke
         get :review
+        patch :review, action: :update_review
+
+        get :remark
+        patch :remark, action: :update_remark
       end
     end
 
@@ -110,6 +114,7 @@ Rails.application.routes.draw do
       get :confirm
 
       get :review
+      patch :review, action: :update_review
     end
   end
 

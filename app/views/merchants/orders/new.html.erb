@@ -24,7 +24,8 @@
       <%= f.input :series_cd, collection: series_map[@order.brand_cd] || [], input_html: { class: "select2" } %>
 
       <%= f.input :quoted_price %>
-      <%= f.input :remark, input_html: { rows: 4 } %>
+      <%= f.input :remark, hint: "备注对所有人可见", input_html: { rows: 4 } %>
+      <%= f.input :merchant_remark, hint: "商户备注仅对当前商户可见", input_html: { rows: 4 } %>
 
       <h5 class="text-muted">联系人信息</h5>
 

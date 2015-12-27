@@ -8,12 +8,12 @@ module Ali
 
   class << self
 
-    def payment order
+    def payment order, return_url = nil
       Alipay::Service.create_direct_pay_by_user_url(
         subject: order.title,
         out_trade_no: order.out_trade_no,
         total_fee: order.price,
-        return_url: "#{MerchantsURL}/orders/#{order.id}/result",
+        return_url: return_url || "#{MerchantsURL}/orders/#{order.id}/result",
         notify_url: "#{MerchantsURL}/orders/#{order.id}/notify.alipay"
       )
     end

@@ -139,6 +139,7 @@ zh-CN:
         quoted_price: 出价
         markup_price: 加价
         remark: 备注
+        merchant_remark: 商户备注
         price: 价格
         professionality: 专业
         timeliness: 守时

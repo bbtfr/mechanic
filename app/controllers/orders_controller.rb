@@ -29,8 +29,8 @@ class OrdersController < ApplicationController
     end
   end
 
-  def update
-    if @order.update_attributes(order_params)
+  def update_review
+    if @order.update_attributes(review_order_params)
       @order.review!
       redirect_to order_path(@order)
     else
@@ -156,8 +156,11 @@ class OrdersController < ApplicationController
 
     def order_params
       params.require(:order).permit(:address, :appointment, :skill_cd,
-        :brand_cd, :series_cd, :quoted_price, :remark, :lbs_id, :professionality,
-        :timeliness, :review)
+        :brand_cd, :series_cd, :quoted_price, :remark, :lbs_id)
+    end
+
+    def review_order_params
+      params.require(:order).permit(:professionality, :timeliness, :review)
     end
 
     def finish_order_params

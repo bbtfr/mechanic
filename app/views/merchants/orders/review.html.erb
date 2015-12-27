@@ -2,7 +2,7 @@
 
 <div class="row">
   <div class="col-md-7">
-    <%= bootstrap_simple_form_for([ :merchants, @order ]) do |f| %>
+    <%= bootstrap_simple_form_for([ :merchants, @order ], url: review_merchants_order_path(@order)) do |f| %>
       <%= f.error_messages %>
 
       <%= f.input :professionality do %>

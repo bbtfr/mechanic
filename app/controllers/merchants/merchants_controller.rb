@@ -17,7 +17,7 @@ class Merchants::MerchantsController < Merchants::ApplicationController
   end
 
   def forget_password
-    session[:original_url] = change_password_merchants_merchant_path
+    set_redirect :password, change_password_merchants_merchant_path
     @merchant = Merchant.new
   end
 
@@ -46,8 +46,8 @@ class Merchants::MerchantsController < Merchants::ApplicationController
       merchant_session = MerchantSession.new(@merchant)
       merchant_session.save
 
-      redirect_to session[:original_url] || merchants_root_path
-      session[:original_url] = nil
+      redirect! :password, merchants_root_path
+      clear_redirect :password
     else
       @merchant.errors.add :base, "验证码错误"
       render :verification_code

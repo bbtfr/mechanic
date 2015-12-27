@@ -17,6 +17,7 @@
       <%= i.attribute :start_working_at, format: :long %>
       <%= i.attribute :finish_working_at, format: :long %>
       <%= i.attribute :remark %>
+      <%= i.attribute :merchant_remark %>
     <% end %>
   </div>
 
@@ -30,6 +31,10 @@
     <% end %>
   </div>
 
+</div>
+
+<div class="pull-right">
+  <%= link_to "修改商户备注", remark_merchants_order_path(@order), class: "btn btn-primary" %>
 </div>
 
 <% if @order.mechanic_id %>

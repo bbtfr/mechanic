@@ -1,5 +1,5 @@
 <% if @order.paid? %>
   clearInterval(interval);
   alert("支付成功\r\n点击确认查看订单详情");
-  window.location.href = "<%= merchants_order_path(@order) %>";
+  window.location.href = "<%= fetch_redirect(:payment) || merchants_order_path(@order) %>";
 <% end %>

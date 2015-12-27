@@ -1,4 +1,6 @@
 class Admin::ApplicationController < ActionController::Base
+  include RedirectionHelper
+
   layout "admin"
 
   # Prevent CSRF attacks by raising an exception.

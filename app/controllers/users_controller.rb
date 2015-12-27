@@ -8,7 +8,7 @@ class UsersController < ApplicationController
 
   def create
     if @user.update_attributes(user_params)
-      redirect_to session[:original_url] || root_path
+      redirect! :authenticate, root_path
     else
       render :new
     end
@@ -36,19 +36,19 @@ class UsersController < ApplicationController
 
     def authenticate!
       if !current_user_session || !current_user
-        session[:original_url] = request.original_url
+        set_redirect_original_url :authenticate
         redirect_to new_user_session_path
       else
-        session[:original_url] = nil if session[:original_url]
+        clear_redirect :authenticate
       end
     end
 
     def validate!
       if current_user.invalid?
-        session[:original_url] = request.original_url
+        set_redirect_original_url :authenticate
         redirect_to new_user_path
       else
-        session[:original_url] = nil if session[:original_url]
+        clear_redirect :authenticate
       end
     end
 end

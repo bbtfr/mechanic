@@ -1,4 +1,6 @@
 class Merchants::ApplicationController < ActionController::Base
+  include RedirectionHelper
+
   layout "merchants"
 
   # Prevent CSRF attacks by raising an exception.
@@ -27,10 +29,10 @@ class Merchants::ApplicationController < ActionController::Base
 
     def authenticate!
       if !current_merchant_session || !current_merchant
-        session[:original_url] = request.original_url
+        set_redirect_original_url :authenticate
         redirect_to new_merchants_merchant_session_path
       else
-        session[:original_url] = nil if session[:original_url]
+        clear_redirect :authenticate
       end
     end
 end

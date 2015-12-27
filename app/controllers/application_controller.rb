@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include RedirectionHelper
+
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -25,13 +27,13 @@ class ApplicationController < ActionController::Base
 
     def authenticate!
       if !current_user_session || !current_user
-        session[:original_url] = request.original_url
+        set_redirect_original_url :authenticate
         redirect_to new_user_session_path
       elsif current_user.invalid?
-        session[:original_url] = request.original_url
+        set_redirect_original_url :authenticate
         redirect_to new_user_path
       else
-        session[:original_url] = nil if session[:original_url]
+        clear_redirect :authenticate
       end
     end
 

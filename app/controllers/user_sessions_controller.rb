@@ -13,7 +13,7 @@ class UserSessionsController < ApplicationController
       user = User.where(weixin_openid: @openid).first
       if user && user.confirmed
         UserSession.create(user)
-        redirect_to session[:original_url] || root_path
+        redirect! :authenticate, root_path
       end
     else
       redirect_to Weixin.authorize_url(request.url)
@@ -34,7 +34,7 @@ class UserSessionsController < ApplicationController
     else
       if @user_session.save
         @user.confirm!
-        redirect_to session[:original_url] || root_path
+        redirect! :authenticate, root_path
       else
         render :new
       end

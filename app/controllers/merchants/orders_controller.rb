@@ -3,6 +3,8 @@ class Merchants::OrdersController < Merchants::ApplicationController
   before_filter :find_order, except: [ :index, :new, :create, :notify ]
   before_filter :redirect_pending, only: [ :new, :create, :index ]
 
+  helper_method :fetch_redirect
+
   def index
     @state = if %w(pendeds paids workings finisheds).include? params[:state]
         params[:state].to_sym
@@ -29,15 +31,6 @@ class Merchants::OrdersController < Merchants::ApplicationController
     end
   end
 
-  def update
-    if @order.update_attributes(order_params)
-      @order.review!
-      redirect_to merchants_order_path(@order)
-    else
-      render :new
-    end
-  end
-
   def pend
     @order.pend!
     flash[:notice] = "订单延后付款！"
@@ -51,9 +44,10 @@ class Merchants::OrdersController < Merchants::ApplicationController
   end
 
   def pay
+    set_redirect_referer :payment
     case params[:format]
     when "alipay"
-      response = Ali.payment @order
+      response = Ali.payment @order, fetch_redirect(:payment)
       redirect_to response
     when "weixin"
       response = Weixin.payment_qrcode @order
@@ -147,17 +141,37 @@ class Merchants::OrdersController < Merchants::ApplicationController
     redirect_to merchants_order_path(@order)
   end
 
+  def remark
+    set_redirect_referer :remark
+  end
+
+  def update_remark
+    if @order.update_attributes(remark_order_params)
+      redirect! :remark, merchants_order_path(@order)
+    else
+      render :new
+    end
+  end
+
   def rework
     @order.rework!
     flash[:notice] = "订单申请返工！"
     redirect_to merchants_order_path(@order)
   end
 
-
   def confirm
     @order.confirm!
     flash[:notice] = "订单确认完工！"
     redirect_to merchants_order_path(@order)
+  end
+
+  def update_review
+    if @order.update_attributes(review_order_params)
+      @order.review!
+      redirect_to merchants_order_path(@order)
+    else
+      render :new
+    end
   end
 
   private
@@ -193,8 +207,17 @@ class Merchants::OrdersController < Merchants::ApplicationController
 
     def order_params
       params.require(:order).permit(:address, :appointment, :skill_cd,
-        :brand_cd, :series_cd, :quoted_price, :remark, :lbs_id, :professionality,
-        :timeliness, :review, :contact_mobile, :contact_nickname, :mechanic_id)
+        :brand_cd, :series_cd, :quoted_price, :remark, :merchant_remark,
+        :lbs_id, :professionality, :timeliness, :review, :contact_mobile,
+        :contact_nickname, :mechanic_id)
+    end
+
+    def review_order_params
+      params.require(:order).permit(:professionality, :timeliness, :review)
+    end
+
+    def remark_order_params
+      params.require(:order).permit(:merchant_remark)
     end
 
 end

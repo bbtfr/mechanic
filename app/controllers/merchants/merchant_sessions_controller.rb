@@ -8,7 +8,7 @@ class Merchants::MerchantSessionsController < Merchants::ApplicationController
   def create
     @merchant_session = MerchantSession.new(merchant_session_params)
     if @merchant_session.save
-      redirect_to session[:original_url] || merchants_root_path
+      redirect! :authenticate, merchants_root_path
     else
       merchant = @merchant_session.attempted_record
       if merchant && !merchant.confirmed?
