@@ -101,8 +101,8 @@ WeixinRailsMiddleware::WeixinController.class_eval do
 欢迎关注汽车堂助手。我是你贴身的汽车服务小伙伴。致力于提供更专业、更靠谱的服务。
 
 使用向导
-【派单方使用教程】<a href="http://mp.weixin.qq.com/s?__biz=MzA3MjYwNzYxMA==&mid=207851238&idx=1&sn=92226aa626e8e9ab45ff5e6c90e58d23#rd">点击查看教程</a>
-【接单方使用教程】<a href="http://mp.weixin.qq.com/s?__biz=MzA3MjYwNzYxMA==&mid=400001510&idx=1&sn=f52d3e55726d342ed15c56e9b40338f6#rd">点击查看教程</a>
+【工费结算】<a href="http://mp.weixin.qq.com/s?__biz=MzA3MjYwNzYxMA==&mid=207851238&idx=1&sn=92226aa626e8e9ab45ff5e6c90e58d23#rd">点击查看教程</a>
+【接单教程】<a href="http://mp.weixin.qq.com/s?__biz=MzA3MjYwNzYxMA==&mid=400001510&idx=1&sn=f52d3e55726d342ed15c56e9b40338f6#rd">点击查看教程</a>
 EOS
     end
 
