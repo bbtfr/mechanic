@@ -15,6 +15,11 @@ class Admin::WithdrawalsController < Admin::ApplicationController
     redirect_to request.referer
   end
 
+  def cancel
+    @withdrawal.cancel!
+    redirect_to request.referer
+  end
+
   def update_settings
     ActiveRecord::Base.transaction do
       setting_params.each do |key, value|

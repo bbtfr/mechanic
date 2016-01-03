@@ -12,6 +12,7 @@ zh-CN:
       edit: 编辑
       destroy: 删除
       confirm: 批准申请
+      cancel: 拒绝申请
       unfollow: 取消关注
       follow: 关注
       inactive: 锁定

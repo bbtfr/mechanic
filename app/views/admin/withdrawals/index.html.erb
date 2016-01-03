@@ -19,14 +19,17 @@
 
       <%= i.attribute :amount %>
       <%= i.attribute :created_at, format: :long %>
+      <%= i.attribute :state do |withdrawal| %>
+        <%= te withdrawal, :state %>
+      <% end %>
 
-      <% if i.object.paid? %>
-        <%= i.actions :show %>
-      <% else %>
-        <%= i.actions do |a| %>
-          <%= a.action_link :show %>
+      <% if i.object.pending? %>
+        <%= i.actions :show do |a| %>
           <%= a.action_link :confirm, method: :post, confirm: "你确定要通过这条申请？" %>
+          <%= a.action_link :cancel, method: :post, confirm: "你确定要拒绝这条申请？" %>
         <% end %>
+      <% else %>
+        <%= i.actions :show %>
       <% end %>
     <% end %>
   </div>

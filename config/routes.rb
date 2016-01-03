@@ -132,6 +132,14 @@ Rails.application.routes.draw do
         post :confirm
       end
     end
+    concern :cancel do
+      collection do
+        get :canceled
+      end
+      member do
+        post :cancel
+      end
+    end
     resources :users do
       member do
         post :mechanicize
@@ -152,12 +160,8 @@ Rails.application.routes.draw do
       end
     end
     resources :orders
-    resources :refunds do
-      member do
-        post :confirm
-      end
-    end
-    resources :withdrawals, concerns: [:confirm] do
+    resources :refunds, concerns: [:confirm]
+    resources :withdrawals, concerns: [:confirm, :cancel] do
       collection do
         get :settings
         post :settings, action: :update_settings
