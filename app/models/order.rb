@@ -65,12 +65,13 @@ class Order < ActiveRecord::Base
   cache_method :mechanic, :professionality_average
   cache_method :mechanic, :timeliness_average
 
-  def location_present?
-    province_cd.present? && city_cd.present?
+  attr_accessor :custom_location
+  def custom_location_present?
+    ["1", 1, true].include?(custom_location) && province_cd.present? && city_cd.present?
   end
 
   def validate_location
-    return if location_present?
+    return if custom_location_present?
 
     if lbs_id.present?
       location = LBS.find(lbs_id)
@@ -102,7 +103,7 @@ class Order < ActiveRecord::Base
       self.city_cd = city.id
     end
   rescue
-    errors.add(:address, "无法定位，请打开GPS定位或输入更详细的地址") unless lbs_id.present?
+    errors.add(:address, "无法定位，请打开GPS定位或输入自定义技师用人信息发送范围")
   end
 
   after_initialize do

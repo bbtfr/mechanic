@@ -14,10 +14,12 @@
 
       <%= f.input :address %>
 
-      <% if @order.location_present? || @order.errors.key?(:address) %>
+      <%= f.input :custom_location, as: :boolean %>
+      <div class="form-inline" id="custom_location" style="display: none;">
         <%= f.input :province_cd, collection: Province.all, input_html: { class: "select2" } %>
         <%= f.input :city_cd, collection: city_map[@order.province_cd] || [], input_html: { class: "select2" } %>
-      <% end %>
+        <p class="help-block">技师用人信息发送范围，范围内的技师将收到用人信息</p>
+      </div>
 
       <%= f.input :appointment do %>
         <div class="datetime-input-group">
@@ -40,7 +42,7 @@
       <%= f.input :contact_mobile %>
     </div>
 
-    <div class="col-md-12">
+    <div class="col-md-12" id="mechanic_list">
       <h5 class="text-muted">指派技师 <a href="#" id="clean_mechanic">取消选中技师</a></h5>
 
       <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\"></option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name), class: "form-control", id: "mechanics_skills_select" %></label>
@@ -122,6 +124,16 @@
       $series.appendOptions(seriesMap[$brand.val()]);
     });
 
+    var $useCustomLocation = $("#order_custom_location");
+    var $customLocation = $("#custom_location");
+    var useCustomLocationCallback = function() {
+      if ($useCustomLocation.is(":checked")) $customLocation.show();
+      else $customLocation.hide();
+    };
+
+    $useCustomLocation.on("change", useCustomLocationCallback);
+    useCustomLocationCallback();
+
     var cityMap = <%= raw city_map.to_json %>;
 
     var $province = $("#order_province_cd");
@@ -136,5 +148,7 @@
       event.preventDefault();
       $("input[type=radio][name=order\\[mechanic_id\\]]").attr("checked", false);
     });
+
+    $("#mechanic_list input[checked]").trigger("click");
   });
 </script>

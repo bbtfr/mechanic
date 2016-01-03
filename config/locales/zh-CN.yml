@@ -155,6 +155,7 @@ zh-CN:
         start_working_at: 开工时间
         finish_working_at: 完工时间
         state: 状态
+        custom_location: 使用自定义技师用人信息发送范围
       bid:
         markup_price: 加价
       skill:
