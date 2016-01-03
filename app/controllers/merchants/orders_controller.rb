@@ -23,7 +23,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
     if @order.save
       if @order.pending?
         redirect_to merchants_order_bids_path(@order)
-      elsif @order.paying?
+      else
         redirect_to merchants_order_path(@order)
       end
     else

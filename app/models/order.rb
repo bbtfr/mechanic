@@ -21,7 +21,7 @@ class Order < ActiveRecord::Base
     paid: 6, working: 7, confirming: 8, finished: 9, reviewed: 10, closed: 11
   as_enum :cancel, pending_timeout: 0, paying_timeout: 1, user_abstain: 2, user_cancel: 3
   as_enum :refund, user_cancel: 0, merchant_revoke: 1
-  as_enum :pay_type, { weixin: 0, alipay: 1 }, prefix: true
+  as_enum :pay_type, { weixin: 0, alipay: 1, skip: 2 }, prefix: true
 
   AVAILABLE_GREATER_THAN = 5
   scope :availables, -> { where('"orders"."state_cd" > ?', AVAILABLE_GREATER_THAN) }
@@ -50,7 +50,7 @@ class Order < ActiveRecord::Base
   has_attached_file :user_attach_2, styles: { medium: "300x300>", thumb: "100x100#" }
   validates_attachment_content_type :user_attach_1, :content_type => /\Aimage\/.*\Z/
 
-  validates_numericality_of :quoted_price, greater_than_or_equal_to: 1
+  validates_numericality_of :quoted_price, greater_than_or_equal_to: 0
   validates_presence_of :skill_cd, :brand_cd, :series_cd, :quoted_price
   validates_presence_of :contact_mobile, if: :merchant_id
   validates_format_of :contact_mobile, with: /\d{11}/, if: :merchant_id
@@ -152,6 +152,8 @@ class Order < ActiveRecord::Base
     end
 
     self.price = quoted_price + markup_price
+    pay! :skip if price.zero?
+
     save(validate: false)
   end
 
