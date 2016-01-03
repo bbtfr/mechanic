@@ -54,7 +54,7 @@ class Order < ActiveRecord::Base
   validates_presence_of :skill_cd, :brand_cd, :series_cd, :quoted_price
   validates_presence_of :contact_mobile, if: :merchant_id
   validates_format_of :contact_mobile, with: /\d{11}/, if: :merchant_id
-  validate :validate_lbs_id, on: :create
+  validate :validate_location, on: :create
 
   delegate :nickname, :mobile, to: :user, prefix: true
   delegate :nickname, :mobile, to: :merchant, prefix: true
@@ -65,19 +65,42 @@ class Order < ActiveRecord::Base
   cache_method :mechanic, :professionality_average
   cache_method :mechanic, :timeliness_average
 
-  def validate_lbs_id
-    return if lbs_id.present?
-    result = LBS.geocoder address
+  def location_present?
+    province_cd.present? && city_cd.present?
+  end
 
-    province_name = result["result"]["address_components"]["province"]
-    city_name = result["result"]["address_components"]["city"]
+  def validate_location
+    return if location_present?
 
-    province = Province.where(fullname: province_name).first!
-    city = province.cities.where(fullname: city_name).first!
+    if lbs_id.present?
+      location = LBS.find(lbs_id)
 
-    self.lbs_id = city.lbs_id
-    self.province_cd = province.id
-    self.city_cd = city.id
+      case location
+      when District
+        city = location.parent
+      when City
+        city = location
+      when Province
+        raise ArgumentError
+      end
+
+      province = city.parent
+
+      self.province_cd = province.id
+      self.city_cd = city.id
+    else
+      result = LBS.geocoder(address)
+
+      province_name = result["result"]["address_components"]["province"]
+      city_name = result["result"]["address_components"]["city"]
+
+      province = Province.where(fullname: province_name).first!
+      city = province.cities.where(fullname: city_name).first!
+
+      self.lbs_id = city.lbs_id
+      self.province_cd = province.id
+      self.city_cd = city.id
+    end
   rescue
     errors.add(:address, "无法定位，请打开GPS定位或输入更详细的地址") unless lbs_id.present?
   end

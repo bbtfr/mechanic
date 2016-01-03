@@ -129,6 +129,10 @@ zh-CN:
         contact_mobile: 手机号码
         mechanic: 技师
         address: 地址
+        province_cd: 省份
+        province: 省份
+        city_cd: 城市
+        city: 城市
         appointment: 预约时间
         skill_cd: 类型
         skill: 类型
@@ -165,6 +169,7 @@ zh-CN:
         amount: 金额
         created_at: 申请日期
         paid_at: 提现日期
+        state: 状态
       fellowship:
         remark: 备注
       note:

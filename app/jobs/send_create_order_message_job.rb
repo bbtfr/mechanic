@@ -2,11 +2,10 @@ class SendCreateOrderMessageJob < ActiveJob::Base
   queue_as :default
 
   def perform(order)
+    city = City.find(order.city_cd)
+
     users = User.mechanics
-
-    location = LBS.find(order.lbs_id)
-    users = users.location_scope(location)
-
+    users = users.location_scope(city)
     users = users.skill_scope(order.skill)
     users.load
 

@@ -208,8 +208,8 @@ class Merchants::OrdersController < Merchants::ApplicationController
     def order_params
       params.require(:order).permit(:address, :appointment, :skill_cd,
         :brand_cd, :series_cd, :quoted_price, :remark, :merchant_remark,
-        :lbs_id, :professionality, :timeliness, :review, :contact_mobile,
-        :contact_nickname, :mechanic_id)
+        :lbs_id, :province_cd, :city_cd, :professionality, :timeliness,
+        :review, :contact_mobile, :contact_nickname, :mechanic_id)
     end
 
     def review_order_params

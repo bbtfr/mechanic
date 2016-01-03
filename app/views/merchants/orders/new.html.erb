@@ -1,6 +1,7 @@
 <h3 class="page-header">预约技师</h3>
 
 <%
+  city_map = types_option_pairs City, :province_id
   series_map = types_option_pairs Series, :brand_id
 %>
 
@@ -12,6 +13,12 @@
       <h5 class="text-muted">需求信息</h5>
 
       <%= f.input :address %>
+
+      <% if @order.location_present? || @order.errors.key?(:address) %>
+        <%= f.input :province_cd, collection: Province.all, input_html: { class: "select2" } %>
+        <%= f.input :city_cd, collection: city_map[@order.province_cd] || [], input_html: { class: "select2" } %>
+      <% end %>
+
       <%= f.input :appointment do %>
         <div class="datetime-input-group">
           <%= f.input_field :appointment, class: "form-control" %>
@@ -106,7 +113,6 @@
       dataTable.draw();
     });
 
-
     var seriesMap = <%= raw series_map.to_json %>;
 
     var $brand = $("#order_brand_cd");
@@ -114,6 +120,15 @@
     $brand.change(function() {
       $series.removeOptions();
       $series.appendOptions(seriesMap[$brand.val()]);
+    });
+
+    var cityMap = <%= raw city_map.to_json %>;
+
+    var $province = $("#order_province_cd");
+    var $city = $("#order_city_cd");
+    $province.change(function() {
+      $city.removeOptions();
+      $city.appendOptions(cityMap[$province.val()]);
     });
 
     var $cleanMechanic = $("#clean_mechanic");
