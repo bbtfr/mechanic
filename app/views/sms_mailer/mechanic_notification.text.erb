@@ -1,10 +1,10 @@
 发布人：<%= @order.user_nickname %>；
-联系人：<%= @order.contact_nickname %> <%= @order.contact_mobile.presence || "无" %>；
+联系人：<%= [@order.contact_nickname, @order.contact_mobile].compact.join(" ").presence ||  "无" %>；
 地址：<%= @order.address %>；
 预约时间：<%= l @order.appointment, format: :long %>；
 类型：<%= @order.skill %>；
 车型：<%= @order.brand %>：
 车系：<%= @order.series %>；
-出价：<%= @order.price %>；
+出价：<%= @order.price %>元；
 备注：<%= @order.remark.presence || "无" %>；
 请先联系顾客，预约施工事宜；到微信公众号“汽车堂助手”中操作完工，完工传“发货明细单+施工图”。施工前确认产品无损。
