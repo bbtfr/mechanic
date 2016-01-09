@@ -9,6 +9,6 @@
 
 <script type="text/javascript">
   var interval = setInterval(function() {
-    $.getScript("<%= result_merchants_order_path(@order, format: :js) %>");
+    $.getScript("<%= result_merchants_order_path(@order) %>.js");
   }, 5000);
 </script>

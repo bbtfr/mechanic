@@ -34,20 +34,19 @@ class Merchants::OrdersController < Merchants::ApplicationController
   def pend
     @order.pend!
     flash[:notice] = "订单延后付款！"
-    redirect_to merchants_order_path(@order)
+    redirect_to merchants_root_path
   end
 
   def cancel
     @order.cancel!
     flash[:notice] = "订单已取消！"
-    redirect_to new_merchants_order_path
+    redirect_to merchants_root_path
   end
 
   def pay
-    set_redirect_referer :payment
     case params[:format]
     when "alipay"
-      response = Ali.payment @order, fetch_redirect(:payment)
+      response = Ali.payment @order, merchants_root_path
       redirect_to response
     when "weixin"
       response = Weixin.payment_qrcode @order
@@ -57,7 +56,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
       else
         @order.pay! :weixin if response["err_code"] == "ORDERPAID"
         flash[:error] = "微信支付：#{response["err_code_des"]}"
-        redirect_to merchants_order_path(@order)
+        redirect_to merchants_root_path
       end
     else
       flash[:error] = "未知支付类型"
