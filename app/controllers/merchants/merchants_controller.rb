@@ -17,7 +17,7 @@ class Merchants::MerchantsController < Merchants::ApplicationController
   end
 
   def forget_password
-    set_redirect :password, change_password_merchants_merchant_path
+    set_redirect :password, password_merchants_merchant_path
     @merchant = Merchant.new
   end
 
