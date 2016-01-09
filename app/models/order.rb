@@ -169,7 +169,7 @@ class Order < ActiveRecord::Base
     update_attribute(:trade_no, trade_no) if trade_no
     update_attribute(:state, Order.states[:paid])
     user.increase_total_cost!(price)
-    Weixin.send_paid_order_message self
+    Weixin.send_paid_order_message(self)
     SMSMailer.mechanic_notification(self).deliver
     SMSMailer.contact_notification(self).deliver if contact_mobile
   rescue => error

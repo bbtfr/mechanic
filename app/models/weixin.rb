@@ -149,7 +149,6 @@ module Weixin
       response
     rescue Exception => e
       Rails.logger.error "  Error occurred when requesting WeixinAuthorize API: #{e.message}"
-      raise
     end
 
     def method_missing method, *args
