@@ -6,17 +6,25 @@ class Admin::WithdrawalsController < Admin::ApplicationController
   end
 
   def confirm
-    response = Weixin.withdrawal @withdrawal
-    if response.success?
-      @withdrawal.pay!
+    if @withdrawal.pending?
+      response = Weixin.withdrawal @withdrawal
+      if response.success?
+        @withdrawal.pay!
+      else
+        flash[:error] = "微信支付：#{response["err_code_des"]}"
+      end
     else
-      flash[:error] = "微信支付：#{response["err_code_des"]}"
+      flash[:error] = "订单状态错误！"
     end
     redirect_to request.referer
   end
 
   def cancel
-    @withdrawal.cancel!
+    if @withdrawal.pending?
+      @withdrawal.cancel!
+    else
+      flash[:error] = "订单状态错误！"
+    end
     redirect_to request.referer
   end
 

@@ -11,7 +11,7 @@
   <%= i.attribute :paid_at, format: :long %>
 <% end %>
 
-<% unless @withdrawal.paid? %>
+<% if @withdrawal.pending? %>
   <div class="pull-right">
     <%= link_to "批准申请", confirm_admin_withdrawal_path(@withdrawal), class: "btn btn-primary", method: :post, confirm: "你确定要通过这条申请？" %>
   </div>
