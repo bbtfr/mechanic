@@ -79,6 +79,8 @@ class Merchants::OrdersController < Merchants::ApplicationController
         else
           render text: "未知支付类型", status: 400
         end
+      else
+        render text: "签名校验失败", status: 400
       end
     when "weixin"
       notify_params = Hash.from_xml(request.body.read)["xml"]

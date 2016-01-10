@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   private
 
     def weixin?
-      request.user_agent.include? "MicroMessenger"
+      request.user_agent && request.user_agent.include? "MicroMessenger"
     end
 
     def current_user_session
