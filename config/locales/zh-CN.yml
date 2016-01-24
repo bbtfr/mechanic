@@ -118,14 +118,17 @@ zh-CN:
         weixin_qr_code_url: 二维码
       order:
         user: 发布人
-        user_nickname: 发布人姓名
+        user_nickname: 发布人
         user_mobile: 手机号码
         merchant: 发布人
-        merchant_nickname: 发布人姓名
+        merchant_nickname: 发布人
         merchant_mobile: 手机号码
         merchant: 发布人
+        mechanic: 技师
+        mechanic_nickname: 技师
+        mechanic_mobile: 手机号码
         contact: 联系人
-        contact_nickname: 联系人姓名
+        contact_nickname: 联系人
         contact_mobile: 手机号码
         mechanic: 技师
         address: 地址
@@ -156,6 +159,7 @@ zh-CN:
         finish_working_at: 完工时间
         state: 状态
         custom_location: 使用自定义技师用人信息发送范围
+        hosting: 汽车堂托管
       bid:
         markup_price: 加价
       skill:

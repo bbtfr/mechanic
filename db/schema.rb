@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151227042225) do
+ActiveRecord::Schema.define(version: 20160123075151) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -183,8 +183,8 @@ ActiveRecord::Schema.define(version: 20151227042225) do
     t.string   "contact_mobile"
     t.integer  "cancel_cd",                      default: 0
     t.datetime "start_working_at"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.integer  "markup_price",                   default: 0
     t.integer  "pay_type_cd",                    default: 0
     t.datetime "paid_at"
@@ -203,10 +203,12 @@ ActiveRecord::Schema.define(version: 20151227042225) do
     t.datetime "finish_working_at"
     t.text     "merchant_remark"
     t.datetime "closed_at"
+    t.boolean  "hosting",                        default: false
   end
 
   add_index "orders", ["bid_id"], name: "index_orders_on_bid_id"
   add_index "orders", ["cancel_cd"], name: "index_orders_on_cancel_cd"
+  add_index "orders", ["hosting"], name: "index_orders_on_hosting"
   add_index "orders", ["mechanic_id"], name: "index_orders_on_mechanic_id"
   add_index "orders", ["merchant_id"], name: "index_orders_on_merchant_id"
   add_index "orders", ["pay_type_cd"], name: "index_orders_on_pay_type_cd"
@@ -289,8 +291,10 @@ ActiveRecord::Schema.define(version: 20151227042225) do
     t.string   "last_login_ip"
     t.decimal  "total_cost",             precision: 10, scale: 2, default: 0.0
     t.integer  "available_orders_count",                          default: 0
+    t.boolean  "host",                                            default: false
   end
 
+  add_index "users", ["host"], name: "index_users_on_host"
   add_index "users", ["mobile"], name: "index_users_on_mobile", unique: true
   add_index "users", ["role_cd"], name: "index_users_on_role_cd"
   add_index "users", ["user_group_id"], name: "index_users_on_user_group_id"

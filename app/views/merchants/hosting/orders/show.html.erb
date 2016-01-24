@@ -1,9 +1,7 @@
-<h3 class="page-header">订单详情 #<%= @order.id %></h3>
+<h3 class="page-header">订单详情</h3>
 
 <div class="row">
-  <div class="col-sm-6">
-    <h4 class="col-sm-offset-1">交易信息</h4>
-
+  <div class="col-sm-offset-3 col-sm-9">
     <%= show_for @order, class: "dl-horizontal" do |i| %>
       <%= i.attribute :merchant_nickname %>
       <%= i.attribute :merchant_mobile %>
@@ -19,35 +17,19 @@
         <% end %>
       <% end %>
 
+      <%= i.attribute :address %>
+      <%= i.attribute :appointment, format: :long %>
       <%= i.attribute :skill %>
       <%= i.attribute :brand %>
       <%= i.attribute :series %>
-      <%= i.attribute :created_at, format: :long %>
-      <%= i.attribute :start_working_at, format: :long %>
-      <%= i.attribute :finish_working_at, format: :long %>
+      <%= i.attribute :price %>
       <%= i.attribute :remark %>
       <%= i.attribute :merchant_remark %>
     <% end %>
   </div>
-
-  <div class="col-sm-6">
-    <h4 class="col-sm-offset-1">价格信息</h4>
-
-    <%= show_for @order, class: "dl-horizontal" do |i| %>
-      <%= i.attribute :price, label: "总价" %>
-      <%= i.attribute :quoted_price %>
-      <%= i.attribute :markup_price %>
-    <% end %>
-  </div>
-
-</div>
-
-<div class="pull-right">
-  <%= link_to "修改商户备注", remark_merchants_order_path(@order), class: "btn btn-primary" %>
 </div>
 
 <% if @order.mechanic_id %>
-
   <h3 class="page-header">技师信息</h3>
 
   <div class="row">
@@ -67,16 +49,31 @@
       <% end %>
     </div>
   </div>
+<% else %>
+  <div class="pull-right">
+    <%= link_to "指派技师", pick_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
+  </div>
 <% end %>
 
 <% case @order.state %>
-<% when :pended %>
+<% when :confirming %>
+  <h3 class="page-header">确认完工 <small>点击施工照片查看原图</small></h3>
+  <% if @order.mechanic_attach_1 || @order.mechanic_attach_2 %>
+    <div class="images">
+      <%= link_to @order.mechanic_attach_1.url(:original) do %>
+        <%= image_tag @order.mechanic_attach_1.url(:thumb), class: "img-rounded" %>
+      <% end if @order.mechanic_attach_1.present? %>
+      <%= link_to @order.mechanic_attach_2.url(:original) do %>
+        <%= image_tag @order.mechanic_attach_2.url(:thumb), class: "img-rounded" %>
+      <% end if @order.mechanic_attach_2.present? %>
+    </div>
+  <% end %>
   <div class="pull-right">
-    <%= link_to "微信支付", pay_merchants_orders_path(@order, format: :weixin), class: "btn btn-primary" %>
-    <%= link_to "支付宝支付", pay_merchants_orders_path(@order, format: :alipay), class: "btn btn-primary" %>
+    <%= link_to "确认完工", confirm_merchants_hosting_order_path(@order), method: :post, class: "btn btn-primary" %>
+    <%= link_to "申请返工", rework_merchants_hosting_order_path(@order), method: :post, class: "btn btn-primary" %>
   </div>
-<% when :reviewed %>
+<% when :finished %>
   <div class="pull-right">
-    <%= link_to "完成结算", close_merchants_admin_order_path(@order), method: :post, class: "btn btn-primary" %>
+    <%= link_to "点评技师", review_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
   </div>
 <% end %>

@@ -24,7 +24,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
       if @order.pending?
         redirect_to merchants_order_bids_path(@order)
       else
-        redirect_to merchants_order_path(@order)
+        redirect_to current_show_path
       end
     else
       render :new
@@ -46,7 +46,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
   def pay
     case params[:format]
     when "alipay"
-      response = Ali.payment @order, merchants_root_path
+      response = Ali.payment @order
       redirect_to response
     when "weixin"
       response = Weixin.payment_qrcode @order
@@ -60,7 +60,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
       end
     else
       flash[:error] = "未知支付类型"
-      redirect_to merchants_order_path(@order)
+      redirect_to current_show_path
     end
   end
 
@@ -107,14 +107,14 @@ class Merchants::OrdersController < Merchants::ApplicationController
 
     if @order.paid?
       flash[:success] = "成功支付订单！"
-      redirect_to merchants_order_path(@order)
+      redirect_to merchants_root_path
     else
       flash.now[:notice] = "正在查询订单支付结果..."
     end
   end
 
   def refund
-    if @order.paid? || @order.working?
+    if @order.paid? || @order.working? || @order.confirming?
       if @order.paid?
         reason = :user_cancel
       else
@@ -141,7 +141,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
     else
       flash[:error] = "订单状态错误！"
     end
-    redirect_to merchants_order_path(@order)
+    redirect_to current_show_path
   end
 
   def remark
@@ -150,7 +150,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
 
   def update_remark
     if @order.update_attributes(remark_order_params)
-      redirect! :remark, merchants_order_path(@order)
+      redirect! :remark, current_show_path
     else
       render :new
     end
@@ -159,25 +159,29 @@ class Merchants::OrdersController < Merchants::ApplicationController
   def rework
     @order.rework!
     flash[:notice] = "订单申请返工！"
-    redirect_to merchants_order_path(@order)
+    redirect_to current_show_path
   end
 
   def confirm
     @order.confirm!
     flash[:notice] = "订单确认完工！"
-    redirect_to merchants_order_path(@order)
+    redirect_to current_show_path
   end
 
   def update_review
     if @order.update_attributes(review_order_params)
       @order.review!
-      redirect_to merchants_order_path(@order)
+      redirect_to current_show_path
     else
       render :new
     end
   end
 
   private
+
+    def current_show_path
+      merchants_order_path(@order)
+    end
 
     def redirect_pending
       if order = order_klass.pendings.first
@@ -212,7 +216,8 @@ class Merchants::OrdersController < Merchants::ApplicationController
       params.require(:order).permit(:address, :appointment, :skill_cd,
         :brand_cd, :series_cd, :quoted_price, :remark, :merchant_remark,
         :custom_location, :lbs_id, :province_cd, :city_cd, :professionality,
-        :timeliness, :review, :contact_mobile, :contact_nickname, :mechanic_id)
+        :timeliness, :review, :contact_mobile, :contact_nickname, :hosting,
+        :mechanic_id)
     end
 
     def review_order_params

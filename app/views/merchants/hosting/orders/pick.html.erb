@@ -1,52 +1,10 @@
-<h3 class="page-header">预约技师</h3>
+<h3 class="page-header">指派技师</h3>
 
-<%
-  city_map = types_option_pairs City, :province_id
-  series_map = types_option_pairs Series, :brand_id
-%>
-
-<%= bootstrap_simple_form_for([ :merchants, @order ]) do |f| %>
+<%= bootstrap_simple_form_for([ :merchants, :hosting, @order ], url: pick_merchants_hosting_order_path(@order)) do |f| %>
   <div class="row">
-    <div class="col-md-7">
+    <div class="col-md-12" id="mechanic_list">
       <%= f.error_messages %>
 
-      <h5 class="text-muted">需求信息</h5>
-
-      <%= f.input :address %>
-
-      <%= f.input :custom_location, as: :boolean %>
-      <div class="form-inline" id="custom_location" style="display: none;">
-        <%= f.input :province_cd, collection: Province.all, input_html: { class: "select2" } %>
-        <%= f.input :city_cd, collection: city_map[@order.province_cd] || [], input_html: { class: "select2" } %>
-        <p class="help-block">技师用人信息发送范围，范围内的技师将收到用人信息</p>
-      </div>
-
-      <%= f.input :appointment do %>
-        <div class="datetime-input-group">
-          <%= f.input_field :appointment, class: "form-control" %>
-        </div>
-      <% end %>
-
-      <%= f.input :skill_cd, collection: Skill.all, input_html: { class: "select2" } %>
-
-      <%= f.input :brand_cd, collection: Brand.all, input_html: { class: "select2" } %>
-      <%= f.input :series_cd, collection: series_map[@order.brand_cd] || [], input_html: { class: "select2" } %>
-
-      <%= f.input :quoted_price %>
-      <%= f.input :remark, hint: "备注对所有人可见", input_html: { rows: 4 } %>
-      <%= f.input :merchant_remark, hint: "商户备注仅对当前商户可见", input_html: { rows: 4 } %>
-
-      <h5 class="text-muted">联系人信息</h5>
-
-      <%= f.input :contact_nickname %>
-      <%= f.input :contact_mobile %>
-
-      <h5 class="text-muted">托管信息</h5>
-
-      <%= f.input :hosting, hint: "订单由汽车堂进行托管，汽车堂会帮您完成派单、确认完工等操作" %>
-    </div>
-
-    <div class="col-md-12" id="mechanic_list">
       <h5 class="text-muted">指派技师 <a href="#" id="clean_mechanic">取消选中技师</a></h5>
 
       <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name), class: "form-control", id: "mechanics_skills_select" %></label>
@@ -117,34 +75,6 @@
     $("#mechanics_skills_select").change(function() {
       skillColumn.search($(this).val());
       dataTable.draw();
-    });
-
-    var seriesMap = <%= raw series_map.to_json %>;
-
-    var $brand = $("#order_brand_cd");
-    var $series = $("#order_series_cd");
-    $brand.change(function() {
-      $series.removeOptions();
-      $series.appendOptions(seriesMap[$brand.val()]);
-    });
-
-    var $useCustomLocation = $("#order_custom_location");
-    var $customLocation = $("#custom_location");
-    var useCustomLocationCallback = function() {
-      if ($useCustomLocation.is(":checked")) $customLocation.show();
-      else $customLocation.hide();
-    };
-
-    $useCustomLocation.on("change", useCustomLocationCallback);
-    useCustomLocationCallback();
-
-    var cityMap = <%= raw city_map.to_json %>;
-
-    var $province = $("#order_province_cd");
-    var $city = $("#order_city_cd");
-    $province.change(function() {
-      $city.removeOptions();
-      $city.appendOptions(cityMap[$province.val()]);
     });
 
     var $cleanMechanic = $("#clean_mechanic");

@@ -46,6 +46,15 @@ Rails.application.routes.draw do
       end
     end
 
+    namespace :hosting do
+      resources :orders do
+        member do
+          get :pick
+          patch :pick, action: :update_pick
+        end
+      end
+    end
+
     resources :merchants
     resources :mechanics do
       member do

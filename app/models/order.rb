@@ -124,7 +124,7 @@ class Order < ActiveRecord::Base
 
   after_create do
     SendCreateOrderMessageJob.set(wait: 1.second).perform_later(self)
-    if mechanic_id
+    if mechanic_id || hosting
       pick!
     else
       pending!
@@ -183,7 +183,7 @@ class Order < ActiveRecord::Base
   end
 
   def refund! reason = :user_cancel
-    return false unless refunding? || paid? || working?
+    return false unless refunding? || paid? || working? || confirming?
     update_attribute(:refund, Order.refunds[reason]) unless refunding?
     update_attribute(:state, Order.states[:refunded])
     user.increase_total_cost!(-price)

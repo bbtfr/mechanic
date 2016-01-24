@@ -1,8 +1,8 @@
-<h3 class="page-header">我的订单</h3>
+<h3 class="page-header">托管订单</h3>
 
 <%
   def order_state_link_to state, text
-    link = link_to text, merchants_orders_path(state: state)
+    link = link_to text, merchants_hosting_orders_path(state: state)
     class_name = (@state == state) ? "active" : ""
     %{<li class="#{class_name}">#{link}</li>}.html_safe
   end
@@ -11,7 +11,6 @@
 <div class="row">
   <div class="col-md-2 col-xs-4">
     <ul class="nav nav-pills nav-stacked">
-      <%= order_state_link_to :pendeds, "待付款" %>
       <%= order_state_link_to :paids, "待服务" %>
       <%= order_state_link_to :workings, "服务中" %>
       <%= order_state_link_to :finisheds, "待评价" %>
@@ -21,7 +20,7 @@
   <% @orders = @orders.includes(mechanic: :user) %>
 
   <div class="col-md-10 col-xs-8">
-    <%= index_for [ :merchants, @orders ], class: "table table-hover data-tables" do |i| %>
+    <%= index_for [ :merchants, :hosting, @orders ], class: "table table-hover data-tables" do |i| %>
       <%= i.attribute :contact_nickname %>
       <%= i.attribute :contact_mobile %>
       <%= i.attribute :appointment, format: :short %>

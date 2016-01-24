@@ -25,14 +25,14 @@
 
   <div class="col-md-10 col-xs-8">
     <%= index_for [ :merchants, :admin, @orders ], class: "table table-hover data-tables" do |i| %>
-      <%= i.attribute :merchant, with: :nickname %>
+      <%= i.attribute :merchant_nickname %>
       <%= i.attribute :contact_nickname %>
       <%= i.attribute :contact_mobile %>
       <%= i.attribute :appointment, format: :short %>
       <%= i.attribute :finish_working_at, format: :short if %i(settleds revieweds closeds).include? @state %>
       <%= i.attribute :skill %>
       <%= i.attribute :price %>
-      <%= i.attribute :mechanic, with: :user_nickname, if_raise: nil %>
+      <%= i.attribute :mechanic_nickname %>
 
       <%= i.actions :show %>
     <% end %>

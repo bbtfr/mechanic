@@ -3,11 +3,11 @@
 <% @orders = @orders.includes(:user, mechanic: :user) %>
 
 <%= index_for [ :admin, @orders ], class: "table table-hover data-tables" do |i| %>
-  <%= i.attribute :user, with: :nickname %>
+  <%= i.attribute :user_nickname %>
   <%= i.attribute :contact %>
   <%= i.attribute :skill %>
   <%= i.attribute :price %>
-  <%= i.attribute :mechanic, with: :user_nickname, if_raise: nil %>
+  <%= i.attribute :mechanic_nickname %>
   <%= i.attribute :state do |order| %>
     <% if order.canceled? %>
       <%= te order, :cancel %>
