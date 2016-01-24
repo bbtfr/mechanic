@@ -269,7 +269,7 @@ class Order < ActiveRecord::Base
   end
 
   def title
-    "#{mechanic.user.nickname} 为您 #{skill}"
+    "汽车堂#{skill}订单"
   end
 
   def mobile

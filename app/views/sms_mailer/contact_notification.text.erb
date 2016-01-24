@@ -1,6 +1,6 @@
 您好<%= @order.contact_nickname || @order.user_nickname %>：您的<%= @order.skill %>服务订单已安排给如下师傅：
-技师姓名：<%= @order.mechanic.user.nickname %>；
-手机号码：<%= @order.mechanic.user.mobile %>；
+技师姓名：<%= @order.mechanic_nickname %>；
+手机号码：<%= @order.mechanic_mobile %>；
 地址：<%= @order.mechanic.user.address %>；
 接单次数：<%= @order.mechanic.available_orders_count %>；
 专业：<%= @order.mechanic.professionality_average %>；
