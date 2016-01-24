@@ -51,6 +51,12 @@ Rails.application.routes.draw do
         member do
           get :pick
           patch :pick, action: :update_pick
+
+          post :confirm
+          post :rework
+
+          get :review
+          patch :review, action: :update_review
         end
       end
     end

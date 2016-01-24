@@ -24,7 +24,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
       if @order.pending?
         redirect_to merchants_order_bids_path(@order)
       else
-        redirect_to current_show_path
+        redirect_to current_order_path
       end
     else
       render :new
@@ -60,7 +60,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
       end
     else
       flash[:error] = "未知支付类型"
-      redirect_to current_show_path
+      redirect_to current_order_path
     end
   end
 
@@ -141,7 +141,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
     else
       flash[:error] = "订单状态错误！"
     end
-    redirect_to current_show_path
+    redirect_to current_order_path
   end
 
   def remark
@@ -150,7 +150,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
 
   def update_remark
     if @order.update_attributes(remark_order_params)
-      redirect! :remark, current_show_path
+      redirect! :remark, current_order_path
     else
       render :new
     end
@@ -159,19 +159,19 @@ class Merchants::OrdersController < Merchants::ApplicationController
   def rework
     @order.rework!
     flash[:notice] = "订单申请返工！"
-    redirect_to current_show_path
+    redirect_to current_order_path
   end
 
   def confirm
     @order.confirm!
     flash[:notice] = "订单确认完工！"
-    redirect_to current_show_path
+    redirect_to current_order_path
   end
 
   def update_review
     if @order.update_attributes(review_order_params)
       @order.review!
-      redirect_to current_show_path
+      redirect_to current_order_path
     else
       render :new
     end
@@ -179,18 +179,18 @@ class Merchants::OrdersController < Merchants::ApplicationController
 
   private
 
-    def current_show_path
+    def current_order_path
       merchants_order_path(@order)
     end
 
     def redirect_pending
-      if order = order_klass.pendings.first
+      if order = unhosting_order_klass.pendings.first
         flash[:notice] = "您有一条竞价中的订单..."
         redirect_to merchants_order_bids_path(order)
-      elsif order = order_klass.payings.first
+      elsif order = unhosting_order_klass.payings.first
         flash[:notice] = "您有一条需要支付的订单..."
         redirect_to merchants_order_path(order)
-      elsif order = order_klass.confirmings.first
+      elsif order = unhosting_order_klass.confirmings.first
         flash[:notice] = "您有一条需要确认完工的订单..."
         redirect_to merchants_order_path(order)
       end
@@ -210,6 +210,10 @@ class Merchants::OrdersController < Merchants::ApplicationController
 
     def order_klass
       Order.where(user_id: current_store, merchant_id: current_merchant)
+    end
+
+    def unhosting_order_klass
+      Order.where(user_id: current_store, merchant_id: current_merchant, hosting: false)
     end
 
     def order_params

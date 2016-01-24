@@ -1,4 +1,15 @@
-<h3 class="page-header">订单详情 #<%= @order.id %></h3>
+<h3 class="page-header">
+  订单详情 #<%= @order.id %>
+  <small>
+    <% if @order.canceled? %>
+      <%= te @order, :cancel %>
+    <% elsif @order.refunded? %>
+      <%= te @order, :refund %>
+    <% else %>
+      <%= te @order, :state %>
+    <% end %>
+  </small>
+</h3>
 
 <div class="row">
   <div class="col-sm-6">

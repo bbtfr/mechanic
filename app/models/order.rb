@@ -157,6 +157,13 @@ class Order < ActiveRecord::Base
     save(validate: false)
   end
 
+  def repick! mechanic
+    update_attribute(:mechanic, mechanic)
+    Weixin.send_paid_order_message(self)
+    SMSMailer.mechanic_notification(self).deliver
+    SMSMailer.contact_notification(self).deliver if contact_mobile
+  end
+
   def cancel! reason = :user_cancel
     return false unless pending? || paying? || pended?
     update_attribute(:cancel, Order.cancels[reason])
@@ -169,9 +176,12 @@ class Order < ActiveRecord::Base
     update_attribute(:trade_no, trade_no) if trade_no
     update_attribute(:state, Order.states[:paid])
     user.increase_total_cost!(price)
-    Weixin.send_paid_order_message(self)
-    SMSMailer.mechanic_notification(self).deliver
-    SMSMailer.contact_notification(self).deliver if contact_mobile
+
+    if mechanic
+      Weixin.send_paid_order_message(self)
+      SMSMailer.mechanic_notification(self).deliver
+      SMSMailer.contact_notification(self).deliver if contact_mobile
+    end
   rescue => error
     Rails.logger.error "#{error.class}: #{error.message} from Order#pay!"
   end

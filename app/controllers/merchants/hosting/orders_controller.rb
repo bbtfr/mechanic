@@ -11,17 +11,22 @@ class Merchants::Hosting::OrdersController < Merchants::OrdersController
   end
 
   def update_pick
-    if @order.update_attributes(order_params)
-      redirect_to current_show_path
-    else
-      render :pick
-    end
+    mechanic = Mechanic.find(params.require(:order).require(:mechanic_id))
+    @order.repick! mechanic
+    redirect_to current_order_path
   end
 
   private
 
-    def current_show_path
+    def current_order_path
       merchants_hosting_order_path(@order)
+    end
+
+    def redirect_pending
+      if order = order_klass.confirmings.first
+        flash[:notice] = "您有一条需要确认完工的订单..."
+        redirect_to merchants_hosting_order_path(order)
+      end
     end
 
     def order_klass
@@ -29,11 +34,7 @@ class Merchants::Hosting::OrdersController < Merchants::OrdersController
     end
 
     def find_order
-      @order = admin_order_klass.find(params[:id])
-    end
-
-    def order_params
-      params.require(:order).permit(:mechanic_id)
+      @order = order_klass.find(params[:id])
     end
 
     def redirect_user
