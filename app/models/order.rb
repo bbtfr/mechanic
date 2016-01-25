@@ -56,14 +56,18 @@ class Order < ActiveRecord::Base
   validates_format_of :contact_mobile, with: /\d{11}/, if: :merchant_id
   validate :validate_location, on: :create
 
-  delegate :nickname, :mobile, to: :user, prefix: true
-  delegate :nickname, :mobile, to: :merchant, prefix: true
-
   cache_method :user, :available_orders_count
   cache_method :mechanic, :available_orders_count
   cache_method :mechanic, :revoke_orders_count
   cache_method :mechanic, :professionality_average
   cache_method :mechanic, :timeliness_average
+
+  cache_column :user, :nickname
+  cache_column :user, :mobile
+  cache_column :mechanic, :user_nickname, cache_column: :mechanic_nickname
+  cache_column :mechanic, :user_mobile, cache_column: :mechanic_mobile
+  cache_column :merchant, :user_nickname, cache_column: :merchant_nickname
+  cache_column :merchant, :user_mobile, cache_column: :merchant_mobile
 
   attr_accessor :custom_location
   def custom_location_present?

@@ -16,7 +16,10 @@ class Mechanic < ActiveRecord::Base
   alias_attribute :skill_cds, :skill_ids
   as_enum :skills, Skill, persistence: true, accessor: :multiple
 
-  delegate :nickname, :mobile, :address, :weixin_openid, to: :user, prefix: true
+  cache_column :user, :nickname
+  cache_column :user, :mobile
+  cache_column :user, :address
+  cache_column :user, :weixin_openid
 
   attr_accessor :_check, :_create
 
