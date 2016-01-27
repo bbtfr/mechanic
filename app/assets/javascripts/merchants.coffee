@@ -4,8 +4,6 @@
 #= require bootstrap/popover
 #= require Chart
 #= require Chart.Scatter
-#= require select2
-#= require select2_locale_zh-CN
 #= require tinymce-jquery
 
 $.fn.extend
@@ -22,10 +20,6 @@ $(document).on 'ready page:load', ->
     viewport:
       selector: 'body'
       padding: 30
-
-  $('.select2').select2
-    theme: 'bootstrap'
-    language: 'zh-CN'
 
   $('.tinymce').tinymce
     height: 300

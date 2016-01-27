@@ -40,11 +40,11 @@ class Mechanic < ActiveRecord::Base
   end
 
   def raw_available_orders_count
-    orders.availables.count
+    orders.availables.count || 0
   end
 
   def raw_revoke_orders_count
-    orders.merchant_revokes.count
+    orders.merchant_revokes.count || 0
   end
 
   def regular_client? user

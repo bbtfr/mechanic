@@ -1,10 +1,25 @@
 #= require jquery
 #= require jquery_ujs
 #= require turbolinks
+#= require select2
+#= require select2_locale_zh-CN
 #= require dataTables/jquery.dataTables
 #= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 
+$.fn.extend
+  removeOptions: ->
+    @find("option:not(:first-child)").remove()
+
+  appendOptions: (values) ->
+    return unless values
+    for value in values
+      @append("<option value=\"#{value[1]}\">#{value[0]}</option>")
+
 $(document).on 'ready page:load', ->
+  $('.select2').select2
+    theme: 'bootstrap'
+    language: 'zh-CN'
+
   window.dataTable = $(".table.data-tables").DataTable
     order: [] # Do not sort by default
     pagingType: 'full_numbers'

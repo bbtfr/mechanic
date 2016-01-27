@@ -1,0 +1,50 @@
+<%
+  city_map = types_option_pairs City, :province_id
+  district_map = types_option_pairs District, :city_id
+%>
+
+<%= bootstrap_simple_form_for(@mechanic, url: url, method: method) do |f| %>
+  <div class="row">
+    <div class="col-md-7">
+      <%= f.error_messages %>
+
+      <%= f.input :mobile %>
+      <%= f.input :nickname %>
+      <%= f.input :gender, collection: enum_option_pairs(User, :gender) %>
+      <%= f.input :address %>
+
+      <%= f.bootstrap_simple_fields_for :mechanic do |ff| %>
+        <%= ff.input :skill_cds, collection: Skill.all, input_html: { class: "select2", multiple: true } %>
+
+        <%= ff.input :province_cd, collection: Province.all, input_html: { class: "select2" } %>
+        <%= ff.input :city_cd, collection: city_map[ff.object.province_cd] || [], input_html: { class: "select2" } %>
+        <%= ff.input :district_cd, collection: district_map[ff.object.city_cd] || [], input_html: { class: "select2" } %>
+
+        <%= ff.input :description, as: :text, input_html: { rows: 4 } %>
+      <% end %>
+
+      <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    var cityMap = <%= raw city_map.to_json %>;
+    var districtMap = <%= raw district_map.to_json %>;
+
+    var $province = $("#user_mechanic_attributes_province_cd");
+    var $city = $("#user_mechanic_attributes_city_cd");
+    var $district = $("#user_mechanic_attributes_district_cd");
+
+    $province.change(function() {
+      $city.removeOptions();
+      $city.appendOptions(cityMap[$province.val()]);
+    });
+
+    $city.change(function() {
+      $district.removeOptions();
+      $district.appendOptions(districtMap[$city.val()]);
+    });
+  });
+</script>

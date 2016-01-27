@@ -57,6 +57,6 @@ class User < ActiveRecord::Base
   end
 
   def raw_available_orders_count
-    orders.availables.count
+    orders.availables.count || 0
   end
 end
