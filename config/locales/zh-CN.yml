@@ -44,6 +44,7 @@ zh-CN:
       confirming: 待完工确认
       finished: 已完工
       reviewed: 已评价
+      closed: 已结算
     cancel:
       pending_timeout: 无技师响应
       paying_timeout: 支付超时
