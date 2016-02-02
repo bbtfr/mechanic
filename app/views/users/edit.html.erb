@@ -7,7 +7,7 @@
   district_map = types_option_pairs District, :city_id
 end %>
 
-<%= simple_form_for(@user, url: user_path) do |f| %>
+<%= simple_form_for(@user, url: user_path, method: :put) do |f| %>
   <%= f.error_messages %>
 
   <div class="jumbotron vertical-parent">

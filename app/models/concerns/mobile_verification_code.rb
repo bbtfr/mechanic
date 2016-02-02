@@ -8,7 +8,7 @@ module MobileVerificationCode
       config.login_field = :mobile
     end
 
-    validates_format_of :mobile, with: /\d{11}/
+    validates_format_of :mobile, with: /^\d{11}$/
     validates_uniqueness_of :mobile
     validate :send_verification_code, if: :verification_code_changed?
 
@@ -20,7 +20,7 @@ module MobileVerificationCode
   end
 
   def send_verification_code
-    return unless mobile =~ /\d{11}/
+    return unless mobile =~ /^\d{11}$/
     return if @skip_send_verification_code
     result = SMSMailer.confirmation(self).deliver
     if result[:success]

@@ -53,7 +53,7 @@ class Order < ActiveRecord::Base
   validates_numericality_of :quoted_price, greater_than_or_equal_to: 0
   validates_presence_of :skill_cd, :brand_cd, :series_cd, :quoted_price
   validates_presence_of :contact_mobile, if: :merchant_id
-  validates_format_of :contact_mobile, with: /\d{11}/, if: :merchant_id
+  validates_format_of :contact_mobile, with: /^\d{11}$/, if: :merchant_id
   validate :validate_location, on: :create
 
   cache_method :user, :available_orders_count
