@@ -8,7 +8,7 @@ module MobileVerificationCode
       config.login_field = :mobile
     end
 
-    validates_format_of :mobile, with: /^\d{11}$/
+    validates_format_of :mobile, with: /\A\d{11}\z/
     validates_uniqueness_of :mobile
     validate :send_verification_code, if: :verification_code_changed?
 
