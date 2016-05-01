@@ -104,7 +104,7 @@ class OrdersController < ApplicationController
         flash[:success] = "成功提交完工信息！<br>等待用户确认..."
         redirect_to order_path(@order)
       else
-        flash[:error] = @order.errors.first[1]
+        flash.now[:error] = @order.errors.first[1]
         render :show
       end
     else

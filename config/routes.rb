@@ -170,6 +170,9 @@ Rails.application.routes.draw do
     resources :users do
       member do
         post :mechanicize
+
+        get :balance
+        patch :balance, action: :update_balance
       end
     end
     resources :user_groups, concerns: [:confirm]

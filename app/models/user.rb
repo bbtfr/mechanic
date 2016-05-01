@@ -48,9 +48,19 @@ class User < ActiveRecord::Base
 
   validates_presence_of :nickname, :gender, :address, if: :confirmed
 
+  attr_accessor :balance_increase_amount, :balance_increase_description
+
   def increase_balance! amount, reason = "", source = nil
-    Metric.audit self, source, :balance, reason: reason, amount: amount
-    increment!(:balance, amount)
+    if reason.present?
+      Metric.audit self, source, :balance, reason: reason, amount: amount
+      increment!(:balance, amount)
+      true
+    else
+      errors.add :balance_increase_description, "不能为空"
+      self.balance_increase_amount = amount
+      self.balance_increase_description = reason
+      false
+    end
   end
 
   def increase_total_cost! amount
