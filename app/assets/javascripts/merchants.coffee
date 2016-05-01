@@ -40,4 +40,5 @@ $(document).on 'ready page:load', ->
     ]
 
 $(document).on 'page:receive', ->
+  dataTable.destroy() if dataTable
   tinymce.remove()

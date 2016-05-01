@@ -57,6 +57,9 @@ Rails.application.routes.draw do
 
           get :review
           patch :review, action: :update_review
+
+          get :procedure_price
+          patch :procedure_price, action: :update_procedure_price
         end
       end
     end

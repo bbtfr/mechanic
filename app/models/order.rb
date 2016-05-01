@@ -6,6 +6,7 @@ class Order < ActiveRecord::Base
   belongs_to :user
   belongs_to :mechanic
   belongs_to :merchant
+  has_one :store, through: :merchant
 
   belongs_to :bid
   has_many :bids
@@ -55,6 +56,7 @@ class Order < ActiveRecord::Base
   validates_presence_of :contact_mobile, if: :merchant_id
   validates_format_of :contact_mobile, with: /\A\d{11}\z/, if: :merchant_id
   validate :validate_location, on: :create
+  validate :validate_procedure_price, on: :update
 
   cache_method :user, :available_orders_count
   cache_method :mechanic, :available_orders_count
@@ -114,6 +116,12 @@ class Order < ActiveRecord::Base
     errors.add(:address, "无法定位，请打开GPS定位或输入自定义技师用人信息发送范围")
   end
 
+  def validate_procedure_price
+    if procedure_price > quoted_price
+      errors.add(:procedure_price, "应低于订单标价")
+    end
+  end
+
   after_initialize do
     if persisted?
       if pending? && Time.now - created_at >= PendingTimeout
@@ -159,7 +167,6 @@ class Order < ActiveRecord::Base
       self.markup_price = bid.markup_price
     end
 
-    self.price = quoted_price + markup_price
     pay! :skip if price.zero?
 
     save(validate: false)
@@ -266,16 +273,20 @@ class Order < ActiveRecord::Base
   end
 
   def settings
-    merchant ? merchant.store.settings : Setting
+    FallbackScopedSettings.for_things self, self.store
+  end
+
+  def price
+    quoted_price + markup_price
   end
 
   def commission
-    @commission ||= (price * (mobile? ? settings.mobile_commission_percent.to_f :
+    @commission ||= ((quoted_price - procedure_price) * (mobile? ? settings.mobile_commission_percent.to_f :
       settings.commission_percent.to_f) / 100).round(2)
   end
 
   def mechanic_income
-    price - commission
+    price - commission - procedure_price
   end
 
   def client_commission

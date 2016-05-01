@@ -1,15 +1,8 @@
 class Store < ActiveRecord::Base
   include Followable
 
-  class ScopedSettings < RailsSettings::ScopedSettings
-    def self.[] key
-      value = super
-      value.nil? ? ::Setting[key] : value
-    end
-  end
-
   def settings
-    ScopedSettings.for_thing self
+    FallbackScopedSettings.for_things self
   end
 
   self.table_name = "users"

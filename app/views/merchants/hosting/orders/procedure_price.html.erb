@@ -1,0 +1,13 @@
+<h3 class="page-header">手续费 <small>手续费应低于订单标价：1元</small></h3>
+
+<div class="row">
+  <div class="col-md-7">
+    <%= bootstrap_simple_form_for([ :merchants, @order ], url: procedure_price_merchants_hosting_order_path(@order)) do |f| %>
+      <%= f.error_messages %>
+
+      <%= f.input :procedure_price %>
+
+      <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+    <% end %>
+  </div>
+</div>

@@ -152,7 +152,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
     if @order.update_attributes(remark_order_params)
       redirect! :remark, current_order_path
     else
-      render :new
+      render :remark
     end
   end
 
@@ -173,7 +173,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
       @order.review!
       redirect_to current_order_path
     else
-      render :new
+      render :review
     end
   end
 

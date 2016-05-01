@@ -16,7 +16,7 @@
     <%= f.input :address %>
 
     <%= f.fields_for :mechanic do |ff| %>
-      <%= ff.input :_create, as: :boolean, label: "我是技师" %>
+      <%= ff.input :_create, as: :boolean, label: "我是技师", input_html: { checked: @user.mechanic? } %>
 
       <div id="user_mechanic_attributes" style="display: none;">
         <%= ff.input :skill_cds, as: :check_boxes, collection: Skill.all %>

@@ -16,6 +16,14 @@ class Merchants::Hosting::OrdersController < Merchants::OrdersController
     redirect_to current_order_path
   end
 
+  def update_procedure_price
+    if @order.update_attributes(procedure_price_order_params)
+      redirect_to current_order_path
+    else
+      render :procedure_price
+    end
+  end
+
   private
 
     def current_order_path
@@ -42,6 +50,10 @@ class Merchants::Hosting::OrdersController < Merchants::OrdersController
         flash[:error] = "无法访问此页面！"
         redirect_to merchants_root_path
       end
+    end
+
+    def procedure_price_order_params
+      params.require(:order).permit(:procedure_price)
     end
 
 end

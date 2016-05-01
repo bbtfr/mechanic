@@ -34,7 +34,7 @@ class OrdersController < ApplicationController
       @order.review!
       redirect_to order_path(@order)
     else
-      render :new
+      render :review
     end
   end
 

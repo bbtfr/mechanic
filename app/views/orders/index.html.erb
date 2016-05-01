@@ -33,7 +33,12 @@
         <div class="media-body">
           <%= order.title %>
           <p>预约时间：<%= l order.appointment, format: :short %></p>
-          <p>成交价格：<%= order.price %> 元</p>
+
+          <% if current_user.mechanic? %>
+            <p>成交价格：<%= order.mechanic_income %> 元</p>
+          <% else %>
+            <p>成交价格：<%= order.price %> 元</p>
+          <% end %>
         </div>
       <% end %>
     </li>

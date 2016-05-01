@@ -20,7 +20,11 @@
     <%= i.attribute :skill %>
     <%= i.attribute :brand %>
     <%= i.attribute :series %>
-    <%= i.attribute :quoted_price %>
+    <% if current_user.mechanic? %>
+      <%= i.attribute :mechanic_income %>
+    <% else %>
+      <%= i.attribute :quoted_price %>
+    <% end %>
     <%= i.attribute :remark %>
   <% end %>
 </div>

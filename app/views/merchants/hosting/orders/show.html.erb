@@ -34,6 +34,7 @@
       <%= i.attribute :brand %>
       <%= i.attribute :series %>
       <%= i.attribute :price %>
+      <%= i.attribute :procedure_price %>
       <%= i.attribute :remark %>
       <%= i.attribute :merchant_remark %>
     <% end %>
@@ -60,9 +61,14 @@
       <% end %>
     </div>
   </div>
+
+  <div class="pull-right">
+    <%= link_to "设置手续费", procedure_price_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
+  </div>
 <% else %>
   <div class="pull-right">
     <%= link_to "指派技师", pick_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
+    <%= link_to "设置手续费", procedure_price_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
   </div>
 <% end %>
 
