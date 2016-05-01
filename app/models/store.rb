@@ -36,6 +36,10 @@ class Store < ActiveRecord::Base
 
   validates_presence_of :nickname, :qq
 
+  def host?
+    host
+  end
+
   def confirm!
     update_attribute(:confirmed, true)
   end

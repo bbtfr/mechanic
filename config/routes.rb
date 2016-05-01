@@ -155,13 +155,22 @@ Rails.application.routes.draw do
         post :cancel
       end
     end
+    concern :hide do
+      collection do
+        get :hidden
+      end
+      member do
+        post :hide
+        post :unhide
+      end
+    end
     resources :users do
       member do
         post :mechanicize
       end
     end
     resources :user_groups, concerns: [:confirm]
-    resources :mechanics do
+    resources :mechanics, concerns: [:hide] do
       member do
         post :clientize
       end

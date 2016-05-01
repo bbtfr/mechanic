@@ -38,7 +38,7 @@ class Merchants::Hosting::OrdersController < Merchants::OrdersController
     end
 
     def redirect_user
-      unless current_store.host
+      unless current_store.host?
         flash[:error] = "无法访问此页面！"
         redirect_to merchants_root_path
       end

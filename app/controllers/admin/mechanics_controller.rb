@@ -38,6 +38,16 @@ class Admin::MechanicsController < Admin::ApplicationController
     end
   end
 
+  def hide
+    @mechanic.hide!
+    redirect_to request.referer
+  end
+
+  def unhide
+    @mechanic.unhide!
+    redirect_to request.referer
+  end
+
   private
 
     def find_mechanic

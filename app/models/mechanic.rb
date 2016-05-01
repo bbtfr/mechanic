@@ -21,6 +21,8 @@ class Mechanic < ActiveRecord::Base
   cache_column :user, :address
   cache_column :user, :weixin_openid
 
+  scope :shown, -> { includes(:user).where.not(users: { hidden: true }) }
+
   attr_accessor :_check, :_create
 
   def increase_total_income! amount

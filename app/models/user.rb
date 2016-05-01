@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   include MobileVerificationCode
   include Followable
+  include Hidable
 
   def update_weixin_openid openid
     return unless openid.present?

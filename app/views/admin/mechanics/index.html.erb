@@ -22,5 +22,10 @@
   <%= i.actions do |a| %>
     <%= a.action_link :show, url: admin_mechanic_path(i.object) %>
     <%= a.action_link :edit, url: edit_admin_mechanic_path(i.object) %>
+    <% if i.object.hidden? %>
+      <%= a.action_link :unhide, url: unhide_admin_mechanic_path(i.object), method: :post, confirm: "你确定要显示这个用户？" %>
+    <% else %>
+      <%= a.action_link :hide, url: hide_admin_mechanic_path(i.object), method: :post, confirm: "你确定要隐藏这个用户？" %>
+    <% end %>
   <% end %>
 <% end %>

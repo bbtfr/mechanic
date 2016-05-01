@@ -17,4 +17,6 @@ zh-CN:
       follow: 关注
       inactive: 锁定
       active: 取消锁定
+      hide: 隐藏
+      unhide: 显示
       confirmation: "你确定要删除这条记录？"

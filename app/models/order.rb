@@ -69,6 +69,10 @@ class Order < ActiveRecord::Base
   cache_column :merchant, :user_nickname, cache_column: :merchant_nickname
   cache_column :merchant, :user_mobile, cache_column: :merchant_mobile
 
+  def hosting?
+    hosting
+  end
+
   attr_accessor :custom_location
   def custom_location_present?
     ["1", 1, true].include?(custom_location) && province_cd.present? && city_cd.present?

@@ -4,7 +4,7 @@ class SendCreateOrderMessageJob < ActiveJob::Base
   def perform(order)
     city = City.find(order.city_cd)
 
-    users = User.mechanics
+    users = User.mechanics.shown
     users = users.location_scope(city)
     users = users.skill_scope(order.skill)
     users.load
