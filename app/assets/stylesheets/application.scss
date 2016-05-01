@@ -39,6 +39,12 @@ body, .bar {
   border-radius: 50%; // set radius in percents
 }
 
+.input.file label {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .btn-positive:visited,
 .btn-negative:visited,
 .btn-primary:visited {

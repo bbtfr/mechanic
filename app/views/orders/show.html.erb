@@ -62,8 +62,6 @@
     <% when :working %>
 
       <%= simple_form_for(@order, url: finish_order_path(@order)) do |f| %>
-        <%= f.error_messages %>
-
         <%= f.input :mechanic_attach_1 do %>
           <input class="btn btn-block btn-positive" value="请选择文件" id="order_mechanic_attach_1_button" readonly></input>
           <%= f.input_field :mechanic_attach_1 %>
@@ -74,6 +72,10 @@
         <% end %>
         <%= f.button :submit, "服务完工", class: "btn-block btn-positive" %>
       <% end %>
+
+      <p>
+        注：网页端派单请上传车主短信照片
+      </p>
 
       <script type="text/javascript">
         fakeFileInput(order_mechanic_attach_1, order_mechanic_attach_1_button);

@@ -75,6 +75,10 @@ class Order < ActiveRecord::Base
     hosting
   end
 
+  def appointing?
+    appointing
+  end
+
   attr_accessor :custom_location
   def custom_location_present?
     ["1", 1, true].include?(custom_location) && province_cd.present? && city_cd.present?
@@ -135,6 +139,8 @@ class Order < ActiveRecord::Base
       elsif confirming? && Time.now - updated_at > ConfirmingTimeout
         confirm!
       end
+    else
+      self.appointing = true if self.mechanic_id
     end
   end
 
@@ -150,10 +156,12 @@ class Order < ActiveRecord::Base
   def pend!
     return false unless paying?
     update_attribute(:state, Order.states[:pended])
+    true
   end
 
   def pending!
     UpdateOrderStateJob.set(wait: PendingTimeout).perform_later(self)
+    true
   end
 
   def pick! bid = nil
@@ -168,8 +176,8 @@ class Order < ActiveRecord::Base
     end
 
     pay! :skip if price.zero?
-
     save(validate: false)
+    true
   end
 
   def repick! mechanic
@@ -177,12 +185,14 @@ class Order < ActiveRecord::Base
     Weixin.send_paid_order_message(self)
     SMSMailer.mechanic_notification(self).deliver
     SMSMailer.contact_notification(self).deliver if contact_mobile
+    true
   end
 
   def cancel! reason = :user_cancel
     return false unless pending? || paying? || pended?
     update_attribute(:cancel, Order.cancels[reason])
     update_attribute(:state, Order.states[:canceled])
+    true
   end
 
   def pay! pay_type = :weixin, trade_no = nil
@@ -197,6 +207,8 @@ class Order < ActiveRecord::Base
       SMSMailer.mechanic_notification(self).deliver
       SMSMailer.contact_notification(self).deliver if contact_mobile
     end
+
+    true
   rescue => error
     Rails.logger.error "#{error.class}: #{error.message} from Order#pay!"
   end
@@ -205,6 +217,7 @@ class Order < ActiveRecord::Base
     return false unless paid? || working?
     update_attribute(:refund, Order.refunds[reason])
     update_attribute(:state, Order.states[:refunding])
+    true
   end
 
   def refund! reason = :user_cancel
@@ -212,19 +225,26 @@ class Order < ActiveRecord::Base
     update_attribute(:refund, Order.refunds[reason]) unless refunding?
     update_attribute(:state, Order.states[:refunded])
     user.increase_total_cost!(-price)
+    true
   end
 
   def work!
     return false unless paid?
     update_attribute(:start_working_at, Time.now)
     update_attribute(:state, Order.states[:working])
+    true
   end
 
   def finish!
     return false unless working?
+    if appointing? && !mechanic_attach_1.present?
+      errors.add(:mechanic_attach_1, "网页端派单请上传车主短信照片")
+      return false
+    end
     update_attribute(:state, Order.states[:confirming])
     UpdateOrderStateJob.set(wait: ConfirmingTimeout).perform_later(self)
     Weixin.send_confirm_order_message self
+    true
   rescue => error
     Rails.logger.error "#{error.class}: #{error.message} from Order#finish!"
   end
@@ -247,12 +267,14 @@ class Order < ActiveRecord::Base
 
     update_attribute(:finish_working_at, Time.now)
     update_attribute(:state, Order.states[:finished])
+    true
   end
 
   def rework!
     return false unless confirming?
     update_attribute(:state, Order.states[:working])
     Weixin.send_rework_order_message self
+    true
   rescue => error
     Rails.logger.error "#{error.class}: #{error.message} from Order#rework!"
   end
@@ -260,12 +282,14 @@ class Order < ActiveRecord::Base
   def review!
     update_attribute(:reviewed_at, Time.now)
     update_attribute(:state, Order.states[:reviewed])
+    true
   end
 
   def close!
     return false unless reviewed?
     update_attribute(:closed_at, Time.now)
     update_attribute(:state, Order.states[:closed])
+    true
   end
 
   def contact
