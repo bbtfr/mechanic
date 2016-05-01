@@ -46,7 +46,7 @@ class Store < ActiveRecord::Base
   end
 
   def total_cost
-    orders.availables.sum(:price) || 0
+    orders.availables.sum(:quoted_price) + orders.availables.sum(:markup_price) || 0
   end
 
   def available_orders_count
