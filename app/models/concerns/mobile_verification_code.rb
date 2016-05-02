@@ -20,11 +20,7 @@ module MobileVerificationCode
   end
 
   def send_verification_code
-<<<<<<< 0fd53286797b3a196d329ac6290dd3d2f944907b
-    return unless mobile =~ /^\d{11}$/
-=======
     return unless mobile =~ /\A\d{11}\z/
->>>>>>> fix mobile regex
     return if @skip_send_verification_code
     result = SMSMailer.confirmation(self).deliver
     if result[:success]
