@@ -66,6 +66,9 @@ gem 'quiet_assets'
 # Use Unicorn as the app server
 gem 'unicorn'
 
+# Supporting gem for Rails Panel (Google Chrome extension for Rails development).
+gem 'meta_request'
+
 group :development, :test do
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3'

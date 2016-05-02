@@ -1,4 +1,15 @@
-<h3 class="page-header">订单详情 #<%= @order.id %></h3>
+<h3 class="page-header">
+  订单详情 #<%= @order.id %>
+  <small>
+    <% if @order.canceled? %>
+      <%= te @order, :cancel %>
+    <% elsif @order.refunded? %>
+      <%= te @order, :refund %>
+    <% else %>
+      <%= te @order, :state %>
+    <% end %>
+  </small>
+</h3>
 
 <div class="row">
   <div class="col-sm-6">
@@ -15,11 +26,24 @@
         <%= i.attribute :contact_mobile %>
       <% end %>
 
+      <%= i.attribute :state do |order| %>
+        <% if order.canceled? %>
+          <%= te order, :cancel %>
+        <% elsif order.refunded? %>
+          <%= te order, :refund %>
+        <% else %>
+          <%= te order, :state %>
+        <% end %>
+      <% end %>
+
       <%= i.attribute :skill %>
       <%= i.attribute :brand %>
       <%= i.attribute :series %>
       <%= i.attribute :created_at, format: :long %>
       <%= i.attribute :start_working_at, format: :long %>
+      <%= i.attribute :finish_working_at, format: :long %>
+      <%= i.attribute :remark %>
+      <%= i.attribute :merchant_remark %>
     <% end %>
   </div>
 
@@ -30,7 +54,31 @@
       <%= i.attribute :price, label: "总价" %>
       <%= i.attribute :quoted_price %>
       <%= i.attribute :markup_price %>
+      <%= i.attribute :procedure_price %>
     <% end %>
   </div>
 
 </div>
+
+<% if @order.mechanic_id %>
+
+  <h3 class="page-header">技师信息</h3>
+
+  <div class="row">
+    <div class="col-sm-3 text-right">
+      <%= image_tag(@order.mechanic.user.avatar.url(:thumb)) %>
+    </div>
+
+    <div class="col-sm-9">
+      <%= show_for @order.mechanic, class: "dl-horizontal" do |i| %>
+        <%= i.attribute :user_nickname %>
+        <%= i.attribute :user_mobile %>
+        <%= i.attribute :user_address %>
+        <%= i.attribute :description %>
+        <%= i.attribute :available_orders_count %>
+        <%= i.attribute :professionality_average %>
+        <%= i.attribute :timeliness_average %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

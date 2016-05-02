@@ -2,7 +2,7 @@ class Merchants::Admin::OrdersController < Merchants::Admin::ApplicationControll
   before_filter :find_order, except: [ :index ]
 
   def index
-    @state = if %w(pendeds paids workings settleds revieweds closeds).include? params[:state]
+    @state = if %w(pendeds paids workings settleds refundeds revieweds closeds).include? params[:state]
         params[:state].to_sym
       else
         :pendeds

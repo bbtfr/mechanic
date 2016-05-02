@@ -37,4 +37,5 @@ $(document).on 'ready page:load', ->
         last: "尾页"
 
 $(document).on 'page:before-unload', ->
+  dataTable.destroy() if dataTable
   clearInterval(interval) if interval?

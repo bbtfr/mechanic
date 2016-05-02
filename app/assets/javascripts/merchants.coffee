@@ -39,6 +39,5 @@ $(document).on 'ready page:load', ->
       value: 'table table-hover'
     ]
 
-$(document).on 'page:receive', ->
-  dataTable.destroy() if dataTable
+$(document).on 'page:before-unload', ->
   tinymce.remove()
