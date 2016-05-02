@@ -15,7 +15,7 @@ $.fn.extend
     for value in values
       @append("<option value=\"#{value[1]}\">#{value[0]}</option>")
 
-$(document).on 'ready page:load', ->
+$(document).on 'ready page:load page:restore', ->
   $('[data-toggle="popover"]').popover
     viewport:
       selector: 'body'

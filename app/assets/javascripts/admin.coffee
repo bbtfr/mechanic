@@ -15,7 +15,7 @@ $.fn.extend
     for value in values
       @append("<option value=\"#{value[1]}\">#{value[0]}</option>")
 
-$(document).on 'ready page:load', ->
+$(document).on 'ready page:load page:restore', ->
   $('.select2').select2
     theme: 'bootstrap'
     language: 'zh-CN'
