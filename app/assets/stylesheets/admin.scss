@@ -34,6 +34,66 @@
   }
 }
 
+.wice_index_for {
+  .index_for {
+    clear: both;
+    margin-top: 6px !important;
+    margin-bottom: 6px !important;
+    max-width: none !important;
+
+    thead > tr > th {
+      padding-right: 30px;
+      white-space: nowrap;
+    }
+
+    thead .sorting,
+    thead .sorting.asc,
+    thead .sorting.desc,
+    thead .sorting.asc.disabled,
+    thead .sorting.desc.disabled {
+      cursor: pointer;
+      position: relative;
+    }
+
+    thead .sorting:after,
+    thead .sorting.asc:after,
+    thead .sorting.desc:after {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      display: block;
+      font-family: 'Glyphicons Halflings';
+      opacity: 0.5;
+    }
+    thead .sorting.asc.disabled:after,
+    thead .sorting.desc.disabled:after {
+      color: #eee;
+    }
+    thead .sorting:after {
+      opacity: 0.2;
+      content: "\e150"; /* sort */
+    }
+    thead .sorting.asc:after {
+      content: "\e155"; /* sort-by-attributes */
+    }
+    thead .sorting.desc:after {
+      content: "\e156"; /* sort-by-attributes-alt */
+    }
+  }
+
+  .index_for_info {
+    padding-top: 8px;
+  }
+
+  .index_for_pagination ul {
+    margin: 0;
+  }
+}
+
+table.dataTable thead > tr > th {
+  white-space: nowrap;
+}
+
 .dataTables_length select {
   margin: 0;
   font: inherit;

@@ -1,10 +1,10 @@
 # source 'https://rubygems.org'
-source 'https://ruby.taobao.org'
+source 'https://gems.ruby-china.org'
 
 gem 'dotenv-rails'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.3'
+gem 'rails', '~> 4.2.3'
 # gem 'rails-i18n'
 
 gem 'sidekiq'
@@ -22,7 +22,9 @@ gem 'simple_enum-multiple'
 gem 'simple_enum-persistence'
 
 gem 'simple_form'
-gem 'index_for'
+gem 'index_for', github: 'bbtfr/index_for'
+gem 'kaminari'
+gem 'kaminari-bootstrap'
 
 gem 'paperclip'
 gem 'rest-client'

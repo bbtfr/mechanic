@@ -5,13 +5,13 @@
 
 <% @mechanics = @mechanics.includes(:mechanic) %>
 
-<%= index_for [ :admin, @mechanics ], class: "table table-hover data-tables" do |i| %>
-  <%= i.attribute :nickname %>
-  <%= i.attribute :mobile %>
+<%= wice_index_for [ :admin, @mechanics ], class: "table table-hover" do |i| %>
+  <%= i.attribute :nickname, searchable: true %>
+  <%= i.attribute :mobile, searchable: true %>
   <%= i.fields_for :mechanic, model: Mechanic do |ii| %>
-    <%= ii.attribute :province %>
-    <%= ii.attribute :city %>
-    <%= ii.attribute :district %>
+    <%= ii.attribute :province, sortable: "mechanics.province_cd" %>
+    <%= ii.attribute :city, sortable: "mechanics.city_cd" %>
+    <%= ii.attribute :district, sortable: "mechanics.district_cd" %>
     <%= ii.attribute :available_orders_count %>
     <%= ii.attribute :revoke_orders_count %>
     <%= ii.attribute :total_income %>
