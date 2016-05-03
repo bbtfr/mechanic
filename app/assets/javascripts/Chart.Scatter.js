@@ -54,6 +54,16 @@
 					: value < min ? min
 					: value;
 			},
+
+			calculateFixedScaleRange: function(startValue, steps, stepWidth) {
+				return {
+					steps: steps,
+					stepValue: stepWidth,
+					min: startValue,
+					max: startValue + (steps * stepWidth)
+				};
+			},
+
 			ScatterPoint: chartjs.Point.extend({
 
 				inRange: function (chartX, chartY) {
@@ -304,20 +314,18 @@
 
 			if (this.scaleOverride) {
 
-				this.yScaleRange = {
-					steps: this.scaleSteps,
-					stepValue: this.scaleStepWidth,
-					min: this.scaleStartValue,
-					max: this.scaleStartValue + (this.scaleSteps * this.scaleStepWidth)
-				};
+				this.yScaleRange = hlp.calculateFixedScaleRange(
+					this.scaleStartValue,
+					this.scaleSteps,
+					this.scaleStepWidth);
 			} else {
 
 				this.yScaleRange = helpers.calculateScaleRange(
-									[this.dataRange.ymin, this.dataRange.ymax],
-									this.chart.height,
-									this.fontSize,
-									this.beginAtZero,	// beginAtZero,
-									this.integersOnly); // integersOnly				
+					[this.dataRange.ymin, this.dataRange.ymax],
+					this.chart.height,
+					this.fontSize,
+					this.beginAtZero,	// beginAtZero,
+					this.integersOnly); // integersOnly
 			}
 		},
 
@@ -325,12 +333,10 @@
 
 			if (this.xScaleOverride) {
 
-				this.xScaleRange = {
-					steps: this.xScaleSteps,
-					stepValue: this.xScaleStepWidth,
-					min: this.xScaleStartValue,
-					max: this.xScaleStartValue + (this.xScaleSteps * this.xScaleStepWidth)
-				};
+				this.xScaleRange = hlp.calculateFixedScaleRange(
+					this.xScaleStartValue,
+					this.xScaleSteps,
+					this.xScaleStepWidth);
 			} else {
 
 				this.xScaleRange = helpers.calculateScaleRange(
@@ -564,6 +570,9 @@
 
 			var maxSteps = drawingSize / (fontSize * 3.3);
 
+			// fix https://github.com/dima117/Chart.Scatter/issues/31
+			valueMax === valueMin && (valueMax++);
+
 			var valueRange = +valueMax - valueMin,
 				offset = this.useUtc ? 0 : new Date().getTimezoneOffset() * 60000,
 				min = +valueMin - offset,
@@ -603,12 +612,21 @@
 
 		calculateXscaleRange: function () {
 
-			this.xScaleRange = this._calculateDateScaleRange(
-				this.dataRange.xmin,
-				this.dataRange.xmax,
-				this.chart.width,
-				this.fontSize
-			);
+			if (this.xScaleOverride) {
+
+				this.xScaleRange = hlp.calculateFixedScaleRange(
+					this.xScaleStartValue,
+					this.xScaleSteps,
+					this.xScaleStepWidth);
+			} else {
+
+				this.xScaleRange = this._calculateDateScaleRange(
+					this.dataRange.xmin,
+					this.dataRange.xmax,
+					this.chart.width,
+					this.fontSize
+				);
+			}
 		},
 
 		argToString: function (arg) {
@@ -715,9 +733,9 @@
 				formattedValue = +y + "",
 				formattedSize = +r + "";
 
-			point.arg = +x;
-			point.value = +y;
-			point.size = +r;  // for use in templates
+			point.arg = +x || 0;
+			point.value = +y || 0;
+			point.size = +r || 0;  // for use in templates
 
 			point.argLabel = helpers.template(this.scaleArgLabel, { value: formattedArg }),
 			point.valueLabel = helpers.template(this.scaleLabel, { value: formattedValue });
@@ -734,7 +752,6 @@
 
 		initialize: function (datasets) {
 
-			this.hasData = false;
 			this.datasets = [];
 			this.scale = this._initScale();
 
@@ -749,8 +766,6 @@
 				var datasetObject = new chartjs.ScatterDataSet(dataset, this.options, this.chart, this.scale);
 
 				this.datasets.push(datasetObject);
-
-				this.hasData |= !!dataset.data.length;
 
 				helpers.each(dataset.data, function (dataPoint) {
 
@@ -933,6 +948,16 @@
 			helpers.each(this.datasets, callback, this);
 		},
 
+		_hasData: function() {
+			var hasData = false;
+
+			this._forEachDataset(function(dataset) {
+				hasData |= !!dataset.points.length;
+			});
+
+			return hasData;
+		},
+
 		_calculateRange: function () {
 
 			var xmin = undefined,
@@ -1059,7 +1084,7 @@
 
 		draw: function (ease) {
 
-			if (this.hasData) {
+			if (this._hasData()) {
 
 				// update view params
 				this.scale.fit();
