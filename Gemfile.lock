@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/bbtfr/index_for.git
-  revision: 6730cb669568bcc62e4f7b97184e4e74a63d91a5
+  revision: 75499deaa2f0f6697bbd6a004f7c719d78abafc5
   specs:
     index_for (0.2.0)
       actionpack (>= 3.2, < 5)

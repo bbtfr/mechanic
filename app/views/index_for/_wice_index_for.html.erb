@@ -32,7 +32,8 @@
 </div>
 
 <script type="text/javascript">
-  $(document).on("ready page:load page:restore", function() {
+  var ready = Turbolinks.supported ? "turbolinks:load" : "ready";
+  $(document).on(ready, function() {
     $(".wice_index_for").each(function() {
       var $this = $(this);
       if ($this.data("wice-index-for")) return;
