@@ -21,7 +21,7 @@ $(document).on ready, ->
     theme: 'bootstrap'
     language: 'zh-CN'
 
-  window.dataTable = $(".table.data-tables").DataTable
+  window.dataTable = $(".table.data-tables:not(.dataTable)").DataTable
     order: [] # Do not sort by default
     pagingType: 'full_numbers'
     language:
