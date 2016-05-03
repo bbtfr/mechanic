@@ -40,5 +40,5 @@ $(document).on ready, ->
       value: 'table table-hover'
     ]
 
-$(document).on 'turbolinks:before-render', ->
+$(document).on 'turbolinks:before-cache', ->
   tinymce.remove()

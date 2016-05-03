@@ -37,6 +37,6 @@ $(document).on ready, ->
         next: "后一页"
         last: "尾页"
 
-$(document).on 'turbolinks:before-render', ->
+$(document).on 'turbolinks:before-cache', ->
   dataTable.destroy() if dataTable
   clearInterval(interval) if interval?
