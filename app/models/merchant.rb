@@ -13,9 +13,9 @@ class Merchant < ActiveRecord::Base
 
   validates_presence_of :nickname
 
-  cache_column :user, :nickname
-  cache_column :user, :mobile
-  cache_column :user, :address
+  cache_column :store, :nickname
+  cache_column :store, :mobile
+  cache_column :store, :address
 
   def inactive!
     update_attribute(:active, false)

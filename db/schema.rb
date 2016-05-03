@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160501162022) do
+ActiveRecord::Schema.define(version: 20160503170640) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -114,9 +114,9 @@ ActiveRecord::Schema.define(version: 20160501162022) do
     t.datetime "last_login_at"
     t.string   "current_login_ip"
     t.string   "last_login_ip"
-    t.string   "user_nickname"
-    t.string   "user_mobile"
-    t.string   "user_address"
+    t.string   "store_nickname"
+    t.string   "store_mobile"
+    t.string   "store_address"
   end
 
   add_index "merchants", ["mobile"], name: "index_merchants_on_mobile", unique: true
@@ -206,6 +206,7 @@ ActiveRecord::Schema.define(version: 20160501162022) do
     t.boolean  "hosting",                        default: false
     t.integer  "procedure_price",                default: 0
     t.boolean  "appointing",                     default: false
+    t.string   "store_nickname"
   end
 
   add_index "orders", ["bid_id"], name: "index_orders_on_bid_id"

@@ -68,8 +68,9 @@ class Order < ActiveRecord::Base
   cache_column :user, :mobile
   cache_column :mechanic, :user_nickname, cache_column: :mechanic_nickname
   cache_column :mechanic, :user_mobile, cache_column: :mechanic_mobile
-  cache_column :merchant, :user_nickname, cache_column: :merchant_nickname
-  cache_column :merchant, :user_mobile, cache_column: :merchant_mobile
+  cache_column :merchant, :nickname, cache_column: :merchant_nickname
+  cache_column :merchant, :mobile, cache_column: :merchant_mobile
+  cache_column :merchant, :store_nickname, cache_column: :store_nickname
 
   def hosting?
     hosting
