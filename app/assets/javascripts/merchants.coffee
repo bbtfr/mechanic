@@ -15,7 +15,8 @@ $.fn.extend
     for value in values
       @append("<option value=\"#{value[1]}\">#{value[0]}</option>")
 
-$(document).on 'ready page:load page:restore', ->
+ready = if Turbolinks.supported then 'turbolinks:load' else 'ready'
+$(document).on ready, ->
   $('[data-toggle="popover"]').popover
     viewport:
       selector: 'body'
@@ -39,5 +40,5 @@ $(document).on 'ready page:load page:restore', ->
       value: 'table table-hover'
     ]
 
-$(document).on 'page:before-unload', ->
+$(document).on 'turbolinks:before-render', ->
   tinymce.remove()

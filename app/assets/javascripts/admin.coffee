@@ -15,7 +15,8 @@ $.fn.extend
     for value in values
       @append("<option value=\"#{value[1]}\">#{value[0]}</option>")
 
-$(document).on 'ready page:load page:restore', ->
+ready = if Turbolinks.supported then 'turbolinks:load' else 'ready'
+$(document).on ready, ->
   $('.select2').select2
     theme: 'bootstrap'
     language: 'zh-CN'
@@ -36,6 +37,6 @@ $(document).on 'ready page:load page:restore', ->
         next: "后一页"
         last: "尾页"
 
-$(document).on 'page:before-unload', ->
+$(document).on 'turbolinks:before-render', ->
   dataTable.destroy() if dataTable
   clearInterval(interval) if interval?
