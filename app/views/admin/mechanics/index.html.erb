@@ -5,7 +5,7 @@
 
 <% @mechanics = @mechanics.includes(:mechanic) %>
 
-<%= wice_index_for [ :admin, @mechanics ], class: "table table-hover" do |i| %>
+<%= index_for [ :admin, @mechanics ], class: "table table-hover data-tables" do |i| %>
   <%= i.attribute :nickname, searchable: true %>
   <%= i.attribute :mobile, searchable: true %>
   <%= i.fields_for :mechanic, model: Mechanic do |ii| %>
