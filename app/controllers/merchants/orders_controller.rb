@@ -1,7 +1,7 @@
 class Merchants::OrdersController < Merchants::ApplicationController
   skip_before_filter :verify_authenticity_token, :authenticate!, only: [ :notify ]
   before_filter :find_order, except: [ :index, :new, :create, :notify ]
-  before_filter :redirect_pending, only: [ :new, :create, :index ]
+  before_filter :redirect_pending, only: [ :new, :index ]
 
   helper_method :fetch_redirect
 
@@ -21,7 +21,9 @@ class Merchants::OrdersController < Merchants::ApplicationController
   def create
     @order = order_klass.new(order_params)
     if @order.save
-      if @order.pending?
+      if @order.appointing?
+        redirect_to pick_merchants_order_path(@order)
+      elsif @order.pending?
         redirect_to merchants_order_bids_path(@order)
       else
         redirect_to current_order_path
@@ -31,15 +33,26 @@ class Merchants::OrdersController < Merchants::ApplicationController
     end
   end
 
-  def pend
-    @order.pend!
-    flash[:notice] = "订单延后付款！"
-    redirect_to merchants_root_path
+  def update_pick
+    if mechanic_id = params[:order] && params[:order][:mechanic_id]
+      mechanic = Mechanic.find(mechanic_id)
+      @order.pick! mechanic
+      redirect_to current_order_path
+    else
+      @order.errors.add :base, "请选择一个技师"
+      render :pick
+    end
   end
 
   def cancel
     @order.cancel!
     flash[:notice] = "订单已取消！"
+    redirect_to merchants_root_path
+  end
+
+  def pend
+    @order.pend!
+    flash[:notice] = "订单延后付款！"
     redirect_to merchants_root_path
   end
 
@@ -185,8 +198,13 @@ class Merchants::OrdersController < Merchants::ApplicationController
 
     def redirect_pending
       if order = unhosting_order_klass.pendings.first
-        flash[:notice] = "您有一条竞价中的订单..."
-        redirect_to merchants_order_bids_path(order)
+        if order.appointing?
+          flash[:notice] = "您有一条需要指派技师的订单..."
+          redirect_to pick_merchants_order_path(order)
+        else
+          flash[:notice] = "您有一条竞价中的订单..."
+          redirect_to merchants_order_bids_path(order)
+        end
       elsif order = unhosting_order_klass.payings.first
         flash[:notice] = "您有一条需要支付的订单..."
         redirect_to merchants_order_path(order)
@@ -221,7 +239,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
         :brand_cd, :series_cd, :quoted_price, :remark, :merchant_remark,
         :custom_location, :lbs_id, :province_cd, :city_cd, :professionality,
         :timeliness, :review, :contact_mobile, :contact_nickname, :hosting,
-        :mechanic_id)
+        :appointing)
     end
 
     def review_order_params

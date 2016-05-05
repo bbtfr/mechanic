@@ -147,10 +147,12 @@ class Order < ActiveRecord::Base
 
   after_create do
     SendCreateOrderMessageJob.set(wait: 1.second).perform_later(self)
-    if mechanic_id || hosting
-      pick!
-    else
-      pending!
+    unless appointing?
+      if hosting?
+        pick!
+      else
+        pending!
+      end
     end
   end
 
@@ -165,15 +167,18 @@ class Order < ActiveRecord::Base
     true
   end
 
-  def pick! bid = nil
+  def pick! target = nil
     return false unless pending?
     update_attribute(:state, Order.states[:paying])
     UpdateOrderStateJob.set(wait: PayingTimeout).perform_later(self)
 
-    if bid
-      self.bid_id = bid.id
-      self.mechanic_id = bid.mechanic_id
-      self.markup_price = bid.markup_price
+    case target
+    when Bid
+      self.bid_id = target.id
+      self.mechanic_id = target.mechanic_id
+      self.markup_price = target.markup_price
+    when Mechanic
+      self.mechanic_id = target.id
     end
 
     pay! :skip if price.zero?

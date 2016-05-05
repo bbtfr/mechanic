@@ -165,6 +165,7 @@ zh-CN:
         state: 状态
         custom_location: 使用自定义技师用人信息发送范围
         hosting: 汽车堂托管
+        appointing: 指派技师
       bid:
         markup_price: 加价
       skill:

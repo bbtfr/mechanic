@@ -11,9 +11,14 @@ class Merchants::Hosting::OrdersController < Merchants::OrdersController
   end
 
   def update_pick
-    mechanic = Mechanic.find(params.require(:order).require(:mechanic_id))
-    @order.repick! mechanic
-    redirect_to current_order_path
+    if mechanic_id = params[:order] && params[:order][:mechanic_id]
+      mechanic = Mechanic.find(mechanic_id)
+      @order.repick! mechanic
+      redirect_to current_order_path
+    else
+      @order.errors.add :base, "请选择一个技师"
+      render :pick
+    end
   end
 
   def update_procedure_price
@@ -31,7 +36,10 @@ class Merchants::Hosting::OrdersController < Merchants::OrdersController
     end
 
     def redirect_pending
-      if order = order_klass.confirmings.first
+      if order = order_klass.where(mechanic_id: nil).first
+        flash[:notice] = "您有一条需要指派技师的订单..."
+        redirect_to pick_merchants_order_path(order)
+      elsif order = order_klass.confirmings.first
         flash[:notice] = "您有一条需要确认完工的订单..."
         redirect_to merchants_hosting_order_path(order)
       end

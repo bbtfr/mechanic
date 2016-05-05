@@ -27,6 +27,9 @@ Rails.application.routes.draw do
       end
 
       member do
+        get :pick
+        patch :pick, action: :update_pick
+
         post :pend
         post :cancel
 

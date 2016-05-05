@@ -1,6 +1,6 @@
 <h3 class="page-header">指派技师</h3>
 
-<%= bootstrap_simple_form_for([ :merchants, :hosting, @order ], url: pick_merchants_hosting_order_path(@order)) do |f| %>
+<%= bootstrap_simple_form_for([ :merchants, @order ], url: pick_merchants_order_path(@order)) do |f| %>
   <div class="row">
     <div class="col-md-12" id="mechanic_list">
       <%= f.error_messages %>
