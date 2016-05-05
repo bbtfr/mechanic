@@ -200,7 +200,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
       if order = unhosting_order_klass.pendings.first
         if order.appointing?
           flash[:notice] = "您有一条需要指派技师的订单..."
-          redirect_to pick_merchants_order_path(order)
+          redirect_to merchants_order_path(order)
         else
           flash[:notice] = "您有一条竞价中的订单..."
           redirect_to merchants_order_bids_path(order)
