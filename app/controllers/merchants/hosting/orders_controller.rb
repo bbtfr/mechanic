@@ -1,21 +1,25 @@
 class Merchants::Hosting::OrdersController < Merchants::OrdersController
+  skip_before_filter :redirect_pending
   before_filter :redirect_user
 
   def index
-    @state = if %w(paids workings finisheds).include? params[:state]
+    @state = if %w(unassigneds assigneds workings finisheds).include? params[:state]
         params[:state].to_sym
       else
-        :paids
+        :unassigneds
       end
     @orders = order_klass.send(@state)
   end
 
   def update_pick
-    if mechanic_id = params[:order] && params[:order][:mechanic_id]
+    if mechanic_id = params[:order][:mechanic_id]
+      remark = params[:order][:remark]
+      @order.update_attribute(:remark, remark) if remark
       mechanic = Mechanic.find(mechanic_id)
       @order.repick! mechanic
       redirect_to current_order_path
     else
+      @order.remark = params[:order][:remark]
       @order.errors.add :base, "请选择一个技师"
       render :pick
     end
@@ -35,18 +39,8 @@ class Merchants::Hosting::OrdersController < Merchants::OrdersController
       merchants_hosting_order_path(@order)
     end
 
-    def redirect_pending
-      if order = order_klass.paids.where(mechanic_id: nil).first
-        flash[:notice] = "您有一条需要指派技师的订单..."
-        redirect_to merchants_hosting_order_path(order)
-      elsif order = order_klass.confirmings.first
-        flash[:notice] = "您有一条需要确认完工的订单..."
-        redirect_to merchants_hosting_order_path(order)
-      end
-    end
-
     def order_klass
-      Order.where(hosting: true)
+      Order.hostings
     end
 
     def find_order

@@ -8,7 +8,7 @@
       <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name), class: "form-control", id: "mechanics_skills_select" %></label>
 
       <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
-      <% @mechanics = Mechanic.includes(:user, :skills).where(users: { role_cd: User.roles[:mechanic] }) %>
+      <% @mechanics = Mechanic.includes(:user, :skills) %>
       <% @mechanics = @mechanics.where(province_cd: @order.province_cd) %>
       <% @mechanics = @mechanics.shown %>
       <%= index_for [ :merchants, @mechanics ], class: "table table-hover" do |i| %>

@@ -11,7 +11,8 @@
 <div class="row">
   <div class="col-md-2 col-xs-4">
     <ul class="nav nav-pills nav-stacked">
-      <%= order_state_link_to :paids, "待服务" %>
+      <%= order_state_link_to :unassigneds, "未分配" %>
+      <%= order_state_link_to :assigneds, "待服务" %>
       <%= order_state_link_to :workings, "服务中" %>
       <%= order_state_link_to :finisheds, "待评价" %>
     </ul>

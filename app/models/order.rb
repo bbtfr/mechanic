@@ -36,6 +36,11 @@ class Order < ActiveRecord::Base
     state_cd > SETTLED_GREATER_THAN
   end
 
+  scope :assigneds, -> { paids.where.not(mechanic_id: nil) }
+  scope :unassigneds, -> { paids.where(mechanic_id: nil) }
+
+  scope :hostings, -> { where(hosting: true) }
+
   def mobile?
     !merchant_id
   end
@@ -243,7 +248,7 @@ class Order < ActiveRecord::Base
 
   def finish!
     return false unless working?
-    if appointing? && !mechanic_attach_1.present?
+    if !mobile? && !mechanic_attach_1.present?
       errors.add(:mechanic_attach_1, "网页端派单请上传车主短信照片")
       return false
     end

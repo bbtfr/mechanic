@@ -38,7 +38,15 @@
           <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "我的技师", merchants_mechanics_path %></li>
 
           <% if current_store.host? %>
-            <li class="<%= "active" if controller_path == "merchants/hosting/orders" %>"><%= link_to "托管订单", merchants_hosting_orders_path %></li>
+            <li class="<%= "active" if controller_path == "merchants/hosting/orders" %>">
+            <%= link_to merchants_hosting_orders_path do %>
+              托管订单
+              <% unassigned_hosting_orders_count = Order.hostings.unassigneds.count %>
+              <% if unassigned_hosting_orders_count > 0 %>
+                <span class="badge"><%=  %></span>
+              <% end %>
+            <% end %>
+            </li>
           <% end %>
 
           <% if current_merchant.admin? %>
