@@ -5,3 +5,32 @@
 </h3>
 
 <%= raw @note.content %>
+
+<a class="scroll-to-top-button" style="display: none;">
+  <span class="glyphicon glyphicon-chevron-up"></span>
+</a>
+
+<script type="text/javascript">
+  (function() {
+    $window = $(window);
+    $scrollToTopButton = $('.scroll-to-top-button');
+    if ($window.scrollTop() > 100) {
+      $scrollToTopButton.show();
+    }
+
+    //Check to see if the window is top if not then display button
+    $window.scroll(function() {
+      if ($window.scrollTop() > 100) {
+        $scrollToTopButton.fadeIn();
+      } else {
+        $scrollToTopButton.fadeOut();
+      }
+    });
+
+    //Click event to scroll to top
+    $scrollToTopButton.click(function() {
+      $('html, body').animate({ scrollTop: 0 }, 300);
+      return false;
+    });
+  })();
+</script>

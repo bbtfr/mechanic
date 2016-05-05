@@ -29,7 +29,7 @@
 <% end %>
 
 <script type="text/javascript">
-  $(document).ready(function() {
+  (function() {
     var cityMap = <%= raw city_map.to_json %>;
     var districtMap = <%= raw district_map.to_json %>;
 
@@ -46,5 +46,5 @@
       $district.removeOptions();
       $district.appendOptions(districtMap[$city.val()]);
     });
-  });
+  })();
 </script>

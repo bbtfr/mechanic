@@ -28,7 +28,7 @@
 </div>
 
 <script type="text/javascript">
-  $(document).ready(function() {
+  (function() {
     var $elements = $(".stars .glyphicon");
     $elements.click(function() {
       var $parent = $(this).parent();
@@ -40,5 +40,5 @@
       $icons.slice(0, value).removeClass("glyphicon-star-empty").addClass("glyphicon-star");
       $icons.slice(value, $icons.length).removeClass("glyphicon-star").addClass("glyphicon-star-empty");
     });
-  });
+  })();
 </script>

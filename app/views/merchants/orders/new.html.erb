@@ -91,7 +91,7 @@
 <% end %>
 
 <script type="text/javascript">
-  $(document).ready(function() {
+  (function() {
     var dataTable = $("#mechanics").DataTable({
       order: [], // Do not sort by default
       pagingType: 'full_numbers',
@@ -155,5 +155,5 @@
     });
 
     $("#mechanic_list input[checked]").trigger("click");
-  });
+  })();
 </script>
