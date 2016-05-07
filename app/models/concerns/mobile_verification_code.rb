@@ -12,6 +12,11 @@ module MobileVerificationCode
     validates_uniqueness_of :mobile
     validate :send_verification_code, if: :verification_code_changed?
 
+    before_validation :ensure_mobile_format
+    def ensure_mobile_format
+      self.mobile.strip! if mobile
+    end
+
     attr_accessor :verification_code_sent
 
     def reset_verification_code

@@ -17,7 +17,6 @@ class Withdrawal < ActiveRecord::Base
 
   def pay!
     return false unless pending?
-    update_attribute(:paid_at, Time.now)
     update_attribute(:state, Withdrawal.states[:paid])
   end
 
@@ -31,7 +30,14 @@ class Withdrawal < ActiveRecord::Base
     "#{user.nickname} 申请提现 #{amount} 元"
   end
 
-  def out_trade_no
-    "#{created_at.strftime("%Y%m%d")}#{"%06d" % id}"
+  def update_timestamp column, update, force
+    if force || (!send(column) && update)
+      update_attribute(column, Time.now)
+    end
+  end
+
+  def out_trade_no force = false
+    update_timestamp :paid_at, true, force
+    "#{paid_at.strftime("%Y%m%d")}#{"%06d" % id}"
   end
 end

@@ -110,6 +110,7 @@ zh-CN:
         available_orders_count: 预约次数
         total_cost: 总支出
         qq: QQ
+        hotline: 服务热线
       user_group:
         nickname: 分堂昵称
         user_nickname: 堂主
@@ -130,6 +131,8 @@ zh-CN:
         mechanic: 技师
         mechanic_nickname: 技师
         mechanic_mobile: 手机号码
+        store_nickname: 店铺名称
+        store_hotline: 服务热线
         contact: 联系人
         contact_nickname: 联系人
         contact_mobile: 手机号码

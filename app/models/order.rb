@@ -6,6 +6,7 @@ class Order < ActiveRecord::Base
   belongs_to :user
   belongs_to :mechanic
   belongs_to :merchant
+  has_one :mechanic_user, through: :mechanic, source: :user
   has_one :store, through: :merchant
 
   belongs_to :bid
@@ -45,6 +46,10 @@ class Order < ActiveRecord::Base
     !merchant_id
   end
 
+  def merchant?
+    !!merchant_id
+  end
+
   scope :state_scope, -> (state) { where(state_cd: states.value(state)) }
 
   has_attached_file :mechanic_attach_1, styles: { medium: "300x300>", thumb: "100x100#" }
@@ -57,11 +62,17 @@ class Order < ActiveRecord::Base
   validates_attachment_content_type :user_attach_1, :content_type => /\Aimage\/.*\z/
 
   validates_numericality_of :quoted_price, greater_than_or_equal_to: 0
+  validates_numericality_of :quoted_price, greater_than_or_equal_to: 1, if: :mobile?
   validates_presence_of :skill_cd, :brand_cd, :series_cd, :quoted_price
-  validates_presence_of :contact_mobile, if: :merchant_id
-  validates_format_of :contact_mobile, with: /\A\d{11}\z/, if: :merchant_id
+  validates_presence_of :contact_mobile, if: :merchant?
+  validates_format_of :contact_mobile, with: /\A\d{11}\z/, if: :merchant?
   validate :validate_location, on: :create
   validate :validate_procedure_price, on: :update
+
+  before_validation :ensure_contact_mobile_format
+  def ensure_contact_mobile_format
+    self.contact_mobile.strip! if contact_mobile
+  end
 
   cache_method :user, :available_orders_count
   cache_method :mechanic, :available_orders_count
@@ -71,11 +82,13 @@ class Order < ActiveRecord::Base
 
   cache_column :user, :nickname
   cache_column :user, :mobile
-  cache_column :mechanic, :user_nickname, cache_column: :mechanic_nickname
-  cache_column :mechanic, :user_mobile, cache_column: :mechanic_mobile
-  cache_column :merchant, :nickname, cache_column: :merchant_nickname
-  cache_column :merchant, :mobile, cache_column: :merchant_mobile
-  cache_column :merchant, :store_nickname, cache_column: :store_nickname
+
+  cache_column :mechanic_user, :nickname, cache_column: :mechanic_nickname
+  cache_column :mechanic_user, :mobile, cache_column: :mechanic_mobile
+  cache_column :merchant, :nickname
+  cache_column :merchant, :mobile
+  cache_column :store, :nickname
+  cache_column :store, :hotline
 
   def hosting?
     hosting
@@ -346,13 +359,13 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def out_trade_no update = true, force = false
-    update_timestamp :paid_at, update, force
+  def out_trade_no force = false
+    update_timestamp :paid_at, true, force
     "#{paid_at.strftime("%Y%m%d")}#{"%06d" % id}"
   end
 
-  def out_refund_no update = true, force = false
-    update_timestamp :refunded_at, update, force
+  def out_refund_no force = false
+    update_timestamp :refunded_at, true, force
     "#{refunded_at.strftime("%Y%m%d")}#{"%06d" % id}"
   end
 
