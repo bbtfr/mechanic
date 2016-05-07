@@ -15,7 +15,8 @@ gem 'whenever'
 gem 'authlogic', '~> 3.4.6'
 gem 'rails-settings-cached'
 
-gem 'activerecord-redundancy'
+gem 'activerecord-redundancy', github: 'bbtfr/activerecord-redundancy'
+gem 'colorize'
 
 gem 'simple_enum'
 gem 'simple_enum-multiple'
