@@ -27,6 +27,8 @@ class Store < ActiveRecord::Base
   scope :confirmeds, -> { where(confirmed: true) }
   scope :unconfirmeds, -> { where(confirmed: false) }
 
+  default_scope -> { where(role_cd: User.roles[:merchant]) }
+
   validates_presence_of :nickname, :qq
 
   def host?
