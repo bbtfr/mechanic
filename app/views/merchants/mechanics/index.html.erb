@@ -20,13 +20,25 @@
   <% when :followeds %>
     <% @mechanics = current_store.followed_mechanics.shown %>
   <% else %>
+
+    <% city_map = types_option_pairs City, :province_id %>
+    <% province_cd = (params[:province] || city_map.first[0]).to_i %>
+    <% city_cd = (params[:city] || city_map.first[1].first[1]).to_i %>
+
+    <form class="form-inline" id="mechanics_location">
+      <label>省份： <%= select_tag "province", options_from_collection_for_select(Province.all, :id, :name, province_cd), class: "form-control", id: "mechanics_provinces_select" %></label>
+      <label>城市： <%= select_tag "city", "<option value=\"\">请选择城市</option>".html_safe + options_for_select(city_map[province_cd], city_cd), class: "form-control", id: "mechanics_cities_select" %></label>
+    </form>
+
     <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
     <% @mechanics = Mechanic.shown %>
+    <% @mechanics = @mechanics.where(city_cd: city_cd) if city_cd %>
+
   <% end %>
 
   <div class="col-md-10 col-xs-8">
 
-    <%= index_for [ :merchants, @mechanics ], class: "table table-hover data-tables" do |i| %>
+    <%= index_for [ :merchants, @mechanics ], class: "table table-hover" do |i| %>
       <%= i.attribute :user_nickname %>
       <%= i.attribute :user_mobile %>
 
@@ -49,3 +61,48 @@
     <% end %>
   </div>
 </div>
+
+<script type="text/javascript">
+  (function() {
+    var dataTable = $("#mechanics").DataTable({
+      order: [], // Do not sort by default
+      pagingType: 'full_numbers',
+      dom: "<'row'<'col-sm-3'l><'col-sm-9'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>",
+      language: {
+        lengthMenu: "每页显示 _MENU_ 条记录",
+        info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+        infoEmpty: "没有数据",
+        infoFiltered: "(从 _MAX_ 条数据中检索)",
+        zeroRecords: "没有检索到数据",
+        search: "搜索：",
+        paginate: {
+          first: "首页",
+          previous: "前一页",
+          next: "后一页",
+          last: "尾页"
+        }
+      }
+    });
+
+    <% unless @state %>
+
+      $location = $("#mechanics_location");
+      $location.prependTo($("#mechanics_filter"));
+
+      var cityMap = <%= raw city_map.to_json %>;
+
+      var $province = $("#mechanics_provinces_select");
+      var $city = $("#mechanics_cities_select");
+      $province.change(function() {
+        $city.removeOptions();
+        $city.appendOptions(cityMap[$province.val()]);
+      });
+
+      $city.change(function() {
+        if ($city.val()) $location.submit();
+      });
+
+    <% end %>
+
+  })();
+</script>

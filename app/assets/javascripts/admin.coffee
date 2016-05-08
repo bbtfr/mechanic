@@ -7,8 +7,9 @@
 #= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 
 $.fn.extend
-  removeOptions: ->
-    @find("option:not(:first-child)").remove()
+  removeOptions: (removeAll = false) ->
+    selector = if removeAll then "option" else "option:not(:first-child)"
+    @find(selector).remove()
 
   appendOptions: (values) ->
     return unless values

@@ -6,15 +6,6 @@
 #= require Chart.Scatter
 #= require tinymce-jquery
 
-$.fn.extend
-  removeOptions: ->
-    @find("option:not(:first-child)").remove()
-
-  appendOptions: (values) ->
-    return unless values
-    for value in values
-      @append("<option value=\"#{value[1]}\">#{value[0]}</option>")
-
 $(document).on "ready page:load page:restore", ->
   $('[data-toggle="popover"]').popover
     viewport:

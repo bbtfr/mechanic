@@ -94,6 +94,17 @@ table.dataTable thead > tr > th {
   white-space: nowrap;
 }
 
+.dataTables_wrapper {
+  .form-inline {
+    display: inline-block;
+    margin: 0;
+
+    label {
+      margin-right: 20px;
+    }
+  }
+}
+
 .dataTables_length select {
   margin: 0;
   font: inherit;
