@@ -35,7 +35,7 @@
         <ul class="nav navbar-nav">
           <li class="<%= "active" if controller_name == "orders" and action_name == "new" or controller_name == "bids" %>"><%= link_to "预约技师", new_merchants_order_path %></li>
           <li class="<%= "active" if controller_path == "merchants/orders" and action_name != "new" %>"><%= link_to "我的订单", merchants_orders_path %></li>
-          <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "我的技师", merchants_mechanics_path %></li>
+          <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "技师列表", merchants_mechanics_path %></li>
 
           <% if current_store.host? %>
             <li class="<%= "active" if controller_path == "merchants/hosting/orders" %>">

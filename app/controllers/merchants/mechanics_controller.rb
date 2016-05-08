@@ -1,6 +1,12 @@
 class Merchants::MechanicsController < Merchants::ApplicationController
   before_filter :find_mechanic, only: [:show, :reviews, :remark, :update_remark, :skill]
 
+  def index
+    @state = if %w(followeds).include? params[:state]
+        params[:state].to_sym
+      end
+  end
+
   def follow
     current_store.follow!(params[:id])
     redirect_to request.referer

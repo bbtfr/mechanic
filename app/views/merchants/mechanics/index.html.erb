@@ -1,21 +1,51 @@
-<h3 class="page-header">我的技师</h3>
+<h3 class="page-header">技师列表</h3>
 
-<% @mechanics = current_store.followed_mechanics.shown %>
+<%
+  def mechanic_state_link_to state, text
+    link = link_to text, merchants_mechanics_path(state: state)
+    class_name = (@state == state) ? "active" : ""
+    %{<li class="#{class_name}">#{link}</li>}.html_safe
+  end
+%>
 
-<%= index_for [ :merchants, @mechanics ], class: "table table-hover data-tables" do |i| %>
-  <%= i.attribute :user_nickname %>
-  <%= i.attribute :user_mobile %>
+<div class="row">
+  <div class="col-md-2 col-xs-4">
+    <ul class="nav nav-pills nav-stacked">
+      <%= mechanic_state_link_to nil, "查询技师" %>
+      <%= mechanic_state_link_to :followeds, "我的技师" %>
+    </ul>
+  </div>
 
-  <%= i.attribute :province %>
-  <%= i.attribute :city %>
-  <%= i.attribute :district %>
-
-  <%= i.attribute :available_orders_count %>
-  <%= i.attribute :revoke_orders_count %>
-  <%= i.attribute :professionality_average %>
-  <%= i.attribute :timeliness_average %>
-
-  <%= i.actions :show do |a| %>
-    <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
+  <% case @state %>
+  <% when :followeds %>
+    <% @mechanics = current_store.followed_mechanics.shown %>
+  <% else %>
+    <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
+    <% @mechanics = Mechanic.shown %>
   <% end %>
-<% end %>
+
+  <div class="col-md-10 col-xs-8">
+
+    <%= index_for [ :merchants, @mechanics ], class: "table table-hover data-tables" do |i| %>
+      <%= i.attribute :user_nickname %>
+      <%= i.attribute :user_mobile %>
+
+      <%= i.attribute :province %>
+      <%= i.attribute :city %>
+      <%= i.attribute :district %>
+
+      <%= i.attribute :available_orders_count %>
+      <%= i.attribute :revoke_orders_count %>
+      <%= i.attribute :professionality_average %>
+      <%= i.attribute :timeliness_average %>
+
+      <%= i.actions :show do |a| %>
+        <% if @state == :followeds || @followed_mechanic_ids.include?(i.object.id) %>
+          <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
+        <% else %>
+          <%= a.action_link :follow, method: :post %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
