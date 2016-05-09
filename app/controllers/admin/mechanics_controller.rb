@@ -56,7 +56,7 @@ class Admin::MechanicsController < Admin::ApplicationController
 
     def mechanic_params
       params.require(:user).permit(:mobile, :nickname, :gender, :address,
-        mechanic_attributes: [ :province_cd, :city_cd, :district_cd, :description, skill_cds: [] ])
+        mechanic_attributes: [ :unique_id, :province_cd, :city_cd, :district_cd, :description, skill_cds: [] ])
     end
 
 end

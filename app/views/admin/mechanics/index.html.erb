@@ -9,6 +9,7 @@
   <%= i.attribute :nickname, searchable: true %>
   <%= i.attribute :mobile, searchable: true %>
   <%= i.fields_for :mechanic, model: Mechanic do |ii| %>
+    <%= ii.attribute :unique_id %>
     <%= ii.attribute :province, sortable: "mechanics.province_cd" %>
     <%= ii.attribute :city, sortable: "mechanics.city_cd" %>
     <%= ii.attribute :district, sortable: "mechanics.district_cd" %>

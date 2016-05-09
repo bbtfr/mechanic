@@ -16,6 +16,7 @@
         <%= ii.attribute :address %>
       <% end %>
 
+      <%= i.attribute :unique_id %>
       <%= i.attribute :skills do |mechanic, skills| %>
         <%= mechanic.skills.join("、") %>
       <% end %>

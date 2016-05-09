@@ -17,6 +17,7 @@
       <%= i.attribute :balance %>
 
       <%= i.fields_for :mechanic do |ii| %>
+        <%= ii.attribute :unique_id %>
         <%= ii.attribute :skills do |mechanic| %>
           <%= mechanic.skills.join("、") %>
         <% end %>

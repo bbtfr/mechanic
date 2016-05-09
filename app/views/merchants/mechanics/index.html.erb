@@ -19,28 +19,37 @@
   <% case @state %>
   <% when :followeds %>
     <% @mechanics = current_store.followed_mechanics.shown %>
+
+    <form class="form-inline" id="mechanics_form">
+      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name), class: "form-control", id: "mechanics_skills_select" %></label>
+    </form>
+
   <% else %>
 
-    <% city_map = types_option_pairs City, :province_id %>
-    <% province_cd = (params[:province] || city_map.first[0]).to_i %>
-    <% city_cd = (params[:city] || city_map.first[1].first[1]).to_i %>
+    <% province_cd = (params[:province] || Province.first.id).to_i %>
 
-    <form class="form-inline" id="mechanics_location">
+    <form class="form-inline" id="mechanics_form">
       <label>省份： <%= select_tag "province", options_from_collection_for_select(Province.all, :id, :name, province_cd), class: "form-control", id: "mechanics_provinces_select" %></label>
-      <label>城市： <%= select_tag "city", "<option value=\"\">请选择城市</option>".html_safe + options_for_select(city_map[province_cd], city_cd), class: "form-control", id: "mechanics_cities_select" %></label>
+      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name, params[:skills]), class: "form-control", id: "mechanics_skills_select" %></label>
     </form>
 
     <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
     <% @mechanics = Mechanic.shown %>
-    <% @mechanics = @mechanics.where(city_cd: city_cd) if city_cd %>
+    <% @mechanics = @mechanics.where(province_cd: province_cd) %>
 
   <% end %>
 
   <div class="col-md-10 col-xs-8">
 
     <%= index_for [ :merchants, @mechanics ], class: "table table-hover" do |i| %>
+
+      <%= i.attribute :skills do |mechanic| %>
+        <%= mechanic.skills.join("、") %>
+      <% end %>
+
       <%= i.attribute :user_nickname %>
       <%= i.attribute :user_mobile %>
+      <%= i.attribute :unique_id %>
 
       <%= i.attribute :province %>
       <%= i.attribute :city %>
@@ -84,22 +93,22 @@
       }
     });
 
+    var skillColumn = dataTable.column(0);
+    skillColumn.visible(false);
+
+    $form = $("#mechanics_form");
+    $form.prependTo($("#mechanics_filter"));
+
+    $("#mechanics_skills_select").change(function() {
+      skillColumn.search($(this).val());
+      dataTable.draw();
+    }).trigger('change');
+
     <% unless @state %>
 
-      $location = $("#mechanics_location");
-      $location.prependTo($("#mechanics_filter"));
-
-      var cityMap = <%= raw city_map.to_json %>;
-
       var $province = $("#mechanics_provinces_select");
-      var $city = $("#mechanics_cities_select");
       $province.change(function() {
-        $city.removeOptions();
-        $city.appendOptions(cityMap[$province.val()]);
-      });
-
-      $city.change(function() {
-        if ($city.val()) $location.submit();
+        if ($province.val()) $form.submit();
       });
 
     <% end %>

@@ -78,6 +78,7 @@ zh-CN:
         balance_increase_amount: 余额变动金额
         balance_increase_description: 余额变动说明
       mechanic:
+        unique_id: 店铺编号
         user_nickname: 姓名
         user_mobile: 手机号码
         user_address: 地址

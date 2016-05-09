@@ -14,6 +14,7 @@
       <%= f.input :address %>
 
       <%= f.bootstrap_simple_fields_for :mechanic do |ff| %>
+        <%= ff.input :unique_id %>
         <%= ff.input :skill_cds, collection: Skill.all, input_html: { class: "select2", multiple: true } %>
 
         <%= ff.input :province_cd, collection: Province.all, input_html: { class: "select2" } %>
