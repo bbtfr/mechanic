@@ -11,7 +11,8 @@ class SMSMailer < ActionSMS::Base
 
   def contact_notification order
     @order = order
-    sms to: order.contact_mobile
+    template_name = "contact_notification_#{order.mobile? ? "mobile" : "merchant"}"
+    sms to: order.contact_mobile, template_name: template_name
   end
 
 end
