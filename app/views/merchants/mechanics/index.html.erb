@@ -76,21 +76,7 @@
     var dataTable = $("#mechanics").DataTable({
       order: [], // Do not sort by default
       pagingType: 'full_numbers',
-      dom: "<'row'<'col-sm-3'l><'col-sm-9'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>",
-      language: {
-        lengthMenu: "每页显示 _MENU_ 条记录",
-        info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
-        infoEmpty: "没有数据",
-        infoFiltered: "(从 _MAX_ 条数据中检索)",
-        zeroRecords: "没有检索到数据",
-        search: "搜索：",
-        paginate: {
-          first: "首页",
-          previous: "前一页",
-          next: "后一页",
-          last: "尾页"
-        }
-      }
+      dom: "<'row'<'col-sm-3'l><'col-sm-9'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>"
     });
 
     var skillColumn = dataTable.column(0);
