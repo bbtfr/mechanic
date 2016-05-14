@@ -44,6 +44,8 @@
       <% end %>
     </div>
 
+    <div class="col-md-12 map" id="map"></div>
+
     <div class="col-md-7">
       <%= f.input :remark, hint: "备注对所有人可见", input_html: { rows: 4 } %>
     </div>
@@ -54,6 +56,7 @@
   </div>
 <% end %>
 
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
 <script type="text/javascript">
   (function() {
     var dataTable = $("#mechanics").DataTable({
@@ -71,5 +74,50 @@
     });
 
     $("#mechanic_list input[checked]").trigger("click");
+
+    // initialze map
+    var map = new qq.maps.Map($('#map')[0], {
+      zoom: 12
+    });
+
+    var imageBlue = <%= raw image_path("map-marker-blue.png").to_json %>,
+        imageRed = <%= raw image_path("map-marker-red.png").to_json %>,
+        size = new qq.maps.Size(256, 256),
+        origin = new qq.maps.Point(0, 0),
+        anchor = new qq.maps.Point(16, 32),
+        scaleSize = new qq.maps.Size(32, 32),
+        iconBlue = new qq.maps.MarkerImage(imageBlue, size, origin, anchor, scaleSize),
+        iconRed = new qq.maps.MarkerImage(imageRed, size, origin, anchor, scaleSize);
+
+    function setMarkerByPosition(position, icon) {
+      return new qq.maps.Marker({
+        icon: icon,
+        map: map,
+        position: position
+      });
+    }
+
+    function setMarker(record, icon) {
+      if (!record.lat || !record.lng) {
+        var geocoder = new qq.maps.Geocoder({
+          complete: function(result) {
+            map.setCenter(result.detail.location);
+            setMarkerByPosition(result.detail.location, icon);
+          }
+        });
+        geocoder.getLocation(record.address);
+      } else {
+        setMarkerByPosition(new qq.maps.LatLng(record.lat, record.lng), icon);
+      }
+    }
+
+    setMarker(<%= raw @order.to_json(only: %w(lat lng address)) %>, iconRed);
+
+    var mechanics = <%= raw @mechanics.map { |mechanic| mechanic.user.as_json(only: %w(lat lng address)) }.to_json %>;
+
+    $.each(mechanics, function(index, mechanic) {
+      setMarker(mechanic, iconBlue);
+    });
+
   })();
 </script>
