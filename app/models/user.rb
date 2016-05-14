@@ -48,6 +48,21 @@ class User < ActiveRecord::Base
 
   validates_presence_of :nickname, :gender, :address, if: :confirmed
 
+  validate :validate_location
+  def validate_location
+    fetch_location if address_changed?
+  rescue
+    errors.add(:address, "无法定位，请打开GPS定位或输入更详细地址")
+  end
+
+  def fetch_location
+    return unless address.present?
+    result = LBS.geocoder(address)
+    raise result["message"] unless result["status"] == 0
+    self.lng = result["result"]["location"]["lng"]
+    self.lat = result["result"]["location"]["lat"]
+  end
+
   attr_accessor :balance_increase_amount, :balance_increase_description
 
   def increase_balance! amount, reason = "", source = nil

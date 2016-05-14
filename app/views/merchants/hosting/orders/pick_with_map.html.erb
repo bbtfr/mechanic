@@ -1,6 +1,6 @@
-<h3 class="page-header">改派技师</h3>
+<h3 class="page-header"><%= @order.assigned? ? "改派技师" : "指派技师" %></h3>
 
-<%= bootstrap_simple_form_for([ :merchants, :hosting, @order ], url: repick_merchants_order_path(@order)) do |f| %>
+<%= bootstrap_simple_form_for([ :merchants, :hosting, @order ], url: pick_merchants_hosting_order_path(@order)) do |f| %>
   <div class="row">
     <div class="col-md-12" id="mechanic_list">
       <%= f.error_messages %>
@@ -42,12 +42,21 @@
         <% end %>
 
       <% end %>
+    </div>
 
+    <div class="col-md-12 map" id="map"></div>
+
+    <div class="col-md-7">
+      <%= f.input :remark, hint: "备注对所有人可见", input_html: { rows: 4 } %>
+    </div>
+
+    <div class="col-md-12">
       <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
     </div>
   </div>
 <% end %>
 
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
 <script type="text/javascript">
   (function() {
     var dataTable = $("#mechanics").DataTable({
@@ -65,5 +74,26 @@
     });
 
     $("#mechanic_list input[checked]").trigger("click");
+
+    // init map
+    var center = new qq.maps.LatLng(39.916527, 116.397128);
+    var map = new qq.maps.Map($('#map')[0], {
+      center: center,
+      zoom: 12
+    });
+
+    var imageBlue = <%= raw image_path("map-marker-blue.png").to_json %>,
+        imageRed = <%= raw image_path("map-marker-red.png").to_json %>,
+        size = new qq.maps.Size(256, 256),
+        origin = new qq.maps.Point(0, 0),
+        anchor = new qq.maps.Point(16, 32),
+        scaleSize = new qq.maps.Size(32, 32),
+        iconBlue = new qq.maps.MarkerImage(imageBlue, size, origin, anchor, scaleSize),
+        iconRed = new qq.maps.MarkerImage(imageRed, size, origin, anchor, scaleSize);
+
+    var marker = new qq.maps.Marker({
+        icon: iconRed,
+        map: map,
+        position: map.getCenter()});
   })();
 </script>

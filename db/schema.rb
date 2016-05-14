@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160509141011) do
+ActiveRecord::Schema.define(version: 20160514085603) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -210,6 +210,8 @@ ActiveRecord::Schema.define(version: 20160509141011) do
     t.boolean  "appointing",                     default: false
     t.string   "store_nickname"
     t.string   "store_hotline"
+    t.float    "lat"
+    t.float    "lng"
   end
 
   add_index "orders", ["bid_id"], name: "index_orders_on_bid_id"
@@ -300,6 +302,8 @@ ActiveRecord::Schema.define(version: 20160509141011) do
     t.boolean  "host",                                            default: false
     t.boolean  "hidden",                                          default: false
     t.string   "hotline"
+    t.float    "lat"
+    t.float    "lng"
   end
 
   add_index "users", ["host"], name: "index_users_on_host"

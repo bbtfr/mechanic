@@ -41,7 +41,7 @@
   </div>
 </div>
 
-<% if @order.mechanic_id %>
+<% if @order.assigned? %>
   <h3 class="page-header">技师信息</h3>
 
   <div class="row">
@@ -65,9 +65,9 @@
 
 <% case @order.state %>
 <% when :paid %>
-  <% if @order.mechanic_id %>
+  <% if @order.assigned? %>
     <div class="pull-right">
-      <%= link_to "改派技师", repick_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
+      <%= link_to "改派技师", pick_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
       <%= link_to "设置手续费", procedure_price_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
     </div>
   <% else %>
@@ -78,7 +78,7 @@
   <% end %>
 <% when :working %>
   <div class="pull-right">
-    <%= link_to "改派技师", repick_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
+    <%= link_to "改派技师", pick_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
     <%= link_to "设置手续费", procedure_price_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
   </div>
 <% when :confirming %>
@@ -94,7 +94,7 @@
     </div>
   <% end %>
   <div class="pull-right">
-    <%= link_to "改派技师", repick_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
+    <%= link_to "改派技师", pick_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
     <%= link_to "设置手续费", procedure_price_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
     <%= link_to "确认完工", confirm_merchants_hosting_order_path(@order), method: :post, class: "btn btn-primary" %>
     <%= link_to "申请返工", rework_merchants_hosting_order_path(@order), method: :post, class: "btn btn-primary" %>

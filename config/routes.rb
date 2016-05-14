@@ -6,9 +6,6 @@ Rails.application.routes.draw do
     member do
       get :pick
       patch :pick, action: :update_pick
-
-      get :repick
-      patch :repick, action: :update_repick
     end
   end
 

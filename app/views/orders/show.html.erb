@@ -29,7 +29,7 @@
   <% end %>
 </div>
 
-<% if @order.mechanic_id %>
+<% if @order.assigned? %>
   <ul class="table-view">
     <li class="table-view-cell media">
       <%= image_tag @order.mechanic.user.avatar.url(:thumb), class: "media-object pull-left" %>

@@ -1,4 +1,4 @@
-<h3 class="page-header">指派技师</h3>
+<h3 class="page-header"><%= @order.assigned? ? "改派技师" : "指派技师" %></h3>
 
 <%= bootstrap_simple_form_for([ :merchants, @order ], url: pick_merchants_order_path(@order)) do |f| %>
   <div class="row">
@@ -42,7 +42,15 @@
         <% end %>
 
       <% end %>
+    </div>
 
+    <% if @order.assigned? %>
+      <div class="col-md-7">
+        <%= f.input :remark, hint: "备注对所有人可见", input_html: { rows: 4 } %>
+      </div>
+    <% end %>
+
+    <div class="col-md-12">
       <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
     </div>
   </div>

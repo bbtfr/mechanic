@@ -1,4 +1,4 @@
-<h3 class="page-header">指派技师</h3>
+<h3 class="page-header"><%= @order.assigned? ? "改派技师" : "指派技师" %></h3>
 
 <%= bootstrap_simple_form_for([ :merchants, :hosting, @order ], url: pick_merchants_hosting_order_path(@order)) do |f| %>
   <div class="row">
