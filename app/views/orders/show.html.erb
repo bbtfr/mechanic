@@ -63,13 +63,13 @@
 
       <%= simple_form_for(@order, url: finish_order_path(@order)) do |f| %>
         <%= f.input :mechanic_attach_1 do %>
-          <input class="btn btn-block btn-positive" value="请选择文件" id="order_mechanic_attach_1_button" readonly></input>
-          <%= f.input_field :mechanic_attach_1, style: "display: none;" %>
+          <input class="btn btn-block btn-positive" value="点击选择图片" id="order_mechanic_attach_1_button" readonly></input>
+          <%= f.input_field :mechanic_attach_1, style: "display: none;", accept: "image/*" %>
           <%= f.input_field :mechanic_attach_1_media_id, type: :hidden %>
         <% end %>
         <%= f.input :mechanic_attach_2 do %>
-          <input class="btn btn-block btn-positive" value="请选择文件" id="order_mechanic_attach_2_button" readonly></input>
-          <%= f.input_field :mechanic_attach_2, style: "display: none;"  %>
+          <input class="btn btn-block btn-positive" value="点击选择图片" id="order_mechanic_attach_2_button" readonly></input>
+          <%= f.input_field :mechanic_attach_2, style: "display: none;", accept: "image/*" %>
           <%= f.input_field :mechanic_attach_2_media_id, type: :hidden %>
         <% end %>
         <%= f.button :submit, "服务完工", class: "btn-block btn-positive" %>
@@ -94,6 +94,7 @@
                       isShowProgressTips: true,
                       success: function (res) {
                         mediaIdInput.value = res.serverId;
+                        fakeInput.value = "点击更换图片";
                       }
                     });
                   }, 0);
@@ -107,8 +108,7 @@
               fileInput.click();
             });
             fileInput.addEventListener("change", function() {
-              paths = this.value.split("\\");
-              fakeInput.value = paths[paths.length - 1];
+              fakeInput.value = "点击更换图片";
             });
           }
         <% end %>
