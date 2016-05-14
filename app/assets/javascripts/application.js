@@ -12,7 +12,6 @@
 //
 // require jquery
 // require jquery_ujs
-// require turbolinks
 // require ratchet
 
 var removeOptions = function(options) {
@@ -29,17 +28,6 @@ var appendOptions = function(parent, values) {
     option.value = values[i][1];
     parent.appendChild(option);
   }
-};
-
-var fakeFileInput = function(fileInput, fakeInput) {
-  fileInput.style.display = "none";
-  fakeInput.addEventListener("click", function() {
-    fileInput.click();
-  });
-  fileInput.addEventListener("change", function() {
-    paths = this.value.split("\\");
-    fakeInput.value = paths[paths.length - 1];
-  });
 };
 
 var closeWindow = function() {

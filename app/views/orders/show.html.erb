@@ -64,11 +64,13 @@
       <%= simple_form_for(@order, url: finish_order_path(@order)) do |f| %>
         <%= f.input :mechanic_attach_1 do %>
           <input class="btn btn-block btn-positive" value="请选择文件" id="order_mechanic_attach_1_button" readonly></input>
-          <%= f.input_field :mechanic_attach_1 %>
+          <%= f.input_field :mechanic_attach_1, style: "display: none;" %>
+          <%= f.input_field :mechanic_attach_1_media_id, type: :hidden %>
         <% end %>
         <%= f.input :mechanic_attach_2 do %>
           <input class="btn btn-block btn-positive" value="请选择文件" id="order_mechanic_attach_2_button" readonly></input>
-          <%= f.input_field :mechanic_attach_2 %>
+          <%= f.input_field :mechanic_attach_2, style: "display: none;"  %>
+          <%= f.input_field :mechanic_attach_2_media_id, type: :hidden %>
         <% end %>
         <%= f.button :submit, "服务完工", class: "btn-block btn-positive" %>
       <% end %>
@@ -78,8 +80,41 @@
       </p>
 
       <script type="text/javascript">
-        fakeFileInput(order_mechanic_attach_1, order_mechanic_attach_1_button);
-        fakeFileInput(order_mechanic_attach_2, order_mechanic_attach_2_button);
+        <% if weixin? %>
+          wx.config(<%= raw Weixin.get_jssign_package(request.url).merge(jsApiList: %w(chooseImage uploadImage)).to_json %>);
+          wx.error(function(res) { alert(res) });
+          function fakeFileInput(fileInput, fakeInput, mediaIdInput) {
+            fakeInput.addEventListener("click", function() {
+              wx.chooseImage({
+                count: 1,
+                success: function (res) {
+                  setTimeout(function() {
+                    wx.uploadImage({
+                      localId: res.localIds[0],
+                      isShowProgressTips: true,
+                      success: function (res) {
+                        mediaIdInput.value = res.serverId;
+                      }
+                    });
+                  }, 0);
+                }
+              });
+            });
+          }
+        <% else %>
+          function fakeFileInput(fileInput, fakeInput) {
+            fakeInput.addEventListener("click", function() {
+              fileInput.click();
+            });
+            fileInput.addEventListener("change", function() {
+              paths = this.value.split("\\");
+              fakeInput.value = paths[paths.length - 1];
+            });
+          }
+        <% end %>
+        fakeFileInput(order_mechanic_attach_1, order_mechanic_attach_1_button, order_mechanic_attach_1_media_id);
+        fakeFileInput(order_mechanic_attach_2, order_mechanic_attach_2_button,
+          order_mechanic_attach_2_media_id);
       </script>
 
     <% end %>

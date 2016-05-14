@@ -168,6 +168,6 @@ class OrdersController < ApplicationController
     end
 
     def finish_order_params
-      params.require(:order).permit(:mechanic_attach_1, :mechanic_attach_2)
+      params.require(:order).permit(:mechanic_attach_1, :mechanic_attach_2, :mechanic_attach_1_media_id, :mechanic_attach_2_media_id)
     end
 end

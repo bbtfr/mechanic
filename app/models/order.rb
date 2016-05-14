@@ -1,4 +1,6 @@
 class Order < ActiveRecord::Base
+  include WeixinMediaLoader
+
   PendingTimeout = 10.minutes
   PayingTimeout = 60.minutes
   ConfirmingTimeout = 1.days
@@ -60,6 +62,8 @@ class Order < ActiveRecord::Base
   validates_attachment_content_type :user_attach_1, :content_type => /\Aimage\/.*\z/
   has_attached_file :user_attach_2, styles: { medium: "300x300>", thumb: "100x100#" }
   validates_attachment_content_type :user_attach_1, :content_type => /\Aimage\/.*\z/
+
+  weixin_media_loaders :mechanic_attach_1, :mechanic_attach_2, :user_attach_1, :user_attach_2
 
   validates_numericality_of :quoted_price, greater_than_or_equal_to: 0
   validates_numericality_of :quoted_price, greater_than_or_equal_to: 1, if: :mobile?
