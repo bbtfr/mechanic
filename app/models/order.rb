@@ -169,7 +169,6 @@ class Order < ActiveRecord::Base
 
   after_create do
     unless appointing?
-      SendCreateOrderMessageJob.set(wait: 1.second).perform_later(self)
       if hosting?
         pick!
       else
@@ -185,6 +184,7 @@ class Order < ActiveRecord::Base
   end
 
   def pending!
+    SendCreateOrderMessageJob.set(wait: 1.second).perform_later(self)
     UpdateOrderStateJob.set(wait: PendingTimeout).perform_later(self)
     true
   end
