@@ -10,7 +10,10 @@ module WeixinMediaLoader
       attr_reader media_id_reader
       define_method media_id_writer do |media_id|
         if media_id.present?
-          media_file = Weixin::Client.download_media_url(media_id)
+          media_url = Weixin::Client.download_media_url(media_id)
+          media_file = Tempfile.new(["", ".jpg"])
+          media_file.binmode
+          open(media_url) { |data| media_file.write data.read }
           send field_writer, media_file
         end
       end
