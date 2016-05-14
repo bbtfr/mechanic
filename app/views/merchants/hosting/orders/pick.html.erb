@@ -1,50 +1,65 @@
-<h3 class="page-header"><%= @order.assigned? ? "改派技师" : "指派技师" %></h3>
+<ul class="nav nav-tabs page-header">
+  <li><h3><%= @order.assigned? ? "改派技师" : "指派技师" %></h3></li>
+  <li class="active"><a href="#tab-table" data-toggle="tab">技师列表</a></li>
+  <li><a href="#tab-map" data-toggle="tab">地图</a></li>
+</ul>
 
 <%= bootstrap_simple_form_for([ :merchants, :hosting, @order ], url: pick_merchants_hosting_order_path(@order)) do |f| %>
   <div class="row">
-    <div class="col-md-12" id="mechanic_list">
-      <%= f.error_messages %>
 
-      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name), class: "form-control", id: "mechanics_skills_select" %></label>
+    <div class="tab-content">
+      <div class="tab-pane active" id="tab-table">
+        <div class="col-md-12" id="mechanic_list">
+          <%= f.error_messages %>
 
-      <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
-      <% @mechanics = Mechanic.includes(:user, :skills) %>
-      <% @mechanics = @mechanics.where(province_cd: @order.province_cd) %>
-      <% @mechanics = @mechanics.shown %>
-      <%= index_for [ :merchants, @mechanics ], class: "table table-hover" do |i| %>
-        <%= i.attribute :_check do |mechanic| %>
-          <%= f.radio_button :mechanic_id, mechanic.id %>
-        <% end %>
+          <%= f.radio_button :mechanic_id, nil, style: "display: none;" %>
 
-        <%= i.attribute :skills do |mechanic| %>
-          <%= mechanic.skills.join("、") %>
-        <% end %>
+          <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name), class: "form-control", id: "mechanics_skills_select" %></label>
 
-        <%= i.attribute :user_nickname %>
-        <%= i.attribute :user_mobile %>
-        <%= i.attribute :unique_id %>
+          <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
+          <% @mechanics = Mechanic.includes(:user, :skills) %>
+          <% @mechanics = @mechanics.where(province_cd: @order.province_cd) %>
+          <% @mechanics = @mechanics.shown %>
+          <%= index_for [ :merchants, @mechanics ], class: "table table-hover" do |i| %>
+            <%= i.attribute :_check do |mechanic| %>
+              <%= f.radio_button :mechanic_id, mechanic.id %>
+            <% end %>
 
-        <%= i.attribute :province %>
-        <%= i.attribute :city %>
-        <%= i.attribute :district %>
+            <%= i.attribute :skills do |mechanic| %>
+              <%= mechanic.skills.join("、") %>
+            <% end %>
 
-        <%= i.attribute :available_orders_count %>
-        <%= i.attribute :revoke_orders_count %>
-        <%= i.attribute :professionality_average %>
-        <%= i.attribute :timeliness_average %>
+            <%= i.attribute :user_nickname %>
+            <%= i.attribute :user_mobile %>
+            <%= i.attribute :unique_id %>
 
-        <%= i.actions :show do |a| %>
-          <% if @followed_mechanic_ids.include? i.object.id %>
-            <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
-          <% else %>
-            <%= a.action_link :follow, method: :post %>
+            <%= i.attribute :province %>
+            <%= i.attribute :city %>
+            <%= i.attribute :district %>
+
+            <%= i.attribute :available_orders_count %>
+            <%= i.attribute :revoke_orders_count %>
+            <%= i.attribute :professionality_average %>
+            <%= i.attribute :timeliness_average %>
+
+            <%= i.actions :show do |a| %>
+              <% if @followed_mechanic_ids.include? i.object.id %>
+                <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
+              <% else %>
+                <%= a.action_link :follow, method: :post %>
+              <% end %>
+            <% end %>
+
           <% end %>
-        <% end %>
-
-      <% end %>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab-map">
+        <div class="col-md-12">
+          <div class="map" id="map"></div>
+        </div>
+      </div>
     </div>
 
-    <div class="col-md-12 map" id="map"></div>
 
     <div class="col-md-7">
       <%= f.input :remark, hint: "备注对所有人可见", input_html: { rows: 4 } %>
@@ -56,10 +71,9 @@
   </div>
 <% end %>
 
-<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
 <script type="text/javascript">
   (function() {
-    var dataTable = $("#mechanics").DataTable({
+    var dataTable = window.dataTable = $("#mechanics").DataTable({
       order: [], // Do not sort by default
       pagingType: 'full_numbers'
     });
@@ -74,50 +88,116 @@
     });
 
     $("#mechanic_list input[checked]").trigger("click");
+    $("#mechanics input[type=radio]").click(function() {
+      if (window.info) {
+        info.setContent("");
+        info.draw();
+      }
+    });
+  })();
+</script>
 
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+<script type="text/javascript">
+  var InfoWindow = function(opts) {
+    qq.maps.Overlay.call(this, opts);
+  };
+  InfoWindow.prototype = new qq.maps.Overlay();
+  InfoWindow.prototype.construct = function() {
+    this.dom = document.createElement('div');
+    this.dom.className = "map-info-window";
+    this.getPanes().floatPane.appendChild(this.dom);
+  };
+  InfoWindow.prototype.setContent = function(content) {
+    this.dom.innerHTML = content;
+  };
+  InfoWindow.prototype.setPosition = function(position) {
+    this.set('position', position);
+  };
+  InfoWindow.prototype.draw = function() {
+    var position = this.get('position');
+    if (position) {
+      var pixel = this.getProjection().fromLatLngToDivPixel(position);
+      this.dom.style.left = pixel.getX() + 'px';
+      this.dom.style.top = pixel.getY() + 'px';
+    }
+  };
+  InfoWindow.prototype.destroy = function() {
+    this.dom.parentNode.removeChild(this.dom);
+  };
+</script>
+<script type="text/javascript">
+  $(document).on("ready page:load page:restore", function() {
     // initialze map
-    var map = new qq.maps.Map($('#map')[0], {
+    var map = window.map = new qq.maps.Map($('#map')[0], {
       zoom: 12
+    });
+    var info = window.info = new InfoWindow({
+      map: map
     });
 
     var imageBlue = <%= raw image_path("map-marker-blue.png").to_json %>,
         imageRed = <%= raw image_path("map-marker-red.png").to_json %>,
-        size = new qq.maps.Size(256, 256),
+        imageGreen = <%= raw image_path("map-marker-green.png").to_json %>,
+        size = new qq.maps.Size(32, 32),
         origin = new qq.maps.Point(0, 0),
         anchor = new qq.maps.Point(16, 32),
         scaleSize = new qq.maps.Size(32, 32),
         iconBlue = new qq.maps.MarkerImage(imageBlue, size, origin, anchor, scaleSize),
-        iconRed = new qq.maps.MarkerImage(imageRed, size, origin, anchor, scaleSize);
+        iconRed = new qq.maps.MarkerImage(imageRed, size, origin, anchor, scaleSize),
+        iconGreen = new qq.maps.MarkerImage(imageGreen, size, origin, anchor, scaleSize);
 
-    function setMarkerByPosition(position, icon) {
-      return new qq.maps.Marker({
-        icon: icon,
+    function setMarkerByPosition(position, record) {
+      var marker = new qq.maps.Marker({
+        icon: record.icon,
         map: map,
         position: position
       });
+
+      qq.maps.event.addListener(marker, 'click', function() {
+        if (record.onClick) record.onClick(this);
+        info.setContent(record.popover);
+        info.setPosition(position);
+        info.draw();
+      });
+
+      if (record.center) map.setCenter(position);
+      return marker;
     }
 
-    function setMarker(record, icon) {
+    function setMarker(record) {
       if (!record.lat || !record.lng) {
         var geocoder = new qq.maps.Geocoder({
           complete: function(result) {
-            map.setCenter(result.detail.location);
-            setMarkerByPosition(result.detail.location, icon);
+            setMarkerByPosition(result.detail.location, record);
           }
         });
         geocoder.getLocation(record.address);
       } else {
-        setMarkerByPosition(new qq.maps.LatLng(record.lat, record.lng), icon);
+        setMarkerByPosition(new qq.maps.LatLng(record.lat, record.lng), record);
       }
     }
 
-    setMarker(<%= raw @order.to_json(only: %w(lat lng address)) %>, iconRed);
-
-    var mechanics = <%= raw @mechanics.map { |mechanic| mechanic.user.as_json(only: %w(lat lng address)) }.to_json %>;
-
+    var $order_mechanic_id = $('#order_mechanic_id');
+    var mechanics = <%= raw @mechanics.map { |mechanic|
+        json = mechanic.user.as_json(only: %w(lat lng address))
+        json.merge!(popover: render(partial: "shared/orders/mechanic_popover", locals: { mechanic: mechanic }))
+        json
+      }.to_json %>;
     $.each(mechanics, function(index, mechanic) {
-      setMarker(mechanic, iconBlue);
+      setMarker($.extend(mechanic, {
+        icon: iconBlue,
+        onClick: function() {
+          $order_mechanic_id.val(mechanic.mechanic_id).trigger('click');
+        }
+      }));
     });
 
-  })();
+    var marker = setMarker($.extend(<%= raw @order.to_json(only: %w(lat lng address)) %>, {
+      popover: <%= raw render(partial: "shared/orders/order_popover", locals: { order: @order }).to_json %>,
+      icon: iconRed,
+      center: true
+    }));
+
+  });
 </script>

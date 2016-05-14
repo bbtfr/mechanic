@@ -11,6 +11,20 @@ class Merchants::Hosting::OrdersController < Merchants::OrdersController
     @orders = order_klass.send(@state)
   end
 
+  def update_pick
+    if mechanic_id = params[:order][:mechanic_id]
+      remark = params[:order][:remark]
+      @order.update_attribute(:remark, remark) if remark
+      mechanic = Mechanic.find(mechanic_id)
+      @order.repick! mechanic
+      redirect_to current_order_path
+    else
+      @order.remark = params[:order][:remark]
+      @order.errors.add :base, "请选择一个技师"
+      render :pick
+    end
+  end
+
   def update_procedure_price
     if @order.update_attributes(procedure_price_order_params)
       redirect_to current_order_path

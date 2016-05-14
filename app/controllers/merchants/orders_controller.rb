@@ -38,7 +38,11 @@ class Merchants::OrdersController < Merchants::ApplicationController
       remark = params[:order][:remark]
       @order.update_attribute(:remark, remark) if remark
       mechanic = Mechanic.find(mechanic_id)
-      @order.repick! mechanic
+      if @order.assigned?
+        @order.repick! mechanic
+      else
+        @order.pick! mechanic
+      end
       redirect_to current_order_path
     else
       @order.remark = params[:order][:remark]

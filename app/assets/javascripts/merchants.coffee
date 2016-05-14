@@ -2,6 +2,7 @@
 #= require bootstrap/transition
 #= require bootstrap/tooltip
 #= require bootstrap/popover
+#= require bootstrap/tab
 #= require Chart
 #= require Chart.Scatter
 #= require tinymce-jquery
