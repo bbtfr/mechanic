@@ -175,6 +175,17 @@ class Merchants::OrdersController < Merchants::ApplicationController
     redirect_to current_order_path
   end
 
+  def update_repick
+    if mechanic_id = params[:order][:mechanic_id]
+      mechanic = Mechanic.find(mechanic_id)
+      @order.repick! mechanic
+      redirect_to current_order_path
+    else
+      @order.errors.add :base, "请选择一个技师"
+      render :repick
+    end
+  end
+
   def confirm
     @order.confirm!
     flash[:notice] = "订单确认完工！"

@@ -2,6 +2,23 @@ Rails.application.routes.draw do
 
   options = Rails.env.production? ? { path: "", constraints: { subdomain: 'es' }} : {}
 
+  concern :pick do
+    member do
+      get :pick
+      patch :pick, action: :update_pick
+
+      get :repick
+      patch :repick, action: :update_repick
+    end
+  end
+
+  concern :review do
+    member do
+      get :review
+      patch :review, action: :update_review
+    end
+  end
+
   namespace :merchants, options do
     resource :merchant_session, path: "session"
     resource :merchant do
@@ -15,7 +32,7 @@ Rails.application.routes.draw do
 
     resource :note
 
-    resources :orders do
+    resources :orders, concerns: [:pick, :review] do
       resources :bids do
         member do
           get :pick
@@ -27,40 +44,24 @@ Rails.application.routes.draw do
       end
 
       member do
-        get :pick
-        patch :pick, action: :update_pick
-
         post :pend
         post :cancel
-
         match :refund, via: [:get, :patch]
         match :notify, via: [:get, :post]
         get :result
-
         post :confirm
         post :rework
         get :revoke
-
-        get :review
-        patch :review, action: :update_review
-
         get :remark
         patch :remark, action: :update_remark
       end
     end
 
     namespace :hosting do
-      resources :orders do
+      resources :orders, concerns: [:pick, :review] do
         member do
-          get :pick
-          patch :pick, action: :update_pick
-
           post :confirm
           post :rework
-
-          get :review
-          patch :review, action: :update_review
-
           get :procedure_price
           patch :procedure_price, action: :update_procedure_price
         end
@@ -115,7 +116,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :orders do
+  resources :orders, concerns: [:review] do
     resources :bids do
       member do
         get :pick
@@ -128,17 +129,12 @@ Rails.application.routes.draw do
 
     member do
       get :cancel
-
       get :refund
       post :notify
       get :result
-
       get :work
       patch :finish
       get :confirm
-
-      get :review
-      patch :review, action: :update_review
     end
   end
 
@@ -170,6 +166,7 @@ Rails.application.routes.draw do
         post :unhide
       end
     end
+
     resources :users do
       member do
         post :mechanicize

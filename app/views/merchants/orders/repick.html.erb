@@ -1,0 +1,69 @@
+<h3 class="page-header">改派技师</h3>
+
+<%= bootstrap_simple_form_for([ :merchants, :hosting, @order ], url: repick_merchants_order_path(@order)) do |f| %>
+  <div class="row">
+    <div class="col-md-12" id="mechanic_list">
+      <%= f.error_messages %>
+
+      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name), class: "form-control", id: "mechanics_skills_select" %></label>
+
+      <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
+      <% @mechanics = Mechanic.includes(:user, :skills) %>
+      <% @mechanics = @mechanics.where(province_cd: @order.province_cd) %>
+      <% @mechanics = @mechanics.shown %>
+      <%= index_for [ :merchants, @mechanics ], class: "table table-hover" do |i| %>
+        <%= i.attribute :_check do |mechanic| %>
+          <%= f.radio_button :mechanic_id, mechanic.id %>
+        <% end %>
+
+        <%= i.attribute :skills do |mechanic| %>
+          <%= mechanic.skills.join("、") %>
+        <% end %>
+
+        <%= i.attribute :user_nickname %>
+        <%= i.attribute :user_mobile %>
+        <%= i.attribute :unique_id %>
+
+        <%= i.attribute :province %>
+        <%= i.attribute :city %>
+        <%= i.attribute :district %>
+
+        <%= i.attribute :available_orders_count %>
+        <%= i.attribute :revoke_orders_count %>
+        <%= i.attribute :professionality_average %>
+        <%= i.attribute :timeliness_average %>
+
+        <%= i.actions :show do |a| %>
+          <% if @followed_mechanic_ids.include? i.object.id %>
+            <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
+          <% else %>
+            <%= a.action_link :follow, method: :post %>
+          <% end %>
+        <% end %>
+
+      <% end %>
+
+      <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  (function() {
+    var dataTable = $("#mechanics").DataTable({
+      order: [], // Do not sort by default
+      pagingType: 'full_numbers'
+    });
+
+    var skillColumn = dataTable.column(1);
+    skillColumn.visible(false);
+
+    $("#mechanics_skills").prependTo($("#mechanics_filter"));
+    $("#mechanics_skills_select").change(function() {
+      skillColumn.search($(this).val());
+      dataTable.draw();
+    });
+
+    $("#mechanic_list input[checked]").trigger("click");
+  })();
+</script>

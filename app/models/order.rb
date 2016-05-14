@@ -194,6 +194,7 @@ class Order < ActiveRecord::Base
     update_attribute(:state, Order.states[:paying])
     UpdateOrderStateJob.set(wait: PayingTimeout).perform_later(self)
 
+    # target could be a bid or a mechanic
     case target
     when Bid
       self.bid_id = target.id
@@ -209,6 +210,9 @@ class Order < ActiveRecord::Base
   end
 
   def repick! mechanic
+    # Only available and non-setted orders can repick mechanic
+    return false unless state_cd > AVAILABLE_GREATER_THAN && state_cd <= SETTLED_GREATER_THAN
+    update_attribute(:state, Order.states[:paid])
     update_attribute(:mechanic, mechanic)
     Weixin.send_paid_order_message(self)
     SMSMailer.mechanic_notification(self).deliver
