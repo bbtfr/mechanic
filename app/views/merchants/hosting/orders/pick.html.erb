@@ -97,37 +97,36 @@
   })();
 </script>
 
-<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&amp;callback=initMap"></script>
 <script type="text/javascript">
-  var InfoWindow = function(opts) {
-    qq.maps.Overlay.call(this, opts);
-  };
-  InfoWindow.prototype = new qq.maps.Overlay();
-  InfoWindow.prototype.construct = function() {
-    this.dom = document.createElement('div');
-    this.dom.className = "map-info-window";
-    this.getPanes().floatPane.appendChild(this.dom);
-  };
-  InfoWindow.prototype.setContent = function(content) {
-    this.dom.innerHTML = content;
-  };
-  InfoWindow.prototype.setPosition = function(position) {
-    this.set('position', position);
-  };
-  InfoWindow.prototype.draw = function() {
-    var position = this.get('position');
-    if (position) {
-      var pixel = this.getProjection().fromLatLngToDivPixel(position);
-      this.dom.style.left = pixel.getX() + 'px';
-      this.dom.style.top = pixel.getY() + 'px';
-    }
-  };
-  InfoWindow.prototype.destroy = function() {
-    this.dom.parentNode.removeChild(this.dom);
-  };
-</script>
-<script type="text/javascript">
-  $(document).on("ready page:load page:restore", function() {
+  function initMap() {
+    var InfoWindow = function(opts) {
+      qq.maps.Overlay.call(this, opts);
+    };
+    InfoWindow.prototype = new qq.maps.Overlay();
+    InfoWindow.prototype.construct = function() {
+      this.dom = document.createElement('div');
+      this.dom.className = "map-info-window";
+      this.getPanes().floatPane.appendChild(this.dom);
+    };
+    InfoWindow.prototype.setContent = function(content) {
+      this.dom.innerHTML = content;
+    };
+    InfoWindow.prototype.setPosition = function(position) {
+      this.set('position', position);
+    };
+    InfoWindow.prototype.draw = function() {
+      var position = this.get('position');
+      if (position) {
+        var pixel = this.getProjection().fromLatLngToDivPixel(position);
+        this.dom.style.left = pixel.getX() + 'px';
+        this.dom.style.top = pixel.getY() + 'px';
+      }
+    };
+    InfoWindow.prototype.destroy = function() {
+      this.dom.parentNode.removeChild(this.dom);
+    };
+
     // initialze map
     var map = window.map = new qq.maps.Map($('#map')[0], {
       zoom: 12
@@ -199,5 +198,5 @@
       center: true
     }));
 
-  });
+  }
 </script>
