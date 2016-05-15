@@ -44,11 +44,11 @@ class Order < ActiveRecord::Base
   end
 
   def hosting?
-    hosting
+    hosting && ["1", 1, true].include?(hosting)
   end
 
   def appointing?
-    appointing
+    appointing && ["1", 1, true].include?(appointing)
   end
 
   has_attached_file :mechanic_attach_1, styles: { medium: "300x300>", thumb: "100x100#" }
