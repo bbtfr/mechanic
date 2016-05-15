@@ -9,7 +9,7 @@
       <%= f.error_messages %>
 
       <%= f.input :mobile %>
-      <%= i.input :weixin_openid %>
+      <%= f.input :weixin_openid %>
       <%= f.input :nickname %>
       <%= f.input :gender, collection: enum_option_pairs(User, :gender) %>
       <%= f.input :address %>
