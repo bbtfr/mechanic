@@ -14,7 +14,8 @@
 
           <%= f.hidden_field :mechanic_id %>
 
-          <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name), class: "form-control", id: "mechanics_skills_select" %></label>
+          <% @skills = Skill.all %>
+          <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :name, :name), class: "form-control mechanics_skills_select" %></label>
 
           <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
           <% @mechanics = Mechanic.includes(:user, :skills) %>
@@ -59,8 +60,9 @@
           <div class="map" id="map"></div>
         </div>
         <div class="col-md-3 map-list" id="map_list">
+          <div class="filter">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :name, :name), class: "form-control mechanics_skills_select" %></div>
           <% @mechanics.each do |mechanic| %>
-            <div class="radio">
+            <div class="item">
               <span class="glyphicon glyphicon-select" data-mechanic-id="<%= mechanic.id %>"></span>
               <%= mechanic.user_nickname %>
               <span class="text-muted distance"></span>
@@ -108,10 +110,6 @@
 
     var skillColumn = dataTable.column(1);
     $("#mechanics_skills").prependTo($("#mechanics_filter"));
-    $("#mechanics_skills_select").change(function() {
-      skillColumn.search($(this).val());
-      dataTable.draw();
-    });
 
     // Initialize Event Callbacks
     var mechanics = <%= raw @mechanics.reduce({}) { |ret, mechanic|
@@ -121,49 +119,85 @@
         ret
       }.to_json %>;
 
-    function getDataTableRow(mechanicId) {
-      return $("#mechanics .glyphicon[data-mechanic-id=" + mechanicId + "]").closest("tr");
+    function getMapListItem(mechanicId) {
+      return $("#map_list .glyphicon[data-mechanic-id=" + mechanicId + "]").closest(".item");
     }
 
-    function getMapListRadio(mechanicId) {
-      return $("#map_list .glyphicon[data-mechanic-id=" + mechanicId + "]").closest(".radio");
+    function getMechanicIdFromNode(item) {
+      return $(item).find(".glyphicon").data("mechanic-id");
     }
 
-    function getMapListMechanicId(radio) {
-      return $(radio).find(".glyphicon").data("mechanic-id");
-    }
-
-    $mechanicId = $("#order_mechanic_id");
+    var $items = $("#map_list .item");
+    var $mechanicId = $("#order_mechanic_id");
     function selectMechanic(mechanicId) {
-      if (selectMechanic.mechanicId === mechanicId) return;
+      if (selectMechanic.mechanicId == mechanicId) return;
       selectMechanic.mechanicId = mechanicId;
 
+      console.log("select mechani: " + mechanicId);
       $mechanicId.val(mechanicId);
 
       // DataTable
       dataTable.rows({ selected: true }).select(false);
-      dataTable.row(getDataTableRow(mechanicId)).select();
+      var selectedRowIndex = dataTable.row(function(index, data) {
+        return $(data[0]).data("mechanic-id") == mechanicId;
+      }).select().index();
+
+      console.log(selectedRowIndex)
+
+      // DataTable display right page
+      var pageInfo = dataTable.page.info();
+      var rowPosition = dataTable.rows()[0].indexOf(selectedRowIndex);
+      if (rowPosition >= 0 && rowPosition < pageInfo.start || rowPosition >= pageInfo.end) {
+        var pageToDisplay = Math.floor(rowPosition / dataTable.page.len());
+        dataTable.page(pageToDisplay).draw("page");
+      }
 
       // Map
-      $("#map_list .radio.selected").removeClass("selected");
-      getMapListRadio(mechanicId).addClass("selected");
+      $items.filter(".selected").removeClass("selected");
+      getMapListItem(mechanicId).addClass("selected");
 
       if (window.showMechanicInfo) window.showMechanicInfo(mechanicId, true);
     }
 
     $("#mechanics").on("click", "td:not(:last-child)", function(event) {
-      var mechanicId = $(event.currentTarget).parent().find(".glyphicon").data("mechanic-id");
-      selectMechanic(mechanicId);
+      selectMechanic(getMechanicIdFromNode($(event.currentTarget).parent()));
     });
 
-    $("#map_list").on("click", ".radio", function(event) {
-      selectMechanic(getMapListMechanicId(event.currentTarget));
+    $("#map_list").on("click", ".item", function(event) {
+      selectMechanic(getMechanicIdFromNode(event.currentTarget));
+    });
+
+    // Skill Select
+    $(".mechanics_skills_select").on("change", function() {
+      skillColumn.search($(this).val());
+      dataTable.draw();
+
+      // Show / Hide Map List Item & Marker if needed
+      $items.hide();
+      $.each(mechanics, function(id, mechanic) {
+        if (mechanic.marker) mechanic.marker.setVisible(false);
+      });
+      var mechanicIds = dataTable.rows({ search: "applied" }).nodes().map(function(node) {
+        var mechanicId = getMechanicIdFromNode(node);
+        getMapListItem(mechanicId).show();
+        var mechanic = mechanics[mechanicId];
+        if (mechanic.marker) mechanic.marker.setVisible(true);
+        return mechanicId;
+      });
+
+      // Show / Hide Map Popover if needed
+      if (mechanicIds.indexOf(selectMechanic.mechanicId) < 0) {
+        showMechanicInfo();
+      } else {
+        showMechanicInfo(selectMechanic.mechanicId);
+      }
     });
 
     selectMechanic(<%= raw @order.mechanic_id.to_json %>);
 
     // Initialize Map
     window.initMap = function() {
+      // Custom InfoWindow
       var InfoWindow = function(opts) {
         qq.maps.Overlay.call(this, opts);
       };
@@ -192,7 +226,7 @@
         this.dom.parentNode.removeChild(this.dom);
       };
 
-      // initialze map
+      // Initialze Map
       var map = new qq.maps.Map($("#map")[0], {
         zoom: 12
       });
@@ -247,6 +281,7 @@
         }
 
         if (record.center) map.setCenter(record.position);
+        record.marker = marker;
         return marker;
       }
 
@@ -270,6 +305,7 @@
         }
       }
 
+      // Use counter to make sure all requests are finished
       var finishedRequestsCount = 0;
       var requestsCount = $.map(mechanics, function(id, mechanic) { return id; }).length + 1;
       $.each(mechanics, function(id, mechanic) {
@@ -296,6 +332,7 @@
       }));
 
       function onCompleteCallback() {
+        // If all requests are finished
         finishedRequestsCount = finishedRequestsCount + 1;
         if (requestsCount !== finishedRequestsCount) return;
         if (!order.position) return;
@@ -305,6 +342,7 @@
             var distance = qq.maps.geometry.spherical.computeDistanceBetween(order.position, mechanic.position);
             mechanic.distance = distance;
 
+            // Display distance text in Map List
             var distanceText;
             if (!distance) {
               distanceText = "【无法定位】"
@@ -314,23 +352,26 @@
               distanceText = "【" + parseInt(distance / 1000) + "千米】";
             }
 
-            getMapListRadio(id).find(".distance").text(distanceText);
+            getMapListItem(id).find(".distance").text(distanceText);
           }
         });
 
+        // Sort Map List Item
         var $mapList = $("#map_list");
-        var $radios = $mapList.children(".radio");
-        $radios.sort(function(aNode, bNode) {
-          var aMechanicId = getMapListMechanicId(aNode);
-          var bMechanicId = getMapListMechanicId(bNode);
+        var $items = $mapList.children(".item");
+        $items.sort(function(aNode, bNode) {
+          var aMechanicId = getMechanicIdFromNode(aNode);
+          var bMechanicId = getMechanicIdFromNode(bNode);
           var aDistance = mechanics[aMechanicId].distance;
           var bDistance = mechanics[bMechanicId].distance;
+          if (!aDistance) return 1;
+          if (!bDistance) return -1;
           if (aDistance > bDistance) return 1;
           if (aDistance < bDistance) return -1;
           return 0;
         });
 
-        $radios.detach().appendTo($mapList);
+        $items.detach().appendTo($mapList);
       }
 
     }
