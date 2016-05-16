@@ -115,6 +115,33 @@
   }
 }
 
+.map-list {
+  height: 500px;
+  overflow-y: scroll;
+  padding-left: 0;
+
+  .radio {
+    cursor: pointer;
+    padding: 5px 10px;
+
+    .glyphicon-select:before {
+      content: "\e157";
+    }
+
+    &.selected {
+      background-color: #f5f5f5;
+
+      .glyphicon-select:before {
+        content: "\e067";
+      }
+    }
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+}
+
 .nav.nav-tabs.page-header {
   padding-bottom: 0;
   margin: 33px 0 20px;

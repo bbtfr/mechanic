@@ -4,6 +4,7 @@
 #= require select2
 #= require select2_locale_zh-CN
 #= require dataTables/jquery.dataTables
+#= require dataTables/extras/dataTables.select
 #= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 
 $.fn.extend

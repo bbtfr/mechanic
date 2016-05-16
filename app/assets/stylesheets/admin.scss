@@ -92,6 +92,10 @@
 
 table.dataTable thead > tr > th {
   white-space: nowrap;
+
+  &.sorting_disabled {
+    padding-right: 8px;
+  }
 }
 
 .dataTables_wrapper {
@@ -148,6 +152,27 @@ table.dataTable thead > tr > th {
   }
 
   // [converter] extracted textarea& to textarea.form-control
+}
+
+// DataTables Select
+.dataTables_info {
+  .select-info {
+    margin-left: 10px;
+  }
+}
+
+.dataTable {
+  .glyphicon-select:before {
+    content: "\e157";
+  }
+
+  .selected {
+    background-color: #f5f5f5;
+
+    .glyphicon-select:before {
+      content: "\e067";
+    }
+  }
 }
 
 /* Sticky footer styles

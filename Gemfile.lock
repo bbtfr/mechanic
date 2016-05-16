@@ -29,7 +29,7 @@ GIT
       coffee-rails
 
 GEM
-  remote: https://gems.ruby-china.org/
+  remote: https://rubygems.org/
   specs:
     actionmailer (4.2.6)
       actionpack (= 4.2.6)
@@ -373,4 +373,4 @@ DEPENDENCIES
   wx_pay!
 
 BUNDLED WITH
-   1.11.2
+   1.12.3

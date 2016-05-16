@@ -11,7 +11,8 @@ class Merchants::Hosting::OrdersController < Merchants::OrdersController
   end
 
   def update_pick
-    if mechanic_id = params[:order][:mechanic_id]
+    mechanic_id = params[:order][:mechanic_id]
+    if mechanic_id.present?
       remark = params[:order][:remark]
       @order.update_attribute(:remark, remark) if remark
       mechanic = Mechanic.find(mechanic_id)
