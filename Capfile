@@ -25,6 +25,7 @@ require 'capistrano/rails/migrations'
 require 'capistrano/unicorn_nginx'
 
 require 'capistrano/sidekiq'
+require 'capistrano/sidekiq/monit'
 
 require 'whenever/capistrano'
 
