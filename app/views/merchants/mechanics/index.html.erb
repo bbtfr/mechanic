@@ -1,4 +1,8 @@
-<h3 class="page-header">技师列表</h3>
+<ul class="nav nav-tabs page-header">
+  <li><h3>技师列表</h3></li>
+  <li class="active"><a href="#table_tab" data-toggle="tab">列表</a></li>
+  <li><a href="#map_tab" data-toggle="tab">地图</a></li>
+</ul>
 
 <%
   def mechanic_state_link_to state, text
@@ -16,58 +20,79 @@
     </ul>
   </div>
 
+  <% @skills = Skill.all %>
+  <% @province_cd = (params[:province] || Province.first.id).to_i %>
+
   <% case @state %>
   <% when :followeds %>
     <% @mechanics = current_store.followed_mechanics.shown %>
 
     <form class="form-inline" id="mechanics_form">
-      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name), class: "form-control", id: "mechanics_skills_select" %></label>
+      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name), class: "form-control", id: "mechanics_skills_select" %></label>
     </form>
 
   <% else %>
 
-    <% province_cd = (params[:province] || Province.first.id).to_i %>
-
     <form class="form-inline" id="mechanics_form">
-      <label>省份： <%= select_tag "province", options_from_collection_for_select(Province.all, :id, :name, province_cd), class: "form-control", id: "mechanics_provinces_select" %></label>
-      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(Skill.all, :name, :name, params[:skills]), class: "form-control", id: "mechanics_skills_select" %></label>
+      <label>省份： <%= select_tag "province", options_from_collection_for_select(Province.all, :id, :name, @province_cd), class: "form-control", id: "mechanics_provinces_select" %></label>
+      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name, params[:skills]), class: "form-control mechanics_skills_select" %></label>
     </form>
 
     <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
     <% @mechanics = Mechanic.shown %>
-    <% @mechanics = @mechanics.where(province_cd: province_cd) %>
+    <% @mechanics = @mechanics.where(province_cd: @province_cd) %>
 
   <% end %>
 
-  <div class="col-md-10 col-xs-8">
+  <div class="tab-content">
+    <div class="tab-pane active" id="table_tab">
 
-    <%= index_for [ :merchants, @mechanics ], class: "table table-hover" do |i| %>
+      <div class="col-md-10 col-xs-8">
 
-      <%= i.attribute :skills do |mechanic| %>
-        <%= mechanic.skills.join("、") %>
-      <% end %>
+        <%= index_for [ :merchants, @mechanics ], class: "table table-hover" do |i| %>
+          <%= i.attribute :id %>
 
-      <%= i.attribute :user_nickname %>
-      <%= i.attribute :user_mobile %>
-      <%= i.attribute :unique_id %>
+          <%= i.attribute :skills do |mechanic| %>
+            <%= mechanic.skills.join("、") %>
+          <% end %>
 
-      <%= i.attribute :province %>
-      <%= i.attribute :city %>
-      <%= i.attribute :district %>
+          <%= i.attribute :user_nickname %>
+          <%= i.attribute :user_mobile %>
+          <%= i.attribute :unique_id %>
 
-      <%= i.attribute :available_orders_count %>
-      <%= i.attribute :revoke_orders_count %>
-      <%= i.attribute :professionality_average %>
-      <%= i.attribute :timeliness_average %>
+          <%= i.attribute :province %>
+          <%= i.attribute :city %>
+          <%= i.attribute :district %>
 
-      <%= i.actions :show do |a| %>
-        <% if @state == :followeds || @followed_mechanic_ids.include?(i.object.id) %>
-          <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
-        <% else %>
-          <%= a.action_link :follow, method: :post %>
+          <%= i.attribute :available_orders_count %>
+          <%= i.attribute :revoke_orders_count %>
+          <%= i.attribute :professionality_average %>
+          <%= i.attribute :timeliness_average %>
+
+          <%= i.actions :show do |a| %>
+            <% if @state == :followeds || @followed_mechanic_ids.include?(i.object.id) %>
+              <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
+            <% else %>
+              <%= a.action_link :follow, method: :post %>
+            <% end %>
+          <% end %>
         <% end %>
-      <% end %>
-    <% end %>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="map_tab">
+      <div class="col-md-8 col-xs-6 map-container">
+        <div class="map" id="map"></div>
+      </div>
+      <div class="col-md-2 col-xs-2 map-list" id="map_list">
+        <div class="filter">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name), class: "form-control mechanics_skills_select" %></div>
+        <% @mechanics.each do |mechanic| %>
+          <div class="item" data-mechanic-id="<%= mechanic.id %>">
+            <%= mechanic.user_nickname %>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -76,19 +101,28 @@
     var dataTable = $("#mechanics").DataTable({
       order: [], // Do not sort by default
       pagingType: 'full_numbers',
-      dom: "<'row'<'col-sm-3'l><'col-sm-9'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>"
+      dom: "<'row'<'col-sm-3'l><'col-sm-9'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>",
+      columnDefs: [{
+        orderable: false,
+        targets: 0
+      }, {
+        visible: false,
+        targets: [0, 1]
+      }],
+      select: 'api',
+      language: {
+        select: {
+          rows: {
+            0: "请选择技师",
+            1: "你选中了一个技师"
+          }
+        }
+      }
     });
 
-    var skillColumn = dataTable.column(0);
-    skillColumn.visible(false);
-
+    var skillColumn = dataTable.column(1);
     $form = $("#mechanics_form");
     $form.prependTo($("#mechanics_filter"));
-
-    $("#mechanics_skills_select").change(function() {
-      skillColumn.search($(this).val());
-      dataTable.draw();
-    }).trigger('change');
 
     <% unless @state %>
 
@@ -99,5 +133,224 @@
 
     <% end %>
 
+    var mechanics = <%= raw @mechanics.reduce({}) { |ret, mechanic|
+        json = mechanic.user.as_json(only: %w(lat lng address))
+        json.merge!(popover: render(partial: "shared/orders/mechanic_popover", locals: { mechanic: mechanic }))
+        ret[mechanic.id] = json
+        ret
+      }.to_json %>;
+
+    function getMapListItem(mechanicId) {
+      return $("#map_list .item[data-mechanic-id=" + mechanicId + "]");
+    }
+
+    function getMechanicIdFromMapListItem(item) {
+      return $(item).data("mechanic-id");
+    }
+
+    function getMechanicIdFromDataTableRow(row) {
+      return getMechanicIdFromDataTableData(dataTable.row(row).data());
+    }
+
+    function getMechanicIdFromDataTableData(data) {
+      return data[0];
+    }
+
+    var $items = $("#map_list .item");
+    function selectMechanic(mechanicId) {
+      if (selectMechanic.mechanicId == mechanicId) return;
+      selectMechanic.mechanicId = mechanicId;
+
+      // DataTable
+      dataTable.rows({ selected: true }).select(false);
+      var selectedRowIndex = dataTable.row(function(index, data) {
+        return getMechanicIdFromDataTableData(data) == mechanicId;
+      }).select().index();
+
+      // DataTable display right page
+      var pageInfo = dataTable.page.info();
+      var rowPosition = dataTable.rows()[0].indexOf(selectedRowIndex);
+      if (rowPosition >= 0 && rowPosition < pageInfo.start || rowPosition >= pageInfo.end) {
+        var pageToDisplay = Math.floor(rowPosition / dataTable.page.len());
+        dataTable.page(pageToDisplay).draw("page");
+      }
+
+      // Map
+      $items.filter(".selected").removeClass("selected");
+      getMapListItem(mechanicId).addClass("selected");
+
+      if (window.showMechanicInfo) window.showMechanicInfo(mechanicId, true);
+    }
+
+    $("#mechanics").on("click", "td:not(:last-child)", function(event) {
+      selectMechanic(getMechanicIdFromDataTableRow($(event.currentTarget).parent()));
+    });
+
+    $("#map_list").on("click", ".item", function(event) {
+      selectMechanic(getMechanicIdFromMapListItem(event.currentTarget));
+    });
+
+    // Skill Select
+    $(".mechanics_skills_select").on("change", function() {
+      var value = $(this).val();
+      $(".mechanics_skills_select").val(value);
+
+      skillColumn.search(value ? $(this).find('option:selected').text() : "");
+      dataTable.draw();
+
+      // Show / Hide Map List Item & Marker if needed
+      $items.hide();
+      $.each(mechanics, function(id, mechanic) {
+        if (mechanic.marker) mechanic.marker.setVisible(false);
+      });
+      var mechanicIds = dataTable.rows({ search: "applied" }).nodes().map(function(node) {
+        var mechanicId = getMechanicIdFromDataTableRow(node);
+        getMapListItem(mechanicId).show();
+        var mechanic = mechanics[mechanicId];
+        if (mechanic.marker) mechanic.marker.setVisible(true);
+        return mechanicId;
+      });
+
+      // Show / Hide Map Popover if needed
+      if (mechanicIds.indexOf(selectMechanic.mechanicId) < 0) {
+        showMechanicInfo();
+      } else {
+        showMechanicInfo(selectMechanic.mechanicId);
+      }
+    });
+
+    // Initialize Map
+    window.initMap = function() {
+      // Custom InfoWindow
+      var InfoWindow = function(opts) {
+        qq.maps.Overlay.call(this, opts);
+      };
+      InfoWindow.prototype = new qq.maps.Overlay();
+      InfoWindow.prototype.construct = function() {
+        this.dom = document.createElement("div");
+        this.dom.className = "map-info-window";
+        this.getPanes().floatPane.appendChild(this.dom);
+        if (this.get("onCreate")) this.get("onCreate")();
+      };
+      InfoWindow.prototype.setContent = function(content) {
+        this.dom.innerHTML = content;
+      };
+      InfoWindow.prototype.setPosition = function(position) {
+        this.set("position", position);
+      };
+      InfoWindow.prototype.draw = function() {
+        var position = this.get("position");
+        if (position) {
+          var pixel = this.getProjection().fromLatLngToDivPixel(position);
+          this.dom.style.left = pixel.getX() + "px";
+          this.dom.style.top = pixel.getY() + "px";
+        }
+      };
+      InfoWindow.prototype.destroy = function() {
+        this.dom.parentNode.removeChild(this.dom);
+      };
+
+      // Initialze Map
+      var map = new qq.maps.Map($("#map")[0], {
+        zoom: 12
+      });
+      var info = new InfoWindow({
+        map: map,
+        onCreate: function() {
+          showMechanicInfo(selectMechanic.mechanicId);
+        }
+      });
+
+      var imageBlue = <%= raw image_path("map-marker-blue.png").to_json %>,
+          imageRed = <%= raw image_path("map-marker-red.png").to_json %>,
+          imageGreen = <%= raw image_path("map-marker-green.png").to_json %>,
+          size = new qq.maps.Size(32, 32),
+          origin = new qq.maps.Point(0, 0),
+          anchor = new qq.maps.Point(16, 32),
+          scaleSize = new qq.maps.Size(32, 32),
+          iconBlue = new qq.maps.MarkerImage(imageBlue, size, origin, anchor, scaleSize),
+          iconRed = new qq.maps.MarkerImage(imageRed, size, origin, anchor, scaleSize),
+          iconGreen = new qq.maps.MarkerImage(imageGreen, size, origin, anchor, scaleSize);
+
+      function showInfo(record, center) {
+        if (showInfo.record === record) return;
+        showInfo.record = record;
+
+        if (record) {
+          info.setPosition(record.position);
+          info.setContent(record.popover);
+          if (center) map.panTo(record.position);
+        } else {
+          info.setContent("");
+        }
+        info.draw();
+
+      }
+
+      var showMechanicInfo = window.showMechanicInfo = function(mechanicId, center) {
+        var mechanic = mechanics[mechanicId];
+        showInfo(mechanic, center);
+      }
+
+      function rawSetMarker(record) {
+        var marker = new qq.maps.Marker({
+          icon: record.icon,
+          map: map,
+          position: record.position,
+          zIndex: record.zIndex || 100
+        });
+
+        if (record.onClick) {
+          qq.maps.event.addListener(marker, "click", record.onClick);
+        }
+
+        if (record.center) map.setCenter(record.position);
+        record.marker = marker;
+        return marker;
+      }
+
+      function setMarker(record) {
+        if (!record.lat || !record.lng) {
+          var geocoder = new qq.maps.Geocoder({
+            complete: function(result) {
+              record.position = result.detail.location;
+              rawSetMarker(record);
+              if (record.onComplete) record.onComplete();
+            },
+            error: function(error) {
+              if (record.onComplete) record.onComplete();
+            }
+          });
+          geocoder.getLocation(record.address);
+        } else {
+          record.position = new qq.maps.LatLng(record.lat, record.lng);
+          rawSetMarker(record);
+          if (record.onComplete) record.onComplete();
+        }
+      }
+
+      // Use counter to make sure all requests are finished
+      var finishedRequestsCount = 0;
+      var requestsCount = $.map(mechanics, function(id, mechanic) { return id; }).length + 1;
+      $.each(mechanics, function(id, mechanic) {
+        setMarker($.extend(mechanic, {
+          icon: iconBlue,
+          onClick: function() {
+            showInfo(mechanic);
+            selectMechanic(id);
+          }
+        }));
+      });
+
+      var geocoder = new qq.maps.Geocoder({
+        complete: function(result) {
+          map.setCenter(result.detail.location);
+        }
+      });
+      geocoder.getLocation(<%= raw Province.find(@province_cd).name.to_json %>);
+
+    }
+
   })();
 </script>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&amp;callback=initMap"></script>

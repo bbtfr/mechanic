@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs page-header">
   <li><h3><%= @order.assigned? ? "改派技师" : "指派技师" %></h3></li>
-  <li class="active"><a href="#table_tab" data-toggle="tab">技师列表</a></li>
+  <li class="active"><a href="#table_tab" data-toggle="tab">列表</a></li>
   <li><a href="#map_tab" data-toggle="tab">地图</a></li>
 </ul>
 
@@ -15,7 +15,7 @@
           <%= f.hidden_field :mechanic_id %>
 
           <% @skills = Skill.all %>
-          <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :name, :name), class: "form-control mechanics_skills_select" %></label>
+          <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name), class: "form-control mechanics_skills_select" %></label>
 
           <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
           <% @mechanics = Mechanic.includes(:user, :skills) %>
@@ -60,7 +60,7 @@
           <div class="map" id="map"></div>
         </div>
         <div class="col-md-3 map-list" id="map_list">
-          <div class="filter">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :name, :name), class: "form-control mechanics_skills_select" %></div>
+          <div class="filter">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name), class: "form-control mechanics_skills_select" %></div>
           <% @mechanics.each do |mechanic| %>
             <div class="item">
               <span class="glyphicon glyphicon-select" data-mechanic-id="<%= mechanic.id %>"></span>
@@ -133,7 +133,6 @@
       if (selectMechanic.mechanicId == mechanicId) return;
       selectMechanic.mechanicId = mechanicId;
 
-      console.log("select mechani: " + mechanicId);
       $mechanicId.val(mechanicId);
 
       // DataTable
@@ -141,8 +140,6 @@
       var selectedRowIndex = dataTable.row(function(index, data) {
         return $(data[0]).data("mechanic-id") == mechanicId;
       }).select().index();
-
-      console.log(selectedRowIndex)
 
       // DataTable display right page
       var pageInfo = dataTable.page.info();
@@ -169,7 +166,10 @@
 
     // Skill Select
     $(".mechanics_skills_select").on("change", function() {
-      skillColumn.search($(this).val());
+      var value = $(this).val();
+      $(".mechanics_skills_select").val(value);
+
+      skillColumn.search(value ? $(this).find('option:selected').text() : "");
       dataTable.draw();
 
       // Show / Hide Map List Item & Marker if needed
