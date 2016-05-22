@@ -180,7 +180,7 @@ GEM
     mimemagic (0.3.0)
     mini_magick (4.5.1)
     mini_portile2 (2.0.0)
-    minitest (5.9.0)
+    minitest (5.8.4)
     multi_json (1.11.3)
     multi_xml (0.5.5)
     net-scp (1.2.1)
