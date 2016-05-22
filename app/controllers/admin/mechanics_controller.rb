@@ -2,7 +2,12 @@ class Admin::MechanicsController < Admin::ApplicationController
   before_filter :find_mechanic, except: [ :index, :new, :create ]
 
   def index
-    @mechanics = User.mechanics
+    @state = if %w(all hidden).include? params[:state]
+        params[:state].to_sym
+      else
+        :all
+      end
+    @mechanics = User.mechanics.send(@state)
   end
 
   def clientize

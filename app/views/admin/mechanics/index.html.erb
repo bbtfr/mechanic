@@ -3,30 +3,49 @@
   <small><%= link_to "添加技师", new_admin_mechanic_path %></small>
 </h3>
 
-<% @mechanics = @mechanics.includes(:mechanic) %>
+<%
+  def mechanic_state_link_to state, text
+    link = link_to text, admin_mechanics_path(state: state)
+    class_name = (@state == state) ? "active" : ""
+    %{<li class="#{class_name}">#{link}</li>}.html_safe
+  end
+%>
 
-<%= index_for [ :admin, @mechanics ], class: "table table-hover data-tables" do |i| %>
-  <%= i.attribute :nickname, searchable: true %>
-  <%= i.attribute :mobile, searchable: true %>
-  <%= i.fields_for :mechanic, model: Mechanic do |ii| %>
-    <%= ii.attribute :unique_id %>
-    <%= ii.attribute :province, sortable: "mechanics.province_cd" %>
-    <%= ii.attribute :city, sortable: "mechanics.city_cd" %>
-    <%= ii.attribute :district, sortable: "mechanics.district_cd" %>
-    <%= ii.attribute :available_orders_count %>
-    <%= ii.attribute :revoke_orders_count %>
-    <%= ii.attribute :total_income %>
-    <%= ii.attribute :professionality_average %>
-    <%= ii.attribute :timeliness_average %>
-  <% end %>
+<div class="row">
+  <div class="col-md-2 col-xs-4">
+    <ul class="nav nav-pills nav-stacked">
+      <%= mechanic_state_link_to :all, "全部技师" %>
+      <%= mechanic_state_link_to :hidden, "隐藏技师" %>
+    </ul>
+  </div>
 
-  <%= i.actions do |a| %>
-    <%= a.action_link :show, url: admin_mechanic_path(i.object) %>
-    <%= a.action_link :edit, url: edit_admin_mechanic_path(i.object) %>
-    <% if i.object.hidden? %>
-      <%= a.action_link :unhide, url: unhide_admin_mechanic_path(i.object), method: :post, confirm: "你确定要显示这个用户？" %>
-    <% else %>
-      <%= a.action_link :hide, url: hide_admin_mechanic_path(i.object), method: :post, confirm: "你确定要隐藏这个用户？" %>
+  <% @mechanics = @mechanics.includes(:mechanic) %>
+
+  <div class="col-md-10 col-xs-8">
+    <%= index_for [ :admin, @mechanics ], class: "table table-hover data-tables" do |i| %>
+      <%= i.attribute :nickname, searchable: true %>
+      <%= i.attribute :mobile, searchable: true %>
+      <%= i.fields_for :mechanic, model: Mechanic do |ii| %>
+        <%= ii.attribute :unique_id %>
+        <%= ii.attribute :province, sortable: "mechanics.province_cd" %>
+        <%= ii.attribute :city, sortable: "mechanics.city_cd" %>
+        <%= ii.attribute :district, sortable: "mechanics.district_cd" %>
+      <% end %>
+      <%= i.attribute :address, searchable: true %>
+      <%= i.fields_for :mechanic, model: Mechanic do |ii| %>
+        <%= ii.attribute :available_orders_count %>
+        <%= ii.attribute :total_income %>
+      <% end %>
+
+      <%= i.actions do |a| %>
+        <%= a.action_link :show, url: admin_mechanic_path(i.object) %>
+        <%= a.action_link :edit, url: edit_admin_mechanic_path(i.object) %>
+        <% if i.object.hidden? %>
+          <%= a.action_link :unhide, url: unhide_admin_mechanic_path(i.object), method: :post, confirm: "你确定要显示这个用户？" %>
+        <% else %>
+          <%= a.action_link :hide, url: hide_admin_mechanic_path(i.object), method: :post, confirm: "你确定要隐藏这个用户？" %>
+        <% end %>
+      <% end %>
     <% end %>
-  <% end %>
-<% end %>
+  </div>
+</div>

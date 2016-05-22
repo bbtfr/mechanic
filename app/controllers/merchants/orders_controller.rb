@@ -139,7 +139,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
         reason = :user_cancel
       else
         reason = :merchant_revoke
-        @order.update_attributes(order_params)
+        @order.update_attributes(review_order_params)
       end
 
       if @order.pay_type_alipay?

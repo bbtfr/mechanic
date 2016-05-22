@@ -102,17 +102,18 @@ class Order < ActiveRecord::Base
       end
 
       def refunding! reason = :user_cancel
-        return false unless paid? || working?
+        return false unless paid? || merchant? && (working? || confirming?)
         update_attribute(:refund, Order.refunds[reason])
         update_state(:refunding)
         true
       end
 
       def refund! reason = :user_cancel
-        return false unless refunding? || paid? || working? || confirming?
+        return false unless refunding? || paid? || merchant? && (working? || confirming?)
         update_attribute(:refund, Order.refunds[reason]) unless refunding?
         update_state(:refunded)
         user.increase_total_cost!(-price)
+        SMSMailer.mechanic_rejection(self, mechanic).deliver
         true
       end
 

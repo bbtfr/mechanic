@@ -63,11 +63,9 @@
           <%= i.attribute :province %>
           <%= i.attribute :city %>
           <%= i.attribute :district %>
+          <%= i.attribute :user_address %>
 
           <%= i.attribute :available_orders_count %>
-          <%= i.attribute :revoke_orders_count %>
-          <%= i.attribute :professionality_average %>
-          <%= i.attribute :timeliness_average %>
 
           <%= i.actions :show do |a| %>
             <% if @state == :followeds || @followed_mechanic_ids.include?(i.object.id) %>
@@ -113,8 +111,8 @@
       language: {
         select: {
           rows: {
-            0: "请选择技师",
-            1: "你选中了一个技师"
+            0: "",
+            1: ""
           }
         }
       }
