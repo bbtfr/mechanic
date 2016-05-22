@@ -4,6 +4,6 @@ class City < ActiveRecord::Base
   has_many :districts
 
   def to_scope
-    {city_cd: id}
+    { city_cd: id }
   end
 end

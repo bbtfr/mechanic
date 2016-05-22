@@ -1,0 +1,67 @@
+<div class="tab-content">
+  <div class="tab-pane active" id="table_tab">
+    <div class="col-md-12" id="mechanic_list">
+      <%= f.error_messages %>
+
+      <%= f.hidden_field :mechanic_id %>
+
+      <% @skills = Skill.all %>
+      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name), class: "form-control mechanics_skills_select" %></label>
+
+      <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
+      <% @mechanics = Mechanic.all %>
+      <% @mechanics = @mechanics.where(province_cd: @order.province_cd) %>
+      <% @mechanics = @mechanics.includes(:user, :skills) %>
+      <% @mechanics = @mechanics.shown %>
+
+      <%= index_for [ :merchants, @mechanics ], class: "table table-hover" do |i| %>
+        <%= i.attribute :_check do |mechanic| %>
+          <span class="glyphicon glyphicon-select" data-mechanic-id="<%= mechanic.id %>"></span>
+        <% end %>
+
+        <%= i.attribute :skills do |mechanic| %>
+          <%= mechanic.skills.join("、") %>
+        <% end %>
+
+        <%= i.attribute :user_nickname %>
+        <%= i.attribute :user_mobile %>
+        <%= i.attribute :unique_id %>
+
+        <%= i.attribute :province %>
+        <%= i.attribute :city %>
+        <%= i.attribute :district %>
+
+        <%= i.attribute :available_orders_count %>
+        <%= i.attribute :revoke_orders_count %>
+        <%= i.attribute :professionality_average %>
+        <%= i.attribute :timeliness_average %>
+
+        <%= i.actions :show do |a| %>
+          <% if @followed_mechanic_ids.include? i.object.id %>
+            <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
+          <% else %>
+            <%= a.action_link :follow, method: :post %>
+          <% end %>
+        <% end %>
+
+      <% end %>
+    </div>
+  </div>
+
+  <div class="tab-pane" id="map_tab">
+    <div class="col-md-9 map-container">
+      <div class="map" id="map"></div>
+    </div>
+    <div class="col-md-3 map-list" id="map_list">
+      <div class="filter">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name), class: "form-control mechanics_skills_select" %></div>
+      <% @mechanics.each do |mechanic| %>
+        <div class="item">
+          <span class="glyphicon glyphicon-select" data-mechanic-id="<%= mechanic.id %>"></span>
+          <%= mechanic.user_nickname %>
+          <span class="text-muted distance"></span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+</div>

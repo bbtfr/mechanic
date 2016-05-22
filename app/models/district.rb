@@ -3,6 +3,6 @@ class District < ActiveRecord::Base
   alias_attribute :parent, :city
 
   def to_scope
-    {district_cd: id}
+    { district_cd: id }
   end
 end

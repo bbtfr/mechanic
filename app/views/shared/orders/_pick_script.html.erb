@@ -1,137 +1,31 @@
-<ul class="nav nav-tabs page-header">
-  <li><h3>技师列表</h3></li>
-  <li class="active"><a href="#table_tab" data-toggle="tab">列表</a></li>
-  <li><a href="#map_tab" data-toggle="tab">地图</a></li>
-</ul>
-
-<%
-  def mechanic_state_link_to state, text
-    link = link_to text, merchants_mechanics_path(state: state)
-    class_name = (@state == state) ? "active" : ""
-    %{<li class="#{class_name}">#{link}</li>}.html_safe
-  end
-%>
-
-<div class="row">
-  <div class="col-md-2 col-xs-4">
-    <ul class="nav nav-pills nav-stacked">
-      <%= mechanic_state_link_to nil, "查询技师" %>
-      <%= mechanic_state_link_to :followeds, "我的技师" %>
-    </ul>
-  </div>
-
-  <% @skills = Skill.all %>
-  <% @province_cd = (params[:province] || Province.first.id).to_i %>
-
-  <% case @state %>
-  <% when :followeds %>
-    <% @mechanics = current_store.followed_mechanics %>
-
-    <form class="form-inline" id="mechanics_form">
-      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name), class: "form-control", id: "mechanics_skills_select" %></label>
-    </form>
-
-  <% else %>
-
-    <form class="form-inline" id="mechanics_form">
-      <label>省份： <%= select_tag "province", options_from_collection_for_select(Province.all, :id, :name, @province_cd), class: "form-control", id: "mechanics_provinces_select" %></label>
-      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name, params[:skills]), class: "form-control mechanics_skills_select" %></label>
-    </form>
-
-    <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
-    <% @mechanics = Mechanic.all %>
-    <% @mechanics = @mechanics.where(province_cd: @province_cd) %>
-
-  <% end %>
-
-  <% @mechanics = @mechanics.includes(:user, :skills) %>
-  <% @mechanics = @mechanics.shown %>
-
-  <div class="tab-content">
-    <div class="tab-pane active" id="table_tab">
-      <div class="col-md-10 col-xs-8">
-        <%= index_for [ :merchants, @mechanics ], class: "table table-hover" do |i| %>
-          <%= i.attribute :id %>
-
-          <%= i.attribute :skills do |mechanic| %>
-            <%= mechanic.skills.join("、") %>
-          <% end %>
-
-          <%= i.attribute :user_nickname %>
-          <%= i.attribute :user_mobile %>
-          <%= i.attribute :unique_id %>
-
-          <%= i.attribute :province %>
-          <%= i.attribute :city %>
-          <%= i.attribute :district %>
-          <%= i.attribute :user_address %>
-
-          <%= i.attribute :available_orders_count %>
-
-          <%= i.actions :show do |a| %>
-            <% if @state == :followeds || @followed_mechanic_ids.include?(i.object.id) %>
-              <%= a.action_link :unfollow, method: :post, confirm: "你确定要取消关注？" %>
-            <% else %>
-              <%= a.action_link :follow, method: :post %>
-            <% end %>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="tab-pane" id="map_tab">
-      <div class="col-md-8 col-xs-6 map-container">
-        <div class="map" id="map"></div>
-      </div>
-      <div class="col-md-2 col-xs-2 map-list" id="map_list">
-        <div class="filter">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name), class: "form-control mechanics_skills_select" %></div>
-        <% @mechanics.each do |mechanic| %>
-          <div class="item" data-mechanic-id="<%= mechanic.id %>">
-            <%= mechanic.user_nickname %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script type="text/javascript">
   (function() {
-    var dataTable = $("#mechanics").DataTable({
+    // Initialize DataTable
+    var dataTable = window.dataTable = $("#mechanics").DataTable({
       order: [], // Do not sort by default
       pagingType: 'full_numbers',
-      dom: "<'row'<'col-sm-3'l><'col-sm-9'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>",
       columnDefs: [{
         orderable: false,
         targets: 0
       }, {
         visible: false,
-        targets: [0, 1]
+        targets: 1
       }],
       select: 'api',
       language: {
         select: {
           rows: {
-            0: "",
-            1: ""
+            0: "请选择技师",
+            1: "你选中了一个技师"
           }
         }
       }
     });
 
     var skillColumn = dataTable.column(1);
-    $form = $("#mechanics_form");
-    $form.prependTo($("#mechanics_filter"));
+    $("#mechanics_skills").prependTo($("#mechanics_filter"));
 
-    <% unless @state %>
-
-      var $province = $("#mechanics_provinces_select");
-      $province.change(function() {
-        if ($province.val()) $form.submit();
-      });
-
-    <% end %>
-
+    // Initialize Event Callbacks
     var mechanics = <%= raw @mechanics.reduce({}) { |ret, mechanic|
         json = mechanic.user.as_json(only: %w(lat lng address))
         json.merge!(popover: render(partial: "shared/orders/mechanic_popover", locals: { mechanic: mechanic }))
@@ -140,30 +34,25 @@
       }.to_json %>;
 
     function getMapListItem(mechanicId) {
-      return $("#map_list .item[data-mechanic-id=" + mechanicId + "]");
+      return $("#map_list .glyphicon[data-mechanic-id=" + mechanicId + "]").closest(".item");
     }
 
-    function getMechanicIdFromMapListItem(item) {
-      return $(item).data("mechanic-id");
-    }
-
-    function getMechanicIdFromDataTableRow(row) {
-      return getMechanicIdFromDataTableData(dataTable.row(row).data());
-    }
-
-    function getMechanicIdFromDataTableData(data) {
-      return data[0];
+    function getMechanicIdFromNode(item) {
+      return $(item).find(".glyphicon").data("mechanic-id");
     }
 
     var $items = $("#map_list .item");
+    var $mechanicId = $("#order_mechanic_id");
     function selectMechanic(mechanicId) {
       if (selectMechanic.mechanicId == mechanicId) return;
       selectMechanic.mechanicId = mechanicId;
 
+      $mechanicId.val(mechanicId);
+
       // DataTable
       dataTable.rows({ selected: true }).select(false);
       var selectedRowIndex = dataTable.row(function(index, data) {
-        return getMechanicIdFromDataTableData(data) == mechanicId;
+        return $(data[0]).data("mechanic-id") == mechanicId;
       }).select().index();
 
       // DataTable display right page
@@ -182,11 +71,11 @@
     }
 
     $("#mechanics").on("click", "td:not(:last-child)", function(event) {
-      selectMechanic(getMechanicIdFromDataTableRow($(event.currentTarget).parent()));
+      selectMechanic(getMechanicIdFromNode($(event.currentTarget).parent()));
     });
 
     $("#map_list").on("click", ".item", function(event) {
-      selectMechanic(getMechanicIdFromMapListItem(event.currentTarget));
+      selectMechanic(getMechanicIdFromNode(event.currentTarget));
     });
 
     // Skill Select
@@ -203,7 +92,7 @@
         if (mechanic.marker) mechanic.marker.setVisible(false);
       });
       var mechanicIds = dataTable.rows({ search: "applied" }).nodes().map(function(node) {
-        var mechanicId = getMechanicIdFromDataTableRow(node);
+        var mechanicId = getMechanicIdFromNode(node);
         getMapListItem(mechanicId).show();
         var mechanic = mechanics[mechanicId];
         if (mechanic.marker) mechanic.marker.setVisible(true);
@@ -217,6 +106,8 @@
         showMechanicInfo(selectMechanic.mechanicId);
       }
     });
+
+    selectMechanic(<%= raw @order.mechanic_id.to_json %>);
 
     // Initialize Map
     window.initMap = function() {
@@ -337,19 +228,68 @@
           onClick: function() {
             showInfo(mechanic);
             selectMechanic(id);
-          }
+          },
+          onComplete: onCompleteCallback
         }));
       });
 
-      var geocoder = new qq.maps.Geocoder({
-        complete: function(result) {
-          map.setCenter(result.detail.location);
-        }
-      });
-      geocoder.getLocation(<%= raw Province.find(@province_cd).name.to_json %>);
+      var order = <%= raw @order.to_json(only: %w(lat lng address)) %>;
+      var marker = setMarker($.extend(order, {
+        center: true,
+        icon: iconRed,
+        onClick: function() {
+          showInfo(order);
+        },
+        onComplete: onCompleteCallback,
+        popover: <%= raw render(partial: "shared/orders/order_popover", locals: { order: @order }).to_json %>,
+        zIndex: 101
+      }));
+
+      function onCompleteCallback() {
+        // If all requests are finished
+        finishedRequestsCount = finishedRequestsCount + 1;
+        if (requestsCount !== finishedRequestsCount) return;
+        if (!order.position) return;
+
+        $.each(mechanics, function(id, mechanic) {
+          if (mechanic.position) {
+            var distance = qq.maps.geometry.spherical.computeDistanceBetween(order.position, mechanic.position);
+            mechanic.distance = distance;
+
+            // Display distance text in Map List
+            var distanceText;
+            if (!distance) {
+              distanceText = "【无法定位】"
+            } else if (distance < 1000) {
+              distanceText = "【" + parseInt(distance) + "米】";
+            } else {
+              distanceText = "【" + parseInt(distance / 1000) + "千米】";
+            }
+
+            getMapListItem(id).find(".distance").text(distanceText);
+          }
+        });
+
+        // Sort Map List Item
+        var $mapList = $("#map_list");
+        var $items = $mapList.children(".item");
+        $items.sort(function(aNode, bNode) {
+          var aMechanicId = getMechanicIdFromNode(aNode);
+          var bMechanicId = getMechanicIdFromNode(bNode);
+          var aDistance = mechanics[aMechanicId].distance;
+          var bDistance = mechanics[bMechanicId].distance;
+          if (!aDistance) return 1;
+          if (!bDistance) return -1;
+          if (aDistance > bDistance) return 1;
+          if (aDistance < bDistance) return -1;
+          return 0;
+        });
+
+        $items.detach().appendTo($mapList);
+      }
 
     }
 
   })();
 </script>
-<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&amp;callback=initMap"></script>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&amp;callback=initMap&amp;libraries=drawing,geometry"></script>

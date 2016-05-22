@@ -6,6 +6,6 @@ class Province < ActiveRecord::Base
   end
 
   def to_scope
-    {province_cd: id}
+    { province_cd: id }
   end
 end
