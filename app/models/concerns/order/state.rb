@@ -66,10 +66,12 @@ class Order < ActiveRecord::Base
       def repick! mechanic
         # Only available and non-setted orders can repick mechanic
         return false unless state_cd > AVAILABLE_GREATER_THAN && state_cd <= SETTLED_GREATER_THAN
+        original_mechanic = self.mechanic
         update_state(:paid)
         update_attribute(:mechanic, mechanic)
         Weixin.send_paid_order_message(self)
         SMSMailer.mechanic_notification(self).deliver
+        SMSMailer.mechanic_rejection(self, original_mechanic).deliver if mechanic != original_mechanic
         SMSMailer.contact_notification(self).deliver if contact_mobile
         true
       end
