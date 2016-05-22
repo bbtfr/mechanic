@@ -37,7 +37,7 @@
           <% if current_user.mechanic? %>
             <p>成交价格：<%= order.mechanic_income %> 元</p>
           <% else %>
-            <p>成交价格：<%= order.price %> 元</p>
+            <p>成交价格：<%= order.price %> 元 <%= "【线下交易】" if order.offline? %></p>
           <% end %>
         </div>
       <% end %>

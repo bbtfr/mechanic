@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160514085603) do
+ActiveRecord::Schema.define(version: 20160522142836) do
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -212,6 +212,7 @@ ActiveRecord::Schema.define(version: 20160514085603) do
     t.string   "store_hotline"
     t.float    "lat"
     t.float    "lng"
+    t.boolean  "offline"
   end
 
   add_index "orders", ["bid_id"], name: "index_orders_on_bid_id"

@@ -33,6 +33,8 @@
       <%= f.input :series_cd, collection: series_map[@order.brand_cd] || [], input_html: { class: "select2" } %>
 
       <%= f.input :quoted_price %>
+      <%= f.input :offline, hint: "订单在线下完成交易，不通过汽车堂进行付款" %>
+
       <%= f.input :remark, hint: "备注对所有人可见", input_html: { rows: 4 } %>
       <%= f.input :merchant_remark, hint: "商户备注仅对当前商户可见", input_html: { rows: 4 } %>
 

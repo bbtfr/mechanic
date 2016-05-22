@@ -246,7 +246,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
         :brand_cd, :series_cd, :quoted_price, :remark, :merchant_remark,
         :custom_location, :lbs_id, :province_cd, :city_cd, :professionality,
         :timeliness, :review, :contact_mobile, :contact_nickname, :hosting,
-        :appointing)
+        :appointing, :offline)
     end
 
     def review_order_params
