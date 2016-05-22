@@ -153,7 +153,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
         else
           flash[:error] = "微信支付：#{response["err_code_des"]}"
         end
-      elsif @order.price.zero?
+      elsif @order.offline?
         @order.refund! reason
       else
         flash[:error] = "未知支付类型"

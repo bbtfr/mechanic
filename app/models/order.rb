@@ -27,6 +27,10 @@ class Order < ActiveRecord::Base
 
   scope :hostings, -> { where(hosting: true) }
 
+  def offline?
+    price.zero?
+  end
+
   def assigned?
     !!mechanic_id
   end

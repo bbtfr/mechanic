@@ -58,7 +58,7 @@ class Order < ActiveRecord::Base
           self.mechanic_id = target.id
         end
 
-        pay! :skip if price.zero?
+        pay! :skip if offline?
         save(validate: false)
         true
       end
