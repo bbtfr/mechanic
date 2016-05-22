@@ -171,6 +171,7 @@ zh-CN:
         hosting: 汽车堂托管
         appointing: 指派技师
         offline: 线下交易
+        offline?: 线下交易
       bid:
         markup_price: 加价
       skill:

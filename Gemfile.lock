@@ -7,9 +7,9 @@ GIT
 
 GIT
   remote: git://github.com/bbtfr/index_for.git
-  revision: 75499deaa2f0f6697bbd6a004f7c719d78abafc5
+  revision: e3922b5e6da3b0d11a7c2e82ff1584de4d09c1ee
   specs:
-    index_for (0.2.0)
+    index_for (0.2.2)
       actionpack (>= 3.2, < 5)
       activemodel (>= 3.2, < 5)
 
@@ -180,7 +180,7 @@ GEM
     mimemagic (0.3.0)
     mini_magick (4.5.1)
     mini_portile2 (2.0.0)
-    minitest (5.8.4)
+    minitest (5.9.0)
     multi_json (1.11.3)
     multi_xml (0.5.5)
     net-scp (1.2.1)

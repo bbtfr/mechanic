@@ -33,6 +33,7 @@
       <%= i.attribute :finish_working_at, format: :short if %i(settleds revieweds closeds).include? @state %>
       <%= i.attribute :skill %>
       <%= i.attribute :price %>
+      <%= i.attribute :offline? %>
       <%= i.attribute :mechanic_nickname %>
 
       <%= i.actions :show %>

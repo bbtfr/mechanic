@@ -28,7 +28,7 @@ class Order < ActiveRecord::Base
   scope :hostings, -> { where(hosting: true) }
 
   def offline?
-    price.zero? || (offline && ["1", 1, true].include?(offline))
+    price.zero? || (offline && ["1", 1, true].include?(offline)) || false
   end
 
   def assigned?

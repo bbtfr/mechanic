@@ -21,9 +21,13 @@
     <%= i.attribute :brand %>
     <%= i.attribute :series %>
     <% if current_user.mechanic? %>
-      <%= i.attribute :mechanic_income %>
+      <%= i.attribute :mechanic_income do |order| %>
+        <%= order.mechanic_income %> 元 <%= "【线下交易】" if order.offline? %>
+      <% end %>
     <% else %>
-      <%= i.attribute :quoted_price %>
+      <%= i.attribute :quoted_price do |order| %>
+        <%= order.quoted_price %> 元
+      <% end %>
     <% end %>
     <%= i.attribute :remark %>
   <% end %>
