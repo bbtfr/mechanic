@@ -154,6 +154,10 @@ table.dataTable thead > tr > th {
   // [converter] extracted textarea& to textarea.form-control
 }
 
+.dataTables_filter .select2 {
+  width: auto!important;
+}
+
 // DataTables Select
 .dataTables_info {
   .select-info {

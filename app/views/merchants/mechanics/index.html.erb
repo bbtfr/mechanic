@@ -28,14 +28,14 @@
     <% @mechanics = current_store.followed_mechanics %>
 
     <form class="form-inline" id="mechanics_form">
-      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name), class: "form-control", id: "mechanics_skills_select" %></label>
+      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name), class: "form-control select2", id: "mechanics_skills_select" %></label>
     </form>
 
   <% else %>
 
     <form class="form-inline" id="mechanics_form">
-      <label>省份： <%= select_tag "province", options_from_collection_for_select(Province.all, :id, :name, @province_cd), class: "form-control", id: "mechanics_provinces_select" %></label>
-      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name, params[:skills]), class: "form-control mechanics_skills_select" %></label>
+      <label>省份： <%= select_tag "province", options_from_collection_for_select(Province.all, :id, :name, @province_cd), class: "form-control select2", id: "mechanics_provinces_select" %></label>
+      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name, params[:skills]), class: "form-control mechanics_skills_select select2" %></label>
     </form>
 
     <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>

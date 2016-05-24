@@ -6,7 +6,7 @@
       <%= f.hidden_field :mechanic_id %>
 
       <% @skills = Skill.all %>
-      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name), class: "form-control mechanics_skills_select" %></label>
+      <label class="mr20" id="mechanics_skills">类型： <%= select_tag "skills", "<option value=\"\">全部</option>".html_safe + options_from_collection_for_select(@skills, :id, :name), class: "form-control mechanics_skills_select select2" %></label>
 
       <% @followed_mechanic_ids = current_store.followed_mechanic_ids %>
       <% @mechanics = Mechanic.all %>
