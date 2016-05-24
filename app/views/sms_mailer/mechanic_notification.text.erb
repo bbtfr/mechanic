@@ -3,7 +3,7 @@
 地址：<%= @order.address %>；
 预约时间：<%= l @order.appointment, format: :long %>；
 类型：<%= @order.skill %>；
-车型：<%= @order.brand %>：
+车型：<%= @order.brand %>；
 车系：<%= @order.series %>；
 出价：<%= @order.mechanic_income %>元<%= "【线下交易】" if @order.offline? %>；
 备注：<%= @order.remark.presence || "无" %>；
