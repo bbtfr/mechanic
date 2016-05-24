@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   skip_before_filter :verify_authenticity_token, :authenticate!, only: [ :notify ]
-  before_filter :find_order, except: [ :index, :new, :create, :notify ]
+  before_filter :find_order, except: [ :index, :new, :create, :notify, :not_found ]
   before_filter :redirect_pending, only: [ :new, :create ]
   before_filter :redirect_mechanic, only: [ :update, :confirm ]
 
@@ -148,6 +148,8 @@ class OrdersController < ApplicationController
 
     def find_order
       @order = order_klass.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      redirect_to not_found_orders_path()
     end
 
     def order_klass

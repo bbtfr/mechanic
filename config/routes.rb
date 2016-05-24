@@ -122,6 +122,7 @@ Rails.application.routes.draw do
 
     collection do
       get :"pay/:id", action: :pay, as: :pay
+      get :not_found
     end
 
     member do
