@@ -1,5 +1,5 @@
-source 'https://rubygems.org'
-# source 'https://gems.ruby-china.org'
+# source 'https://rubygems.org'
+source 'https://gems.ruby-china.org'
 
 gem 'dotenv-rails'
 
@@ -35,6 +35,8 @@ gem 'wx_pay', github: 'bbtfr/wx_pay'
 gem 'alipay'
 
 gem 'rqrcode'
+
+gem 'roo'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'

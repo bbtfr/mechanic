@@ -1,0 +1,44 @@
+<h3 class="page-header">导入技师</h3>
+
+<%= form_for :import, method: :post, multipart: true do |f| %>
+  <div class="row">
+    <div class="col-md-7">
+      <div class="form-group file optional">
+        <label class="file optional control-label">导入Excel文件</label>
+        <%= f.file_field "mechanics", style: "display: none;" %>
+        <div class="dropzone dz-clickable" id="import_mechanics_preview">
+          <span class="text-muted dz-message">点击或拖拽文件到此处上传文件</span>
+        </div>
+        <p class="help-block">Excel文件格式：省份、城市、区县、地址、姓名、电话号码，<a href="/mechanic_import_template.xlsx">模板文件下载</a></p>
+      </div>
+      <%= f.button "确定", class: "btn btn-primary pull-right" %>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  var $import_mechanics_preview = $("#import_mechanics_preview");
+  var $import_mechanics = $("#import_mechanics");
+
+  $import_mechanics_preview.click(function() {
+    $import_mechanics.trigger("click");
+  }).on("dragover", function(event) {
+     event.preventDefault();
+     event.stopPropagation();
+     $import_mechanics_preview.addClass('dz-drag-hover');
+  }).on("dragleave", function() {
+     event.preventDefault();
+     event.stopPropagation();
+     $import_mechanics_preview.removeClass('dz-drag-hover');
+  }).on("drop", function() {
+     event.preventDefault();
+     event.stopPropagation();
+     $import_mechanics_preview.removeClass('dz-drag-hover');
+     $import_mechanics[0].files = event.dataTransfer.files;
+  });
+
+  $import_mechanics.change(function() {
+    $import_mechanics_preview.find("span").text('点击或拖拽文件到此处更换文件：' + this.files[0].name);
+  });
+
+</script>

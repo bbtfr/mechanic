@@ -2,7 +2,6 @@
 //= require select2-bootstrap
 
 @import "admin";
-@import "dropzone/dropzone";
 @import "tinymce-override";
 
 .form-control.datetime {
@@ -29,12 +28,6 @@
   span.text-muted {
     margin-left: 15px;
   }
-}
-
-.dropzone {
-  border: 2px dashed #CCC;
-  border-radius: 5px;
-  background: white;
 }
 
 .reviews {

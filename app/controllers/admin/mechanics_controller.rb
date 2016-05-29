@@ -1,5 +1,5 @@
 class Admin::MechanicsController < Admin::ApplicationController
-  before_filter :find_mechanic, except: [ :index, :new, :create ]
+  before_filter :find_mechanic, except: [ :index, :new, :create, :import, :create_import ]
 
   def index
     @state = if %w(all hidden).include? params[:state]
@@ -51,6 +51,11 @@ class Admin::MechanicsController < Admin::ApplicationController
   def unhide
     @mechanic.unhide!
     redirect_to request.referer
+  end
+
+  def create_import
+    file = params[:import][:mechanics]
+    @importer = Mechanic::Importer.new(file)
   end
 
   private

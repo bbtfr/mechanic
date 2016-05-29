@@ -1,0 +1,33 @@
+<h3 class="page-header">导入技师</h3>
+
+<% if @importer.success? %>
+  <div class="alert alert-success">成功导入 <%= @importer.success_count %> 条技师信息</div>
+  <% if @importer.failed_rows.any? %>
+    <div class="alert alert-danger"><%= @importer.failed_rows.count %> 条技师信息导入失败</div>
+
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>行号</th>
+          <th>姓名</th>
+          <th>手机号码</th>
+          <th>地址</th>
+          <th>失败原因</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @importer.each_failed_row do |row| %>
+          <tr>
+            <td><%= row.index %></td>
+            <td><%= row.nickname %></td>
+            <td><%= row.mobile %></td>
+            <td><%= row.address %></td>
+            <td><%= simple_format row.error_messages.join("\n") %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% else %>
+  <div class="alert alert-danger"><%= @importer.error_message %></div>
+<% end %>

@@ -178,6 +178,11 @@ Rails.application.routes.draw do
     resources :mechanics, concerns: [:hide] do
       resources :orders
 
+      collection do
+        get :import
+        post :import, action: :create_import
+      end
+
       member do
         post :clientize
       end

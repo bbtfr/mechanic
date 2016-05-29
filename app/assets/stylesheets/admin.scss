@@ -2,6 +2,7 @@
 //= require select2-bootstrap
 
 @import "dataTables/bootstrap/3/jquery.dataTables.bootstrap";
+@import "dropzone/dropzone";
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
@@ -177,6 +178,12 @@ table.dataTable thead > tr > th {
       content: "\e067";
     }
   }
+}
+
+.dropzone {
+  border: 2px dashed #CCC;
+  border-radius: 5px;
+  background: white;
 }
 
 /* Sticky footer styles
