@@ -176,11 +176,15 @@ Rails.application.routes.draw do
     end
     resources :user_groups, concerns: [:confirm]
     resources :mechanics, concerns: [:hide] do
+      resources :orders
+
       member do
         post :clientize
       end
     end
     resources :merchants, concerns: [:confirm] do
+      resources :orders
+
       member do
         post :active
         post :inactive

@@ -1,4 +1,12 @@
-<h3 class="page-header">订单管理</h3>
+<h3 class="page-header">
+  <% if @mechanic %>
+    相关订单 <small>技师 #<%= @mechanic.id %> “<%= @mechanic.user_nickname %>”</small>
+  <% elsif @merchant %>
+    相关订单 <small>商家 #<%= @merchant.id %> “<%= @merchant.store_nickname %>”</small>
+  <% else %>
+    订单管理
+  <% end %>
+</h3>
 
 <% @orders = @orders.includes(:user, mechanic: :user) %>
 
@@ -9,6 +17,7 @@
   <%= i.attribute :price %>
   <%= i.attribute :offline? %>
   <%= i.attribute :mechanic_nickname %>
+  <%= i.attribute :mechanic_mobile %>
   <%= i.attribute :state do |order| %>
     <% if order.canceled? %>
       <%= te order, :cancel %>
