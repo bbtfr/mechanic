@@ -66,21 +66,20 @@
 
 <% case @order.state %>
 <% when :paid %>
-  <% if @order.assigned? %>
-    <div class="pull-right">
+  <div class="pull-right">
+    <% if @order.assigned? %>
       <%= link_to "改派技师", pick_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
-      <%= link_to "设置手续费", procedure_price_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
-    </div>
-  <% else %>
-    <div class="pull-right">
+    <% else %>
       <%= link_to "指派技师", pick_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
-      <%= link_to "设置手续费", procedure_price_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
-    </div>
-  <% end %>
+    <% end %>
+    <%= link_to "设置手续费", procedure_price_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
+    <%= link_to "申请退款", refund_merchants_hosting_order_path(@order), class: "btn btn-danger", data: {confirm: "您确定要申请退款？" } %>
+  </div>
 <% when :working %>
   <div class="pull-right">
     <%= link_to "改派技师", pick_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
     <%= link_to "设置手续费", procedure_price_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
+    <%= link_to "申请撤单", revoke_merchants_hosting_order_path(@order), class: "btn btn-danger" %>
   </div>
 <% when :confirming %>
   <h3 class="page-header">确认完工 <small>点击施工照片查看原图</small></h3>
@@ -99,6 +98,7 @@
     <%= link_to "设置手续费", procedure_price_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
     <%= link_to "确认完工", confirm_merchants_hosting_order_path(@order), method: :post, class: "btn btn-primary" %>
     <%= link_to "申请返工", rework_merchants_hosting_order_path(@order), method: :post, class: "btn btn-primary" %>
+    <%= link_to "申请撤单", revoke_merchants_hosting_order_path(@order), class: "btn btn-danger" %>
   </div>
 <% when :finished %>
   <div class="pull-right">

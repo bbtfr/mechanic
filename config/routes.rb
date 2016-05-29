@@ -61,6 +61,7 @@ Rails.application.routes.draw do
           post :rework
           get :procedure_price
           patch :procedure_price, action: :update_procedure_price
+          match :refund, via: [:get, :patch]
         end
       end
     end
