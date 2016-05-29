@@ -113,7 +113,7 @@ class Order < ActiveRecord::Base
         update_attribute(:refund, Order.refunds[reason]) unless refunding?
         update_state(:refunded)
         user.increase_total_cost!(-price)
-        SMSMailer.mechanic_rejection(self, mechanic).deliver
+        SMSMailer.mechanic_rejection(self, mechanic).deliver if mechanic
         true
       end
 
