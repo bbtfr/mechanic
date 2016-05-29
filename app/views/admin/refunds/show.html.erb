@@ -20,6 +20,9 @@
       <%= i.attribute :series %>
       <%= i.attribute :created_at, format: :long %>
       <%= i.attribute :start_working_at, format: :long %>
+      <%= i.attribute :finish_working_at, format: :long %>
+      <%= i.attribute :remark %>
+      <%= i.attribute :merchant_remark %>
     <% end %>
   </div>
 
@@ -30,10 +33,35 @@
       <%= i.attribute :price, label: "总价" %>
       <%= i.attribute :quoted_price %>
       <%= i.attribute :markup_price %>
+      <%= i.attribute :procedure_price %>
+      <%= i.attribute :offline? %>
     <% end %>
   </div>
 
 </div>
+
+<% if @order.assigned? %>
+
+  <h3 class="page-header">技师信息</h3>
+
+  <div class="row">
+    <div class="col-sm-3 text-right">
+      <%= image_tag(@order.mechanic.user.avatar.url(:thumb)) %>
+    </div>
+
+    <div class="col-sm-9">
+      <%= show_for @order.mechanic, class: "dl-horizontal" do |i| %>
+        <%= i.attribute :user_nickname %>
+        <%= i.attribute :user_mobile %>
+        <%= i.attribute :user_address %>
+        <%= i.attribute :description %>
+        <%= i.attribute :available_orders_count %>
+        <%= i.attribute :professionality_average %>
+        <%= i.attribute :timeliness_average %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
 
 <div class="pull-right">
   <%= link_to "批准申请", confirm_admin_refund_path(@order), class: "btn btn-primary", method: :post, confirm: "你确定要通过这条申请？" %>
