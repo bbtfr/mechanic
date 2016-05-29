@@ -71,7 +71,7 @@ class Order < ActiveRecord::Base
         update_attribute(:mechanic, mechanic)
         Weixin.send_paid_order_message(self)
         SMSMailer.mechanic_notification(self).deliver
-        SMSMailer.mechanic_rejection(self, original_mechanic).deliver if mechanic != original_mechanic
+        SMSMailer.mechanic_rejection(self, original_mechanic).deliver if original_mechanic && mechanic != original_mechanic
         SMSMailer.contact_notification(self).deliver if contact_mobile
         true
       end
