@@ -141,16 +141,27 @@ class Order < ActiveRecord::Base
       def confirm!
         return false unless confirming?
 
-        mechanic.user.increase_balance!(mechanic_income, "订单结算", self)
+        unless offline?
+          # Increase balance
+          mechanic.user.increase_balance!(mechanic_income, "订单结算", self)
+
+          if client_user_group = user.user_group
+            client_user_group.user.increase_balance!(client_commission, "订单分红", self)
+          end
+
+          if mechanic_user_group = mechanic.user_group
+            mechanic_user_group.user.increase_balance!(mechanic_commission, "订单分红", self)
+          end
+        end
+
+        # Increase total income / commission
         mechanic.increase_total_income!(mechanic_income)
 
         if client_user_group = user.user_group
-          client_user_group.user.increase_balance!(client_commission, "订单分红", self)
           client_user_group.increase_total_commission!(client_commission)
         end
 
         if mechanic_user_group = mechanic.user_group
-          mechanic_user_group.user.increase_balance!(mechanic_commission, "订单分红", self)
           mechanic_user_group.increase_total_commission!(mechanic_commission)
         end
 
