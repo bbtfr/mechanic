@@ -57,8 +57,11 @@
             <%= mechanic.skills.join("、") %>
           <% end %>
 
-          <%= i.attribute :user_nickname %>
-          <%= i.attribute :user_mobile %>
+          <% if current_store.host? %>
+            <%= i.attribute :user_nickname %>
+            <%= i.attribute :user_mobile %>
+          <% end %>
+
           <%= i.attribute :unique_id %>
 
           <%= i.attribute :province %>

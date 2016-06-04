@@ -7,9 +7,12 @@
 
   <div class="col-sm-9">
     <%= show_for @mechanic, class: "dl-horizontal" do |i| %>
+      <% if current_store.host? %>
+        <%= i.attribute :user_nickname %>
+        <%= i.attribute :user_mobile %>
+      <% end %>
+
       <%= i.fields_for :user do |ii| %>
-        <%= ii.attribute :nickname %>
-        <%= ii.attribute :mobile %>
         <%= ii.attribute :gender do |user| %>
           <%= te user, :gender %>
         <% end %>

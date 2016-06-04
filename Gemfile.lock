@@ -14,6 +14,13 @@ GIT
       activemodel (>= 3.2, < 5)
 
 GIT
+  remote: git://github.com/bbtfr/tailog.git
+  revision: c71c0d0c9fb9b4fdb64f701d142be2bf98717112
+  specs:
+    tailog (0.4.5)
+      sinatra (~> 1.4)
+
+GIT
   remote: git://github.com/bbtfr/wx_pay.git
   revision: f305e18b300fd5cefa0559d2b9759887de1bb869
   specs:
@@ -202,6 +209,8 @@ GEM
     rack-contrib (1.4.0)
       git-version-bump (~> 0.15)
       rack (~> 1.4)
+    rack-protection (1.5.3)
+      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.6)
@@ -278,6 +287,10 @@ GEM
     simple_form (3.2.1)
       actionpack (> 4, < 5.1)
       activemodel (> 4, < 5.1)
+    sinatra (1.4.7)
+      rack (~> 1.5)
+      rack-protection (~> 1.4)
+      tilt (>= 1.3, < 3)
     sprockets (3.6.0)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -367,6 +380,7 @@ DEPENDENCIES
   simple_enum-persistence
   simple_form
   sqlite3
+  tailog!
   tinymce-rails
   turbolinks!
   uglifier (>= 1.3.0)

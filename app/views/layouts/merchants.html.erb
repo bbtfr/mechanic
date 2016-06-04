@@ -43,7 +43,7 @@
               托管订单
               <% unassigned_hosting_orders_count = Order.hostings.unassigneds.count %>
               <% if unassigned_hosting_orders_count > 0 %>
-                <span class="badge"><%=  %></span>
+                <span class="badge"><%= unassigned_hosting_orders_count %></span>
               <% end %>
             <% end %>
             </li>
