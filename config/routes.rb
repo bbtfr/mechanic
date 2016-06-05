@@ -57,11 +57,12 @@ Rails.application.routes.draw do
     namespace :hosting do
       resources :orders, concerns: [:pick, :review] do
         member do
+          match :refund, via: [:get, :patch]
           post :confirm
           post :rework
+          get :revoke
           get :procedure_price
           patch :procedure_price, action: :update_procedure_price
-          match :refund, via: [:get, :patch]
         end
       end
     end
