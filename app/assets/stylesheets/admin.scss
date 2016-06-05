@@ -6,6 +6,10 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
+body {
+  font-family: Helvetica, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", Arial, sans-serif;
+}
+
 .nav {
   .divider {
     height: 1px;
