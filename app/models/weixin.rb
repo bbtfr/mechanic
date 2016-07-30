@@ -25,6 +25,10 @@ module Weixin
       sub_button: [
       {
         type: "view",
+        name: "批发",
+        url: "http://mp.weixin.qq.com/bizmall/mallshelf?id=&t=mall/list&biz=MzA3MjYwNzYxMA==&shelf_id=2&showwxpaytitle=1#wechat_redirect"
+      }, {
+        type: "view",
         name: "工费结算",
         url: "http://mp.weixin.qq.com/s?__biz=MzA3MjYwNzYxMA==&mid=207851238&idx=1&sn=92226aa626e8e9ab45ff5e6c90e58d23#rd"
       }, {
