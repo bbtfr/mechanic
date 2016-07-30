@@ -7,7 +7,7 @@
 #= require Chart.Scatter
 #= require tinymce-jquery
 
-$(document).on "ready page:load page:restore", ->
+onPageLoad ->
   $('[data-toggle="popover"]').popover
     viewport:
       selector: 'body'
@@ -31,5 +31,5 @@ $(document).on "ready page:load page:restore", ->
       value: 'table table-hover'
     ]
 
-$(document).on 'page:before-unload', ->
+onPageUnload ->
   tinymce.remove()

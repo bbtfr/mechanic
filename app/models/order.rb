@@ -1,4 +1,4 @@
-class Order < ActiveRecord::Base
+class Order < ApplicationRecord
   include Order::State
   include WeixinMediaLoader
 

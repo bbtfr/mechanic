@@ -6,8 +6,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   helper_method :current_user_session, :current_user, :weixin?
-  before_filter :ensure_weixin_openid!
-  before_filter :authenticate!
+  before_action :ensure_weixin_openid!
+  before_action :authenticate!
 
   private
 

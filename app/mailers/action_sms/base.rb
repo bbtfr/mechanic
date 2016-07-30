@@ -38,8 +38,6 @@ module ActionSMS
     end
 
     def process(*args) #:nodoc:
-      lookup_context.skip_default_locale!
-
       super
       @_message = NullSMS.new unless @_sms_was_called
     end

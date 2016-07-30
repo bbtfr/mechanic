@@ -1,4 +1,4 @@
-class UpdateOrderStateJob < ActiveJob::Base
+class UpdateOrderStateJob < ApplicationJob
   queue_as :default
 
   def perform(order)

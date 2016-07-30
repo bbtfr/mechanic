@@ -1,4 +1,4 @@
-class UserGroup < ActiveRecord::Base
+class UserGroup < ApplicationRecord
   belongs_to :user
   has_many :users
   has_many :orders, through: :users

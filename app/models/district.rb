@@ -1,4 +1,4 @@
-class District < ActiveRecord::Base
+class District < ApplicationRecord
   belongs_to :city
   alias_attribute :parent, :city
 

@@ -1,5 +1,5 @@
 class Merchants::Admin::ApplicationController <  Merchants::ApplicationController
-  before_filter :redirect_user
+  before_action :redirect_user
 
   private
 

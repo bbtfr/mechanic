@@ -1,6 +1,6 @@
 class BidsController < ApplicationController
-  before_filter :find_order
-  before_filter :find_bid, only: [ :show, :pick ]
+  before_action :find_order
+  before_action :find_bid, only: [ :show, :pick ]
 
   def new
     @bid = bid_klass.new

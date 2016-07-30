@@ -1,5 +1,5 @@
 class Admin::WithdrawalsController < Admin::ApplicationController
-  before_filter :find_withdrawal, except: [ :index, :settings, :update_settings ]
+  before_action :find_withdrawal, except: [ :index, :settings, :update_settings ]
 
   def index
     @withdrawals = Withdrawal.all

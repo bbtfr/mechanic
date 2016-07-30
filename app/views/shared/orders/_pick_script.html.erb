@@ -1,7 +1,7 @@
 <script type="text/javascript">
   (function() {
     // Initialize DataTable
-    var dataTable = window.dataTable = $("#mechanics").DataTable({
+    var dataTable = window.dataTable = $("#mechanics:not(.dataTable)").DataTable({
       order: [], // Do not sort by default
       pagingType: 'full_numbers',
       columnDefs: [{

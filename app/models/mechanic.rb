@@ -1,4 +1,4 @@
-class Mechanic < ActiveRecord::Base
+class Mechanic < ApplicationRecord
   belongs_to :user
 
   has_many :orders

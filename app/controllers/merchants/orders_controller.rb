@@ -1,7 +1,7 @@
 class Merchants::OrdersController < Merchants::ApplicationController
-  skip_before_filter :verify_authenticity_token, :authenticate!, only: [ :notify ]
-  before_filter :find_order, except: [ :index, :new, :create, :notify ]
-  before_filter :redirect_pending, only: [ :new, :index ]
+  skip_before_action :verify_authenticity_token, :authenticate!, only: [ :notify ]
+  before_action :find_order, except: [ :index, :new, :create, :notify ]
+  before_action :redirect_pending, only: [ :new, :index ]
 
   helper_method :fetch_redirect
 

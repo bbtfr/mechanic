@@ -1,5 +1,5 @@
 class Admin::MechanicsController < Admin::ApplicationController
-  before_filter :find_mechanic, except: [ :index, :new, :create, :import, :create_import ]
+  before_action :find_mechanic, except: [ :index, :new, :create, :import, :create_import ]
 
   def index
     @state = if %w(all hidden).include? params[:state]

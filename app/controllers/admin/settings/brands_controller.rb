@@ -1,5 +1,5 @@
 class Admin::Settings::BrandsController < Admin::ApplicationController
-  before_filter :find_brand, only: [ :edit, :update, :destroy ]
+  before_action :find_brand, only: [ :edit, :update, :destroy ]
 
   def index
     @brands = Brand.all

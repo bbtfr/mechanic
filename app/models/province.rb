@@ -1,4 +1,4 @@
-class Province < ActiveRecord::Base
+class Province < ApplicationRecord
   has_many :cities
 
   def parent

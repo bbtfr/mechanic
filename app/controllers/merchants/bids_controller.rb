@@ -1,6 +1,6 @@
 class Merchants::BidsController < Merchants::ApplicationController
-  before_filter :find_order
-  before_filter :find_bid, only: [ :show, :pick ]
+  before_action :find_order
+  before_action :find_bid, only: [ :show, :pick ]
 
   def pick
     if @order.pick!(@bid)

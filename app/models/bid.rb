@@ -1,4 +1,4 @@
-class Bid < ActiveRecord::Base
+class Bid < ApplicationRecord
   belongs_to :mechanic
   belongs_to :order
 

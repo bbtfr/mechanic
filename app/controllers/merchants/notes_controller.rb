@@ -1,5 +1,5 @@
 class Merchants::NotesController < Merchants::ApplicationController
-  before_filter :find_note
+  before_action :find_note
 
   def update
     if @note.update_attributes(note_params)

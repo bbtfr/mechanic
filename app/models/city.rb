@@ -1,4 +1,4 @@
-class City < ActiveRecord::Base
+class City < ApplicationRecord
   belongs_to :province
   alias_attribute :parent, :province
   has_many :districts

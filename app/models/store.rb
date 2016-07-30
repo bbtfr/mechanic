@@ -1,4 +1,4 @@
-class Store < ActiveRecord::Base
+class Store < ApplicationRecord
   include Followable
 
   def settings

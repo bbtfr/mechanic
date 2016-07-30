@@ -1,5 +1,5 @@
 class Merchants::Admin::OrdersController < Merchants::Admin::ApplicationController
-  before_filter :find_order, except: [ :index ]
+  before_action :find_order, except: [ :index ]
 
   def index
     @state = if %w(pendeds paids workings settleds refundeds revieweds closeds).include? params[:state]

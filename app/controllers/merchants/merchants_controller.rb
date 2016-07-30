@@ -1,6 +1,6 @@
 class Merchants::MerchantsController < Merchants::ApplicationController
-  before_filter :authenticate!, except: [ :new, :create, :forget_password, :verification_code, :confirm ]
-  before_filter :find_merchant, only: [ :show, :edit, :update, :password, :update_password ]
+  before_action :authenticate!, except: [ :new, :create, :forget_password, :verification_code, :confirm ]
+  before_action :find_merchant, only: [ :show, :edit, :update, :password, :update_password ]
 
   def new
     @merchant = Merchant.new

@@ -1,4 +1,4 @@
-class Withdrawal < ActiveRecord::Base
+class Withdrawal < ApplicationRecord
   belongs_to :user
 
   as_enum :state, pending: 0, canceled: 1, paid: 2

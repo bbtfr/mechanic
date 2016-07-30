@@ -32,15 +32,29 @@ $.extend true, $.fn.dataTable.defaults,
       next: "后一页"
       last: "尾页"
 
-$(document).on "ready page:load page:restore", ->
-  $('.select2').select2
-    theme: 'bootstrap'
-    language: 'zh-CN'
+window.onPageLoad = (callback) ->
+  $(document).on "ready turbolinks:load", callback
 
-  window.dataTable = $(".table.data-tables:not(.dataTable)").DataTable
-    order: [] # Do not sort by default
-    pagingType: 'full_numbers'
+window.onPageUnload = (callback) ->
+  $(document).on "turbolinks:before-cache", callback
 
-$(document).on 'page:before-unload', ->
-  dataTable.destroy() if dataTable
-  clearInterval(interval) if interval?
+onPageLoad ->
+  $(".select2.select2-container").remove()
+  $("select.select2").select2
+    theme: "bootstrap"
+    language: "zh-CN"
+
+  if $(".table.data-tables:not(.dataTable)").length > 0
+    window.dataTable = $(".table.data-tables:not(.dataTable)").DataTable
+      order: [] # Do not sort by default
+      pagingType: "full_numbers"
+
+onPageUnload ->
+  if window.dataTable
+    window.dataTable.destroy()
+    window.dataTable = null
+
+  # Clear interval when reload page
+  if window.interval?
+    clearInterval(window.interval)
+    window.interval = null

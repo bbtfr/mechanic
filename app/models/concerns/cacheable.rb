@@ -7,7 +7,7 @@ module Cacheable
       methods.each do |method|
         method = method.to_sym
         class_eval do
-          if self.kind_of? ActiveRecord::Base
+          if self.kind_of? ApplicationRecord
             define_method :"#{method}_with_cache" do |*args|
               Rails.cache.fetch([self.class.name, self.id, method, *args, options[:version]],
                 expires_in: (options[:expires_in] || 1.hour)) do

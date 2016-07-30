@@ -21,8 +21,10 @@ require 'capistrano/deploy'
 require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
-# require 'capistrano/passenger'
-require 'capistrano/unicorn_nginx'
+
+require 'capistrano/puma'
+require 'capistrano/puma/monit'
+require 'capistrano/puma/nginx'
 
 require 'capistrano/sidekiq'
 require 'capistrano/sidekiq/monit'

@@ -8,7 +8,7 @@ class Merchants::ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   helper_method :current_merchant_session, :current_merchant, :current_store
-  before_filter :authenticate!
+  before_action :authenticate!
 
   private
 

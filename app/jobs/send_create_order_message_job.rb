@@ -1,4 +1,4 @@
-class SendCreateOrderMessageJob < ActiveJob::Base
+class SendCreateOrderMessageJob < ApplicationJob
   queue_as :default
 
   def perform(order)

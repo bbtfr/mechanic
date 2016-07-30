@@ -1,5 +1,5 @@
 class WithdrawalsController < ApplicationController
-  before_filter :find_withdrawals_by_state
+  before_action :find_withdrawals_by_state
 
   helper_method :withdrawal_klass
 

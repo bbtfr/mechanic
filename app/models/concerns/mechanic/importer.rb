@@ -1,4 +1,4 @@
-class Mechanic < ActiveRecord::Base
+class Mechanic < ApplicationRecord
   class Importer
 
     class ImportRow

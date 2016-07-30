@@ -1,4 +1,4 @@
-class Merchant < ActiveRecord::Base
+class Merchant < ApplicationRecord
   include MobileVerificationCode
 
   attr_accessor :current_password

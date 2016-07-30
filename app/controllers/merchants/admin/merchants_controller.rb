@@ -1,5 +1,5 @@
 class Merchants::Admin::MerchantsController < Merchants::Admin::ApplicationController
-  before_filter :find_merchant, except: [ :index, :new, :create ]
+  before_action :find_merchant, except: [ :index, :new, :create ]
 
   def index
     @merchants = merchant_klass.all

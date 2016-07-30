@@ -1,5 +1,5 @@
 class Merchants::Hosting::OrdersController < Merchants::OrdersController
-  before_filter :redirect_user
+  before_action :redirect_user
 
   def index
     @state = if %w(unassigneds assigneds workings finisheds).include? params[:state]

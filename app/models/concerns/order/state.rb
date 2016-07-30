@@ -1,4 +1,4 @@
-class Order < ActiveRecord::Base
+class Order < ApplicationRecord
   module State
     extend ActiveSupport::Concern
 

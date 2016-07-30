@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   include MobileVerificationCode
   include Followable
   include Hidable

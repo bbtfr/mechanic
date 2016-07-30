@@ -1,5 +1,5 @@
 class Admin::RefundsController < Admin::ApplicationController
-  before_filter :find_order, except: [ :index ]
+  before_action :find_order, except: [ :index ]
 
   def index
     @orders = Order.refundings

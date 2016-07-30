@@ -1,5 +1,5 @@
 class Admin::Settings::SkillsController < Admin::ApplicationController
-  before_filter :find_skill, only: [ :edit, :update, :destroy ]
+  before_action :find_skill, only: [ :edit, :update, :destroy ]
 
   def index
     @skills = Skill.all

@@ -99,8 +99,11 @@
 </div>
 
 <script type="text/javascript">
+  var $form;
+
   (function() {
-    var dataTable = $("#mechanics").DataTable({
+    // Initialize DataTable
+    var dataTable = window.dataTable = $("#mechanics:not(.dataTable)").DataTable({
       order: [], // Do not sort by default
       pagingType: 'full_numbers',
       dom: "<'row'<'col-sm-3'l><'col-sm-9'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -123,7 +126,7 @@
     });
 
     var skillColumn = dataTable.column(1);
-    $form = $("#mechanics_form");
+    if ($("#mechanics_form").length > 0) $form = $("#mechanics_form").detach();
     $form.prependTo($("#mechanics_filter"));
 
     <% unless @state %>
@@ -192,6 +195,8 @@
       selectMechanic(getMechanicIdFromMapListItem(event.currentTarget));
     });
 
+    window.showMechanicInfo = function() {}
+
     // Skill Select
     $(".mechanics_skills_select").on("change", function() {
       var value = $(this).val();
@@ -219,7 +224,7 @@
       } else {
         showMechanicInfo(selectMechanic.mechanicId);
       }
-    });
+    }).change();
 
     // Initialize Map
     window.initMap = function() {

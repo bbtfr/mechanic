@@ -1,5 +1,5 @@
 class Merchants::MechanicsController < Merchants::ApplicationController
-  before_filter :find_mechanic, only: [:show, :reviews, :remark, :update_remark, :skill]
+  before_action :find_mechanic, only: [:show, :reviews, :remark, :update_remark, :skill]
 
   def index
     @state = if %w(followeds).include? params[:state]

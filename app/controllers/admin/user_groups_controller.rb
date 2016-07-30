@@ -1,5 +1,5 @@
 class Admin::UserGroupsController < Admin::ApplicationController
-  before_filter :find_user_group, except: [ :index, :confirmed ]
+  before_action :find_user_group, except: [ :index, :confirmed ]
 
   def index
     @user_groups = UserGroup.unconfirmeds

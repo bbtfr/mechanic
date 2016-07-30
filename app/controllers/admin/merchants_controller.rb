@@ -1,5 +1,5 @@
 class Admin::MerchantsController < Admin::ApplicationController
-  before_filter :find_merchant, except: [ :index, :confirmed ]
+  before_action :find_merchant, except: [ :index, :confirmed ]
 
   def index
     @merchants = Store.merchants.unconfirmeds

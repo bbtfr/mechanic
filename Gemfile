@@ -4,78 +4,75 @@ source 'https://gems.ruby-china.org'
 gem 'dotenv-rails'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.3'
+gem 'rails', '~> 5.0.0'
 # gem 'rails-i18n'
 
-gem 'sidekiq'
-
-gem 'whenever'
-
-# Use authlogic for authentication
-gem 'authlogic', '~> 3.4.6'
-gem 'rails-settings-cached'
-
-gem 'activerecord-redundancy', github: 'bbtfr/activerecord-redundancy'
-gem 'colorize'
-
-gem 'simple_enum'
-gem 'simple_enum-multiple'
-gem 'simple_enum-persistence'
-
-gem 'simple_form'
-gem 'index_for', github: 'bbtfr/index_for'
-gem 'kaminari'
-gem 'kaminari-bootstrap'
-
-gem 'paperclip'
-gem 'rest-client'
-gem 'weixin_authorize'
-gem 'weixin_rails_middleware'
-gem 'wx_pay', github: 'bbtfr/wx_pay'
-gem 'alipay'
-
-gem 'rqrcode'
-
-gem 'roo'
-
-gem 'tailog', github: 'bbtfr/tailog'
-
+# Use Puma as the app server
+gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.1.0'
+gem 'coffee-rails', '~> 4.2'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
+
 # Use jquery as the JavaScript library
-gem 'jquery-rails', '4.0.4'
+gem 'jquery-rails'
+# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
+gem 'turbolinks', '~> 5'
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jbuilder', '~> 2.5'
+# Use Redis adapter to run Action Cable in production
+# gem 'redis', '~> 3.0'
+# Use ActiveModel has_secure_password
+# gem 'bcrypt', '~> 3.1.7'
+
+# Simple, efficient background processing for Ruby
+gem 'sidekiq'
+# Cron jobs in Ruby
+gem 'whenever'
+
+# View Helpers
+gem 'simple_form'
+gem 'index_for', github: 'bbtfr/index_for'
+gem 'kaminari'
+gem 'kaminari-bootstrap'
+
+# Database
+# Use authlogic for authentication
+gem 'authlogic', github: 'binarylogic/authlogic'
+gem 'paperclip'
+gem 'rails-settings-cached'
+gem 'activerecord-redundancy', github: 'bbtfr/activerecord-redundancy'
+# Simple enum-like field support for ActiveModel (including validations and i18n)
+gem 'simple_enum'
+gem 'simple_enum-multiple'
+gem 'simple_enum-persistence'
+
+# Weixin & Alipay
+gem 'weixin_authorize'
+gem 'weixin_rails_middleware'
+gem 'wx_pay', github: 'bbtfr/wx_pay'
+gem 'alipay'
+
+gem 'colorize'
+gem 'rest-client'
+gem 'rqrcode'
+gem 'roo'
+
 gem 'jquery-datatables-rails'
 gem 'chart-js-rails', '0.0.9'
 gem 'dropzonejs-rails'
 gem 'select2-rails'
 gem 'tinymce-rails'
-
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks', github: 'rails/turbolinks'
-
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
-# bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
-
 gem 'ratchet-sass'
 gem 'bootstrap-sass'
-gem 'quiet_assets'
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Unicorn as the app server
-gem 'unicorn'
 
 # Supporting gem for Rails Panel (Google Chrome extension for Rails development).
 gem 'meta_request'
+# gem 'tailog', github: 'bbtfr/tailog'
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record
@@ -92,7 +89,7 @@ group :development, :test do
 
   # Use Capistrano for deployment
   gem 'capistrano-rails'
-  gem 'capistrano-unicorn-nginx'
+  gem 'capistrano3-puma'
   gem 'capistrano-sidekiq'
 end
 

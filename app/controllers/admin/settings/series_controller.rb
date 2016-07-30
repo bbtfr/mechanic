@@ -1,5 +1,5 @@
 class Admin::Settings::SeriesController < Admin::ApplicationController
-  before_filter :find_series, only: [ :edit, :update, :destroy ]
+  before_action :find_series, only: [ :edit, :update, :destroy ]
 
   def index
     @series = Series.all
