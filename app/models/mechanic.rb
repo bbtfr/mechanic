@@ -16,10 +16,11 @@ class Mechanic < ActiveRecord::Base
   alias_attribute :skill_cds, :skill_ids
   as_enum :skills, Skill, persistence: true, accessor: :multiple
 
-  cache_column :user, :nickname
-  cache_column :user, :mobile
-  cache_column :user, :address
-  cache_column :user, :weixin_openid
+  # cache_column :user, :nickname
+  # cache_column :user, :mobile
+  # cache_column :user, :address
+  # cache_column :user, :weixin_openid
+  delegate :nickname, :mobile, :address, :weixin_openid, to: :user, prefix: true
 
   scope :shown, -> { includes(:user).where.not(users: { hidden: true }) }
 

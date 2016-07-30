@@ -2,6 +2,8 @@
   技师评价
 <% end %>
 
+<% @reviews = @reviews.includes(:user) %>
+
 <ul class="table-view">
   <% @reviews.each do |review| %>
     <li class="table-view-cell media">

@@ -22,7 +22,7 @@
     </ul>
   </div>
 
-  <% @orders = @orders.includes(:merchant, mechanic: :user) %>
+  <% @orders = @orders.includes(:merchant, :mechanic_user) %>
 
   <div class="col-md-10 col-xs-8">
     <%= index_for [ :merchants, :admin, @orders ], class: "table table-hover data-tables" do |i| %>

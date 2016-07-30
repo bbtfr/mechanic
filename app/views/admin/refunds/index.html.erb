@@ -1,6 +1,6 @@
 <h3 class="page-header">退款管理</h3>
 
-<% @orders = @orders.includes(:user, mechanic: :user) %>
+<% @orders = @orders.includes(:user, :mechanic_user) %>
 
 <%= index_for [ :admin, @orders ], class: "table table-hover data-tables" do |i| %>
   <%= i.attribute :user_nickname %>

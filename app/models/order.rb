@@ -125,15 +125,19 @@ class Order < ActiveRecord::Base
   cache_method :mechanic, :professionality_average
   cache_method :mechanic, :timeliness_average
 
-  cache_column :user, :nickname
-  cache_column :user, :mobile
+  # cache_column :user, :nickname
+  # cache_column :user, :mobile
+  delegate :nickname, :mobile, to: :user, prefix: true
 
-  cache_column :mechanic_user, :nickname, cache_column: :mechanic_nickname
-  cache_column :mechanic_user, :mobile, cache_column: :mechanic_mobile
-  cache_column :merchant, :nickname
-  cache_column :merchant, :mobile
-  cache_column :store, :nickname
-  cache_column :store, :hotline
+  # cache_column :mechanic_user, :nickname, cache_column: :mechanic_nickname
+  # cache_column :mechanic_user, :mobile, cache_column: :mechanic_mobile
+  delegate :nickname, :mobile, to: :mechanic_user, prefix: :mechanic
+  # cache_column :merchant, :nickname
+  # cache_column :merchant, :mobile
+  delegate :nickname, :mobile, to: :merchant, prefix: true
+  # cache_column :store, :nickname
+  # cache_column :store, :hotline
+  delegate :nickname, :mobile, to: :store, prefix: true
 
   attr_accessor :custom_location
   def custom_location_present?
