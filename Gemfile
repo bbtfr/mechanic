@@ -88,6 +88,7 @@ group :development, :test do
   # gem 'spring'
 
   # Use Capistrano for deployment
+  gem 'capistrano', '~> 3.5.0'
   gem 'capistrano-rails'
   gem 'capistrano3-puma'
   gem 'capistrano-sidekiq'
