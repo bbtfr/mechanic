@@ -131,13 +131,13 @@ class Order < ApplicationRecord
 
   # cache_column :mechanic_user, :nickname, cache_column: :mechanic_nickname
   # cache_column :mechanic_user, :mobile, cache_column: :mechanic_mobile
-  delegate :nickname, :mobile, to: :mechanic_user, prefix: :mechanic
+  delegate :nickname, :mobile, to: :mechanic_user, prefix: :mechanic, allow_nil: true
   # cache_column :merchant, :nickname
   # cache_column :merchant, :mobile
-  delegate :nickname, :mobile, to: :merchant, prefix: true
+  delegate :nickname, :mobile, to: :merchant, prefix: true, allow_nil: true
   # cache_column :store, :nickname
   # cache_column :store, :hotline
-  delegate :nickname, :mobile, to: :store, prefix: true
+  delegate :nickname, :mobile, to: :store, prefix: true, allow_nil: true
 
   attr_accessor :custom_location
   def custom_location_present?

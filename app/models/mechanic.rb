@@ -20,7 +20,7 @@ class Mechanic < ApplicationRecord
   # cache_column :user, :mobile
   # cache_column :user, :address
   # cache_column :user, :weixin_openid
-  delegate :nickname, :mobile, :address, :weixin_openid, to: :user, prefix: true
+  delegate :nickname, :mobile, :address, :weixin_openid, to: :user, prefix: true, allow_nil: true
 
   scope :shown, -> { includes(:user).where.not(users: { hidden: true }) }
 

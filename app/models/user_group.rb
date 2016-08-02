@@ -8,7 +8,7 @@ class UserGroup < ApplicationRecord
 
   validates_presence_of :nickname
 
-  delegate :nickname, :role, to: :user, prefix: true
+  delegate :nickname, :role, to: :user, prefix: true, allow_nil: true
 
   scope :confirmeds, -> { where(confirmed: true) }
   scope :unconfirmeds, -> { where.not(confirmed: true) }

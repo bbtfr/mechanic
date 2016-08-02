@@ -16,7 +16,7 @@ class Merchant < ApplicationRecord
   # cache_column :store, :nickname
   # cache_column :store, :mobile
   # cache_column :store, :address
-  delegate :nickname, :mobile, :address, to: :store, prefix: true
+  delegate :nickname, :mobile, :address, to: :store, prefix: true, allow_nil: true
 
   def inactive!
     update_attribute(:active, false)
