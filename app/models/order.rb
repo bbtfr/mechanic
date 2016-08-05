@@ -137,7 +137,7 @@ class Order < ApplicationRecord
   delegate :nickname, :mobile, to: :merchant, prefix: true, allow_nil: true
   # cache_column :store, :nickname
   # cache_column :store, :hotline
-  delegate :nickname, :mobile, to: :store, prefix: true, allow_nil: true
+  delegate :nickname, :hotline, to: :store, prefix: true, allow_nil: true
 
   attr_accessor :custom_location
   def custom_location_present?
