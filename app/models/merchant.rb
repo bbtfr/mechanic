@@ -3,7 +3,7 @@ class Merchant < ApplicationRecord
 
   attr_accessor :current_password
 
-  as_enum :role, admin: 0, user: 1
+  as_enum :role, admin: 0, dispatcher: 1
 
   has_many :orders
 

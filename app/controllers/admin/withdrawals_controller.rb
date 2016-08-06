@@ -1,4 +1,5 @@
 class Admin::WithdrawalsController < Admin::ApplicationController
+  before_action :redirect_user
   before_action :find_withdrawal, except: [ :index, :settings, :update_settings ]
 
   def index

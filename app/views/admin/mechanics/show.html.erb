@@ -37,5 +37,7 @@
 
 <div class="pull-right">
   <%= link_to "相关订单", admin_mechanic_orders_path(@mechanic), class: "btn btn-primary" %>
-  <%= link_to "修改账户余额", balance_admin_user_path(@mechanic), class: "btn btn-primary" %>
+  <% if current_admin.admin? %>
+    <%= link_to "修改账户余额", balance_admin_user_path(@mechanic), class: "btn btn-primary" %>
+  <% end %>
 </div>

@@ -32,7 +32,8 @@ zh-CN:
       female: 女
     role:
       admin: 管理员
-      user: 派单人员
+      dispatcher: 派单员
+      operator: 操作员
       client: 车主
       mechanic: 技师
       merchant: 商户

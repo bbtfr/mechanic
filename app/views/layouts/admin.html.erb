@@ -56,23 +56,27 @@
           </li>
           <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "技师", admin_mechanics_path %></li>
           <li class="<%= "active" if controller_name == "orders" %>"><%= link_to "订单", admin_orders_path %></li>
-          <li class="<%= "active" if controller_name == "refunds" %>">
-            <%= link_to admin_refunds_path do %>
-              退款
-              <% unconfirmed_refunds_count = Order.refundings.count %>
-              <% if unconfirmed_refunds_count > 0 %>
-                <span class="badge"><%= unconfirmed_refunds_count %></span>
+
+          <% if current_admin.admin? %>
+            <li class="<%= "active" if controller_name == "refunds" %>">
+              <%= link_to admin_refunds_path do %>
+                退款
+                <% unconfirmed_refunds_count = Order.refundings.count %>
+                <% if unconfirmed_refunds_count > 0 %>
+                  <span class="badge"><%= unconfirmed_refunds_count %></span>
+                <% end %>
               <% end %>
-            <% end %>
-          </li>
-          <li class="<%= "active" if controller_name == "withdrawals" %>"><%= link_to "账目提现", admin_withdrawals_path %></li>
-          <li class="<%= "active" if controller_path == "admin/administrators" %>"><%= link_to "管理员", admin_administrators_path %></li>
+            </li>
+            <li class="<%= "active" if controller_name == "withdrawals" %>"><%= link_to "账目提现", admin_withdrawals_path %></li>
+            <li class="<%= "active" if controller_path == "admin/administrators" and action_name != "password" %>"><%= link_to "管理员", admin_administrators_path %></li>
+          <% end %>
+
           <li class="<%= "active" if controller_path.start_with? "admin/settings/" %>"><%= link_to "设置", admin_settings_skills_path %></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
           <li><a><%= current_admin.nickname %></a></li>
-          <li class="<%= "active" if controller_name == "merchants" and action_name == "password" %>"><%= link_to "修改密码", password_admin_administrator_path %></li>
+          <li class="<%= "active" if controller_name == "administrators" and action_name == "password" %>"><%= link_to "修改密码", password_admin_administrator_path %></li>
           <li><%= link_to "退出登录", admin_administrator_session_path, method: :delete %></li>
         </ul>
       </div><!-- /.navbar-collapse -->

@@ -1,4 +1,5 @@
 class Admin::UsersController < Admin::ApplicationController
+  before_action :redirect_user, only: [ :balance, :update_balance ]
   before_action :find_user, except: [ :index ]
 
   def index

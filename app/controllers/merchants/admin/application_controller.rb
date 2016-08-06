@@ -4,8 +4,8 @@ class Merchants::Admin::ApplicationController <  Merchants::ApplicationControlle
   private
 
     def redirect_user
-      if current_merchant.user?
-        flash[:error] = "派单人员无法访问此页面！"
+      if current_merchant.dispatcher?
+        flash[:error] = "派单员无法访问此页面！"
         redirect_to merchants_root_path
       end
     end

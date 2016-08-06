@@ -1,4 +1,5 @@
 class Admin::RefundsController < Admin::ApplicationController
+  before_action :redirect_user
   before_action :find_order, except: [ :index ]
 
   def index

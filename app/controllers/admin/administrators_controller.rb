@@ -1,5 +1,6 @@
 class Admin::AdministratorsController < Admin::ApplicationController
   skip_before_action :authenticate!, only: [ :forget_password, :verification_code, :confirm ]
+  before_action :redirect_user, except: [ :password, :update_password, :forget_password, :verification_code, :confirm ]
   before_action :find_admin, only: [ :show, :edit, :update, :password, :update_password ]
 
   def index
@@ -106,7 +107,7 @@ class Admin::AdministratorsController < Admin::ApplicationController
 
     def admin_params
       params.require(:administrator).permit(:mobile, :nickname, :password, :password_confirmation,
-        :current_password)
+        :current_password, :role)
     end
 
     def verification_code_params

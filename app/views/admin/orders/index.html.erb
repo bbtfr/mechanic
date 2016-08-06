@@ -1,8 +1,8 @@
 <h3 class="page-header">
   <% if @mechanic %>
-    相关订单 <small>技师 #<%= @mechanic.id %> “<%= @mechanic.user_nickname %>”</small>
+    相关订单 <small>技师 #<%= @mechanic.id %> <%= @mechanic.user_nickname %></small>
   <% elsif @merchant %>
-    相关订单 <small>商家 #<%= @merchant.id %> “<%= @merchant.store_nickname %>”</small>
+    相关订单 <small>商家 #<%= @merchant.id %> <%= @merchant.store_nickname %></small>
   <% else %>
     订单管理
   <% end %>
