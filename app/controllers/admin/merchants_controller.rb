@@ -1,4 +1,5 @@
 class Admin::MerchantsController < Admin::ApplicationController
+  before_action :redirect_user
   before_action :find_merchant, except: [ :index, :confirmed ]
 
   def index

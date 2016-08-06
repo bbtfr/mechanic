@@ -45,15 +45,19 @@
               <% end %>
             <% end %>
           </li>
-          <li class="<%= "active" if controller_name == "merchants" %>">
-            <%= link_to admin_merchants_path do %>
-              商家
-              <% unconfirmed_merchants_count = User.merchants.unconfirmeds.count %>
-              <% if unconfirmed_merchants_count > 0 %>
-                <span class="badge"><%= unconfirmed_merchants_count %></span>
+
+          <% if current_admin.admin? %>
+            <li class="<%= "active" if controller_name == "merchants" %>">
+              <%= link_to admin_merchants_path do %>
+                商家
+                <% unconfirmed_merchants_count = User.merchants.unconfirmeds.count %>
+                <% if unconfirmed_merchants_count > 0 %>
+                  <span class="badge"><%= unconfirmed_merchants_count %></span>
+                <% end %>
               <% end %>
-            <% end %>
-          </li>
+            </li>
+          <% end %>
+
           <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "技师", admin_mechanics_path %></li>
           <li class="<%= "active" if controller_name == "orders" %>"><%= link_to "订单", admin_orders_path %></li>
 
