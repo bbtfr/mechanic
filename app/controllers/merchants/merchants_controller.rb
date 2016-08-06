@@ -22,7 +22,7 @@ class Merchants::MerchantsController < Merchants::ApplicationController
   end
 
   def verification_code
-    mobile = session[:mobile] || params[:merchant][:mobile] rescue nil
+    mobile = session[:mobile] || params[:merchant][:mobile]
     @merchant = Merchant.where(mobile: mobile).first_or_initialize
     if @merchant.persisted?
       if @merchant.reset_verification_code!
@@ -36,6 +36,8 @@ class Merchants::MerchantsController < Merchants::ApplicationController
       @merchant.errors.add :base, "手机号码未注册"
       render :forget_password
     end
+  rescue
+    redirect_to forget_password_merchants_merchant_path
   end
 
   def confirm
@@ -46,6 +48,7 @@ class Merchants::MerchantsController < Merchants::ApplicationController
       merchant_session = MerchantSession.new(@merchant)
       merchant_session.save
 
+      session[:verification_code] = true
       redirect! :password, merchants_root_path
       clear_redirect :password
     else
@@ -65,6 +68,7 @@ class Merchants::MerchantsController < Merchants::ApplicationController
   def update_password
     if @merchant.valid_password?(merchant_params[:current_password])
       if @merchant.update_attributes(merchant_params)
+        session[:verification_code] = nil
         flash[:success] = "修改密码成功"
         redirect_to merchants_root_path
       else
