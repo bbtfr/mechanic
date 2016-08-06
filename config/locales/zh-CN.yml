@@ -10,6 +10,7 @@ zh-CN:
       verification_code_blank: 不能为空
       verification_code_invalid: 错误
       not_confirmed: 您的帐号还未验证通过
+      not_active: 您的帐号已被锁定，请联系管理员
       store_not_confirmed: 您的店铺还未验证通过
       store_not_active: 您的店铺已被锁定，请联系管理员
       no_authentication_details: 您没用提供登录所需的信息
@@ -20,6 +21,9 @@ zh-CN:
         verification_code: 验证码
         remember_me: 记住我
       merchant_session:
+        mobile: 手机号码
+        password: 登录密码
+      administrator_session:
         mobile: 手机号码
         password: 登录密码
   enums:
@@ -105,6 +109,18 @@ zh-CN:
         password: 登录密码
         password_confirmation: 确认密码
         role: 系统角色
+        login_count: 登录次数
+        current_login_at: 最近登录时间
+      administrator:
+        nickname: 姓名
+        mobile: 手机号码
+        verification_code: 验证码
+        current_password: 当前密码
+        password: 登录密码
+        password_confirmation: 确认密码
+        role: 系统角色
+        login_count: 登录次数
+        current_login_at: 最近登录时间
       store:
         avatar: 头像
         nickname: 店铺名称

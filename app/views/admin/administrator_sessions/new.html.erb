@@ -1,0 +1,16 @@
+<h3 class="page-header">帐号登录</h3>
+
+<div class="row">
+  <div class="col-md-7">
+    <%= bootstrap_simple_form_for(@admin_session, url: admin_administrator_session_path) do |f| %>
+      <%= f.error_messages %>
+
+      <%= f.input :mobile %>
+      <%= f.input :password %>
+
+      <%= link_to "忘记密码？", forget_password_admin_administrator_path %>
+
+      <%= f.button :submit, "登录", class: "btn-primary pull-right" %>
+    <% end %>
+  </div>
+</div>

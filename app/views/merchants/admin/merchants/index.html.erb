@@ -6,12 +6,13 @@
 <%= index_for [ :merchants, :admin, @merchants ], class: "table table-hover data-tables" do |i| %>
   <%= i.attribute :nickname %>
   <%= i.attribute :mobile %>
+  <%= i.attribute :login_count %>
+  <%= i.attribute :current_login_at, format: :long %>
   <%= i.attribute :role do |merchant| %>
     <%= te merchant, :role %>
   <% end %>
 
-  <%= i.actions do |a| %>
-    <%= a.action_link :edit %>
+  <%= i.actions :edit do |a| %>
     <% if current_merchant != i.object %>
       <% if i.object.active %>
         <%= a.action_link :inactive, url: inactive_merchants_admin_merchant_path(i.object), method: :post, confirm: "你确定要锁定这个账户？" %>

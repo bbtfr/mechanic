@@ -3,6 +3,7 @@ class UserSessionsController < ApplicationController
 
   def new
     new_weixin
+    clear_redirect :authenticate
     @user_session = UserSession.new
   end
 

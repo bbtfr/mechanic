@@ -1,5 +1,5 @@
 class Merchants::MerchantsController < Merchants::ApplicationController
-  before_action :authenticate!, except: [ :new, :create, :forget_password, :verification_code, :confirm ]
+  skip_before_action :authenticate!, only: [ :new, :create, :forget_password, :verification_code, :confirm ]
   before_action :find_merchant, only: [ :show, :edit, :update, :password, :update_password ]
 
   def new
@@ -52,7 +52,7 @@ class Merchants::MerchantsController < Merchants::ApplicationController
       redirect! :password, merchants_root_path
       clear_redirect :password
     else
-      @merchant.errors.add :base, "验证码错误"
+      @merchant.errors.add :verification_code, "错误"
       render :verification_code
     end
   end
@@ -66,7 +66,7 @@ class Merchants::MerchantsController < Merchants::ApplicationController
   end
 
   def update_password
-    if @merchant.valid_password?(merchant_params[:current_password])
+    if session[:verification_code] || @merchant.valid_password?(merchant_params[:current_password])
       if @merchant.update_attributes(merchant_params)
         session[:verification_code] = nil
         flash[:success] = "修改密码成功"

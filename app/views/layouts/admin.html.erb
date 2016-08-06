@@ -18,7 +18,7 @@
   <![endif]-->
 </head>
 <body>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-inverse navbar-static-top">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -31,43 +31,53 @@
       <span class="navbar-brand">后台管理</span>
     </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li class="<%= "active" if controller_name == "users" %>"><%= link_to "车主", admin_users_path %></li>
-        <li class="<%= "active" if controller_name == "user_groups" %>">
-          <%= link_to admin_user_groups_path do %>
-            堂主
-            <% unconfirmed_user_groups_count = UserGroup.unconfirmeds.count %>
-            <% if unconfirmed_user_groups_count > 0 %>
-              <span class="badge"><%= unconfirmed_user_groups_count %></span>
+    <% if current_admin %>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="<%= "active" if controller_name == "users" %>"><%= link_to "车主", admin_users_path %></li>
+          <li class="<%= "active" if controller_name == "user_groups" %>">
+            <%= link_to admin_user_groups_path do %>
+              堂主
+              <% unconfirmed_user_groups_count = UserGroup.unconfirmeds.count %>
+              <% if unconfirmed_user_groups_count > 0 %>
+                <span class="badge"><%= unconfirmed_user_groups_count %></span>
+              <% end %>
             <% end %>
-          <% end %>
-        </li>
-        <li class="<%= "active" if controller_name == "merchants" %>">
-          <%= link_to admin_merchants_path do %>
-            商家
-            <% unconfirmed_merchants_count = User.merchants.unconfirmeds.count %>
-            <% if unconfirmed_merchants_count > 0 %>
-              <span class="badge"><%= unconfirmed_merchants_count %></span>
+          </li>
+          <li class="<%= "active" if controller_name == "merchants" %>">
+            <%= link_to admin_merchants_path do %>
+              商家
+              <% unconfirmed_merchants_count = User.merchants.unconfirmeds.count %>
+              <% if unconfirmed_merchants_count > 0 %>
+                <span class="badge"><%= unconfirmed_merchants_count %></span>
+              <% end %>
             <% end %>
-          <% end %>
-        </li>
-        <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "技师", admin_mechanics_path %></li>
-        <li class="<%= "active" if controller_name == "orders" %>"><%= link_to "订单", admin_orders_path %></li>
-        <li class="<%= "active" if controller_name == "refunds" %>">
-          <%= link_to admin_refunds_path do %>
-            退款
-            <% unconfirmed_refunds_count = Order.refundings.count %>
-            <% if unconfirmed_refunds_count > 0 %>
-              <span class="badge"><%= unconfirmed_refunds_count %></span>
+          </li>
+          <li class="<%= "active" if controller_name == "mechanics" %>"><%= link_to "技师", admin_mechanics_path %></li>
+          <li class="<%= "active" if controller_name == "orders" %>"><%= link_to "订单", admin_orders_path %></li>
+          <li class="<%= "active" if controller_name == "refunds" %>">
+            <%= link_to admin_refunds_path do %>
+              退款
+              <% unconfirmed_refunds_count = Order.refundings.count %>
+              <% if unconfirmed_refunds_count > 0 %>
+                <span class="badge"><%= unconfirmed_refunds_count %></span>
+              <% end %>
             <% end %>
-          <% end %>
-        </li>
-        <li class="<%= "active" if controller_name == "withdrawals" %>"><%= link_to "账目提现", admin_withdrawals_path %></li>
-        <li class="<%= "active" if controller_path.start_with? "admin/settings/" %>"><%= link_to "设置", admin_settings_skills_path %></li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
+          </li>
+          <li class="<%= "active" if controller_name == "withdrawals" %>"><%= link_to "账目提现", admin_withdrawals_path %></li>
+          <li class="<%= "active" if controller_path == "admin/administrators" %>"><%= link_to "管理员", admin_administrators_path %></li>
+          <li class="<%= "active" if controller_path.start_with? "admin/settings/" %>"><%= link_to "设置", admin_settings_skills_path %></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li><a><%= current_admin.nickname %></a></li>
+          <li class="<%= "active" if controller_name == "merchants" and action_name == "password" %>"><%= link_to "修改密码", password_admin_administrator_path %></li>
+          <li><%= link_to "退出登录", admin_administrator_session_path, method: :delete %></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    <% end %>
+
   </div><!-- /.container-fluid -->
 </nav>
 

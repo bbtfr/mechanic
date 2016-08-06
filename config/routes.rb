@@ -167,6 +167,23 @@ Rails.application.routes.draw do
       end
     end
 
+    resource :administrator_session, path: "session"
+    resource :administrator, only: [] do
+      get :forget_password
+      match :verification_code, via: [:get, :post, :patch]
+      match :confirm, via: [:post, :patch]
+
+      get :password
+      patch :password, action: :update_password
+    end
+
+    resources :administrators do
+      member do
+        post :active
+        post :inactive
+      end
+    end
+
     resources :users do
       member do
         post :mechanicize

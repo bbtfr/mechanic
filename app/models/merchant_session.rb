@@ -15,5 +15,4 @@ class MerchantSession < Authlogic::Session::Base
     end
     true
   end
-
 end

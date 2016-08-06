@@ -23,7 +23,7 @@ class Merchants::Admin::MerchantsController < Merchants::Admin::ApplicationContr
     if @merchant.update_attributes(merchant_params)
       redirect_to merchants_admin_merchants_path
     else
-      render :new
+      render :edit
     end
   end
 

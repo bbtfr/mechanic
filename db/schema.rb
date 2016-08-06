@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160522142836) do
+ActiveRecord::Schema.define(version: 20160806034811) do
+
+  create_table "administrators", force: :cascade do |t|
+    t.string   "mobile"
+    t.string   "crypted_password"
+    t.string   "password_salt"
+    t.string   "persistence_token"
+    t.string   "verification_code"
+    t.boolean  "active",              default: true
+    t.boolean  "confirmed",           default: false
+    t.integer  "login_count",         default: 0,     null: false
+    t.integer  "failed_login_count",  default: 0,     null: false
+    t.datetime "last_request_at"
+    t.datetime "current_login_at"
+    t.datetime "last_login_at"
+    t.string   "current_login_ip"
+    t.string   "last_login_ip"
+    t.string   "nickname"
+    t.string   "avatar_file_name"
+    t.string   "avatar_content_type"
+    t.integer  "avatar_file_size"
+    t.datetime "avatar_updated_at"
+    t.integer  "role_cd",             default: 0
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.index ["mobile"], name: "index_administrators_on_mobile", unique: true
+    t.index ["role_cd"], name: "index_administrators_on_role_cd"
+  end
 
   create_table "bids", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -19,10 +45,9 @@ ActiveRecord::Schema.define(version: 20160522142836) do
     t.integer  "markup_price", default: 0
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+    t.index ["mechanic_id"], name: "index_bids_on_mechanic_id"
+    t.index ["order_id"], name: "index_bids_on_order_id"
   end
-
-  add_index "bids", ["mechanic_id"], name: "index_bids_on_mechanic_id"
-  add_index "bids", ["order_id"], name: "index_bids_on_order_id"
 
   create_table "brands", force: :cascade do |t|
     t.string "name"
@@ -33,22 +58,20 @@ ActiveRecord::Schema.define(version: 20160522142836) do
     t.string  "fullname"
     t.integer "province_id"
     t.integer "lbs_id"
+    t.index ["fullname"], name: "index_cities_on_fullname"
+    t.index ["lbs_id"], name: "index_cities_on_lbs_id"
+    t.index ["province_id"], name: "index_cities_on_province_id"
   end
-
-  add_index "cities", ["fullname"], name: "index_cities_on_fullname"
-  add_index "cities", ["lbs_id"], name: "index_cities_on_lbs_id"
-  add_index "cities", ["province_id"], name: "index_cities_on_province_id"
 
   create_table "districts", force: :cascade do |t|
     t.string  "name"
     t.string  "fullname"
     t.integer "city_id"
     t.integer "lbs_id"
+    t.index ["city_id"], name: "index_districts_on_city_id"
+    t.index ["fullname"], name: "index_districts_on_fullname"
+    t.index ["lbs_id"], name: "index_districts_on_lbs_id"
   end
-
-  add_index "districts", ["city_id"], name: "index_districts_on_city_id"
-  add_index "districts", ["fullname"], name: "index_districts_on_fullname"
-  add_index "districts", ["lbs_id"], name: "index_districts_on_lbs_id"
 
   create_table "fellowships", force: :cascade do |t|
     t.integer  "mechanic_id"
@@ -56,10 +79,9 @@ ActiveRecord::Schema.define(version: 20160522142836) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.text     "remark"
+    t.index ["mechanic_id"], name: "index_fellowships_on_mechanic_id"
+    t.index ["user_id"], name: "index_fellowships_on_user_id"
   end
-
-  add_index "fellowships", ["mechanic_id"], name: "index_fellowships_on_mechanic_id"
-  add_index "fellowships", ["user_id"], name: "index_fellowships_on_user_id"
 
   create_table "mechanics", force: :cascade do |t|
     t.integer  "user_id"
@@ -67,11 +89,11 @@ ActiveRecord::Schema.define(version: 20160522142836) do
     t.integer  "city_cd"
     t.integer  "district_cd"
     t.text     "description"
-    t.datetime "created_at",                                                     null: false
-    t.datetime "updated_at",                                                     null: false
+    t.datetime "created_at",                                                       null: false
+    t.datetime "updated_at",                                                       null: false
     t.float    "professionality_average",                          default: 4.0
     t.float    "timeliness_average",                               default: 4.0
-    t.decimal  "total_income",            precision: 10, scale: 2, default: 0.0
+    t.decimal  "total_income",            precision: 10, scale: 2, default: "0.0"
     t.integer  "available_orders_count",                           default: 0
     t.string   "user_nickname"
     t.string   "user_mobile"
@@ -79,12 +101,11 @@ ActiveRecord::Schema.define(version: 20160522142836) do
     t.integer  "revoke_orders_count"
     t.string   "user_weixin_openid"
     t.string   "unique_id"
+    t.index ["city_cd"], name: "index_mechanics_on_city_cd"
+    t.index ["district_cd"], name: "index_mechanics_on_district_cd"
+    t.index ["province_cd"], name: "index_mechanics_on_province_cd"
+    t.index ["user_id"], name: "index_mechanics_on_user_id"
   end
-
-  add_index "mechanics", ["city_cd"], name: "index_mechanics_on_city_cd"
-  add_index "mechanics", ["district_cd"], name: "index_mechanics_on_district_cd"
-  add_index "mechanics", ["province_cd"], name: "index_mechanics_on_province_cd"
-  add_index "mechanics", ["user_id"], name: "index_mechanics_on_user_id"
 
   create_table "mechanics_skills", id: false, force: :cascade do |t|
     t.integer "mechanic_id", null: false
@@ -119,11 +140,10 @@ ActiveRecord::Schema.define(version: 20160522142836) do
     t.string   "store_mobile"
     t.string   "store_address"
     t.string   "store_hotline"
+    t.index ["mobile"], name: "index_merchants_on_mobile", unique: true
+    t.index ["role_cd"], name: "index_merchants_on_role_cd"
+    t.index ["user_id"], name: "index_merchants_on_user_id"
   end
-
-  add_index "merchants", ["mobile"], name: "index_merchants_on_mobile", unique: true
-  add_index "merchants", ["role_cd"], name: "index_merchants_on_role_cd"
-  add_index "merchants", ["user_id"], name: "index_merchants_on_user_id"
 
   create_table "metrics", force: :cascade do |t|
     t.integer  "source_id"
@@ -133,19 +153,17 @@ ActiveRecord::Schema.define(version: 20160522142836) do
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["source_type", "source_id"], name: "index_metrics_on_source_type_and_source_id"
+    t.index ["user_id"], name: "index_metrics_on_user_id"
   end
-
-  add_index "metrics", ["source_type", "source_id"], name: "index_metrics_on_source_type_and_source_id"
-  add_index "metrics", ["user_id"], name: "index_metrics_on_user_id"
 
   create_table "notes", force: :cascade do |t|
     t.integer  "store_id"
     t.text     "content"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["store_id"], name: "index_notes_on_store_id"
   end
-
-  add_index "notes", ["store_id"], name: "index_notes_on_store_id"
 
   create_table "orders", force: :cascade do |t|
     t.integer  "user_id"
@@ -213,33 +231,30 @@ ActiveRecord::Schema.define(version: 20160522142836) do
     t.float    "lat"
     t.float    "lng"
     t.boolean  "offline"
+    t.index ["bid_id"], name: "index_orders_on_bid_id"
+    t.index ["cancel_cd"], name: "index_orders_on_cancel_cd"
+    t.index ["hosting"], name: "index_orders_on_hosting"
+    t.index ["mechanic_id"], name: "index_orders_on_mechanic_id"
+    t.index ["merchant_id"], name: "index_orders_on_merchant_id"
+    t.index ["pay_type_cd"], name: "index_orders_on_pay_type_cd"
+    t.index ["refund_cd"], name: "index_orders_on_refund_cd"
+    t.index ["state_cd"], name: "index_orders_on_state_cd"
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
-
-  add_index "orders", ["bid_id"], name: "index_orders_on_bid_id"
-  add_index "orders", ["cancel_cd"], name: "index_orders_on_cancel_cd"
-  add_index "orders", ["hosting"], name: "index_orders_on_hosting"
-  add_index "orders", ["mechanic_id"], name: "index_orders_on_mechanic_id"
-  add_index "orders", ["merchant_id"], name: "index_orders_on_merchant_id"
-  add_index "orders", ["pay_type_cd"], name: "index_orders_on_pay_type_cd"
-  add_index "orders", ["refund_cd"], name: "index_orders_on_refund_cd"
-  add_index "orders", ["state_cd"], name: "index_orders_on_state_cd"
-  add_index "orders", ["user_id"], name: "index_orders_on_user_id"
 
   create_table "provinces", force: :cascade do |t|
     t.string  "name"
     t.string  "fullname"
     t.integer "lbs_id"
+    t.index ["fullname"], name: "index_provinces_on_fullname"
+    t.index ["lbs_id"], name: "index_provinces_on_lbs_id"
   end
-
-  add_index "provinces", ["fullname"], name: "index_provinces_on_fullname"
-  add_index "provinces", ["lbs_id"], name: "index_provinces_on_lbs_id"
 
   create_table "series", force: :cascade do |t|
     t.string  "name"
     t.integer "brand_id"
+    t.index ["brand_id"], name: "index_series_on_brand_id"
   end
-
-  add_index "series", ["brand_id"], name: "index_series_on_brand_id"
 
   create_table "settings", force: :cascade do |t|
     t.string   "var",                   null: false
@@ -248,9 +263,8 @@ ActiveRecord::Schema.define(version: 20160522142836) do
     t.string   "thing_type", limit: 30
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["thing_type", "thing_id", "var"], name: "index_settings_on_thing_type_and_thing_id_and_var", unique: true
   end
-
-  add_index "settings", ["thing_type", "thing_id", "var"], name: "index_settings_on_thing_type_and_thing_id_and_var", unique: true
 
   create_table "skills", force: :cascade do |t|
     t.string "name"
@@ -264,12 +278,11 @@ ActiveRecord::Schema.define(version: 20160522142836) do
     t.string   "weixin_qr_code_ticket"
     t.datetime "created_at",                                                     null: false
     t.datetime "updated_at",                                                     null: false
-    t.decimal  "total_commission",      precision: 10, scale: 2, default: 0.0
+    t.decimal  "total_commission",      precision: 10, scale: 2, default: "0.0"
     t.integer  "settled_orders_count",                           default: 0
     t.integer  "users_count",                                    default: 0
+    t.index ["user_id"], name: "index_user_groups_on_user_id"
   end
-
-  add_index "user_groups", ["user_id"], name: "index_user_groups_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "mobile"
@@ -298,19 +311,21 @@ ActiveRecord::Schema.define(version: 20160522142836) do
     t.datetime "last_login_at"
     t.string   "current_login_ip"
     t.string   "last_login_ip"
-    t.decimal  "total_cost",             precision: 10, scale: 2, default: 0.0
+    t.decimal  "total_cost",             precision: 10, scale: 2, default: "0.0"
     t.integer  "available_orders_count",                          default: 0
     t.boolean  "host",                                            default: false
     t.boolean  "hidden",                                          default: false
     t.string   "hotline"
     t.float    "lat"
     t.float    "lng"
+    t.integer  "province_cd"
+    t.integer  "city_cd"
+    t.integer  "district_cd"
+    t.index ["host"], name: "index_users_on_host"
+    t.index ["mobile"], name: "index_users_on_mobile", unique: true
+    t.index ["role_cd"], name: "index_users_on_role_cd"
+    t.index ["user_group_id"], name: "index_users_on_user_group_id"
   end
-
-  add_index "users", ["host"], name: "index_users_on_host"
-  add_index "users", ["mobile"], name: "index_users_on_mobile", unique: true
-  add_index "users", ["role_cd"], name: "index_users_on_role_cd"
-  add_index "users", ["user_group_id"], name: "index_users_on_user_group_id"
 
   create_table "withdrawals", force: :cascade do |t|
     t.integer  "user_id"
@@ -319,9 +334,8 @@ ActiveRecord::Schema.define(version: 20160522142836) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.datetime "paid_at"
+    t.index ["state_cd"], name: "index_withdrawals_on_state_cd"
+    t.index ["user_id"], name: "index_withdrawals_on_user_id"
   end
-
-  add_index "withdrawals", ["state_cd"], name: "index_withdrawals_on_state_cd"
-  add_index "withdrawals", ["user_id"], name: "index_withdrawals_on_user_id"
 
 end

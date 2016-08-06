@@ -1,0 +1,17 @@
+<h3 class="page-header">验证手机并修改密码</h3>
+
+<div class="row">
+  <div class="col-md-7">
+    <%= bootstrap_simple_form_for(@admin, url: confirm_admin_administrator_path) do |f| %>
+      <%= f.error_messages %>
+
+      <%= f.hidden_field :mobile %>
+      <%= f.input :verification_code, input_html: { value: nil } %>
+
+      <%= f.input :password %>
+      <%= f.input :password_confirmation %>
+
+      <%= f.button :submit, "验证手机", class: "btn-primary pull-right" %>
+    <% end %>
+  </div>
+</div>
