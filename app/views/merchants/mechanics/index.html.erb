@@ -99,8 +99,6 @@
 </div>
 
 <script type="text/javascript">
-  var $form;
-
   (function() {
     // Initialize DataTable
     var dataTable = window.dataTable = $("#mechanics:not(.dataTable)").DataTable({
@@ -126,7 +124,7 @@
     });
 
     var skillColumn = dataTable.column(1);
-    if ($("#mechanics_form").length > 0) $form = $("#mechanics_form").detach();
+    var $form = $("#mechanics_form");
     $form.prependTo($("#mechanics_filter"));
 
     <% unless @state %>
