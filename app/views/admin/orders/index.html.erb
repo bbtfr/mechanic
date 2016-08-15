@@ -8,17 +8,17 @@
   <% end %>
 </h3>
 
-<% @orders = @orders.includes(:user, :mechanic_user) %>
+<% @orders = @orders.includes(:user, :mechanic_user).joins(:user) %>
 
-<%= index_for [ :admin, @orders ], class: "table table-hover data-tables" do |i| %>
-  <%= i.attribute :user_nickname %>
-  <%= i.attribute :contact %>
-  <%= i.attribute :skill %>
-  <%= i.attribute :price %>
-  <%= i.attribute :offline? %>
+<%= wice_index_for [ :admin, @orders ], class: "table table-hover" do |i| %>
+  <%= i.attribute :user_nickname, searchable: "users.nickname" %>
+  <%= i.attribute :contact, sortable: "orders.contact_nickname", searchable: "orders.contact_nickname" %>
+  <%= i.attribute :skill, sortable: "orders.skill_cd", filterable: { "orders.skill_cd" => Order.skills[params[:search]] } %>
+  <%= i.attribute :price, sortable: "orders.quoted_price" %>
+  <%= i.attribute :offline?, sortable: "orders.offline" %>
   <%= i.attribute :mechanic_nickname %>
   <%= i.attribute :mechanic_mobile %>
-  <%= i.attribute :state do |order| %>
+  <%= i.attribute :state, sortable: ["orders.state_cd", "orders.cancel_cd", "orders.refund_cd"], filterable: { "orders.state_cd" => Order.states[I18n.t("enums.state").key(params[:search])], "orders.cancel_cd" => Order.cancels[I18n.t("enums.cancel").key(params[:search])], "orders.refund_cd" => Order.refunds[I18n.t("enums.refund").key(params[:search])] } do |order| %>
     <% if order.canceled? %>
       <%= te order, :cancel %>
     <% elsif order.refunded? %>

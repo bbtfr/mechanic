@@ -32,35 +32,32 @@
 </div>
 
 <script type="text/javascript">
-  var ready = Turbolinks.supported ? "turbolinks:load" : "ready";
-  $(document).on(ready, function() {
-    $(".wice_index_for").each(function() {
-      var $this = $(this);
-      if ($this.data("wice-index-for")) return;
-      $this.data("wice-index-for", true);
-      $this.find(".index_for_length select").change(function(event) {
-        var location = $(event.target).find("option:selected").data("href");
-        if (location) Turbolinks.visit(location);
-      });
+  $(".wice_index_for").each(function() {
+    var $this = $(this);
+    if ($this.data("wice-index-for")) return;
+    $this.data("wice-index-for", true);
+    $this.find(".index_for_length select").change(function(event) {
+      var location = $(event.target).find("option:selected").data("href");
+      if (location) Turbolinks.visit(location);
+    });
 
-      $this.find(".index_for thead th").click(function(event) {
-        var location = $(event.target).data("href");
-        if (location) Turbolinks.visit(location);
-      });
+    $this.find(".index_for thead th").click(function(event) {
+      var location = $(event.target).data("href");
+      if (location) Turbolinks.visit(location);
+    });
 
-      $this.find(".index_for_filter input").keypress(function(event) {
-        if (event.which === 13 || event.keyCode === 13) {
-          var location = $(event.target).data("href"),
-              search = $(event.target).val();
-          if (location) {
-            if (location.indexOf("?") >= 0) {
-              Turbolinks.visit(location + "&search=" + search);
-            } else {
-              Turbolinks.visit(location + "?search=" + search);
-            }
+    $this.find(".index_for_filter input").keypress(function(event) {
+      if (event.which === 13 || event.keyCode === 13) {
+        var location = $(event.target).data("href"),
+            search = $(event.target).val();
+        if (location) {
+          if (location.indexOf("?") >= 0) {
+            Turbolinks.visit(location + "&search=" + search);
+          } else {
+            Turbolinks.visit(location + "?search=" + search);
           }
         }
-      })
+      }
     })
   });
 </script>

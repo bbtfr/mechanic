@@ -7,9 +7,9 @@ GIT
 
 GIT
   remote: git://github.com/bbtfr/index_for.git
-  revision: eb368100a7542cfe594cc13b2178473edc06ac7e
+  revision: f5b05f6b5a0d78ec10ab9a2c745bbee28fe42f92
   specs:
-    index_for (0.3.0)
+    index_for (0.3.1)
       actionpack (>= 3.2, < 6)
       activemodel (>= 3.2, < 6)
 
