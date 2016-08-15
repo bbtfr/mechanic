@@ -20,17 +20,17 @@
     </ul>
   </div>
 
-  <% @mechanics = @mechanics.includes(:mechanic) %>
+  <% @mechanics = @mechanics.includes(:mechanic).joins(:mechanic) %>
 
   <div class="col-md-10 col-xs-8">
-    <%= index_for [ :admin, @mechanics ], class: "table table-hover data-tables" do |i| %>
+    <%= wice_index_for [ :admin, @mechanics ], class: "table table-hover" do |i| %>
       <%= i.attribute :nickname, searchable: true %>
       <%= i.attribute :mobile, searchable: true %>
       <%= i.fields_for :mechanic, model: Mechanic do |ii| %>
-        <%= ii.attribute :unique_id %>
-        <%= ii.attribute :province, sortable: "mechanics.province_cd" %>
-        <%= ii.attribute :city, sortable: "mechanics.city_cd" %>
-        <%= ii.attribute :district, sortable: "mechanics.district_cd" %>
+        <%= ii.attribute :unique_id, searchable: true %>
+        <%= ii.attribute :province, sortable: "mechanics.province_cd", filterable: { "mechanics.province_cd" => Mechanic.provinces[params[:search]] } %>
+        <%= ii.attribute :city, sortable: "mechanics.city_cd", filterable: { "mechanics.city_cd" => Mechanic.cities[params[:search]] } %>
+        <%= ii.attribute :district, sortable: "mechanics.district_cd", filterable: { "mechanics.district_cd" => Mechanic.districts[params[:search]] } %>
       <% end %>
       <%= i.attribute :address, searchable: true %>
       <%= i.fields_for :mechanic, model: Mechanic do |ii| %>
