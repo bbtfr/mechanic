@@ -12,7 +12,7 @@
 
     <div class="col-sm-6 text-right index_for_filter">
       搜索：
-      <input type="search" class="form-control input" placeholder="<%= params[:search] %>" data-href="<%= url_for(params.merge(search: nil)) %>">
+      <input type="search" class="form-control input" placeholder="<%= params[:search] %>" data-href="<%= url_for(params.merge(search: nil, page: 1)) %>">
     </div>
   </div>
 
