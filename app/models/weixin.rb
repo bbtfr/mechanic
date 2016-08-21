@@ -257,19 +257,15 @@ module Weixin
       if keyword =~ /(\w+?)_(\d+)/
         type, id = $1.to_sym, $2.to_i
         Rails.logger.info "  Audit: #{type}, #{weixin_openid}, #{id} "
-        if user = User.where(weixin_openid: weixin_openid).first
-          user.safe_change_group(id) if type == "qrscene_user_group"
-        else
-          WeixinAuthorize.weixin_redis.hset type, weixin_openid, id
-        end
+        WeixinAuthorize.weixin_redis.hset type, weixin_openid, id
       end
     end
 
     def callback_signup_event user, weixin_openid
-      group_id = WeixinAuthorize.weixin_redis.hget "qrscene_user_group", weixin_openid
+      group_id = WeixinAuthorize.weixin_redis.hget "user_group", weixin_openid
       return unless group_id
-      WeixinAuthorize.weixin_redis.hdel "qrscene_user_group", weixin_openid
-      Rails.logger.info "  Audit: qrscene_user_group, #{weixin_openid}, #{group_id}"
+      WeixinAuthorize.weixin_redis.hdel "user_group", weixin_openid
+      Rails.logger.info "  Audit: user_group, #{weixin_openid}, #{group_id}"
       user.safe_change_group(group_id)
     end
 
