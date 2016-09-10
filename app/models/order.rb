@@ -185,6 +185,13 @@ class Order < ApplicationRecord
     FallbackScopedSettings.for_things self, self.store
   end
 
+  # ###########################
+  # price 用户支付金额
+  # quoted_price 用户报价
+  # markup_price 技师加价
+  # commission 堂主分成
+  # procedure_price 汽车堂分成
+  # mechanic_income 技师实际收入
   def price
     quoted_price + markup_price
   end
