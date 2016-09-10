@@ -78,7 +78,7 @@ module Weixin
         }
     end
 
-    def send_paid_order_message order
+    def send_pay_order_message order
       weixin_authorize_client_send :send_template_msg,
         order.mechanic.user_weixin_openid,
         OrderTemplate,
@@ -89,7 +89,7 @@ module Weixin
           keyword1: format_template_data(I18n.l(order.appointment, format: :long)),
           keyword2: format_template_data(order.skill),
           keyword3: format_template_data("#{order.brand} #{order.series}"),
-          keyword4: format_template_data("#{order.price} 元"),
+          keyword4: format_template_data("#{order.mechanic_income} 元"),
           keyword5: format_template_data(order.remark.presence || "无"),
           remark: format_template_data("\r\n点击查看订单详情！")
         }
@@ -122,7 +122,7 @@ module Weixin
           keyword1: format_template_data(I18n.l(order.appointment, format: :long)),
           keyword2: format_template_data(order.skill),
           keyword3: format_template_data("#{order.brand} #{order.series}"),
-          keyword4: format_template_data("#{order.price} 元"),
+          keyword4: format_template_data("#{order.mechanic_income} 元"),
           keyword5: format_template_data(order.remark.presence || "无"),
           remark: format_template_data("\r\n点击查看订单详情！")
         }
@@ -143,6 +143,23 @@ module Weixin
           keyword4: format_template_data("#{order.price} 元"),
           keyword5: format_template_data(order.remark.presence || "无"),
           remark: format_template_data("\r\n点击详情去确认完工！")
+        }
+    end
+
+    def send_refund_order_message order, mechanic
+      weixin_authorize_client_send :send_template_msg,
+        mechanic.user_weixin_openid,
+        OrderTemplate,
+        "#{BaseURL}/orders/#{order.id}",
+        TemplateTopColor,
+        {
+          first: format_template_data("您的订单 #{order.user.nickname} 刚刚被取消"),
+          keyword1: format_template_data(I18n.l(order.appointment, format: :long)),
+          keyword2: format_template_data(order.skill),
+          keyword3: format_template_data("#{order.brand} #{order.series}"),
+          keyword4: format_template_data("#{order.mechanic_income} 元"),
+          keyword5: format_template_data(order.remark.presence || "无"),
+          remark: format_template_data("")
         }
     end
 

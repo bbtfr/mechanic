@@ -69,10 +69,15 @@ class Order < ApplicationRecord
         original_mechanic = self.mechanic
         update_state(:paid)
         update_attribute(:mechanic, mechanic)
-        Weixin.send_paid_order_message(self)
-        SMSMailer.mechanic_notification(self).deliver
-        SMSMailer.mechanic_rejection(self, original_mechanic).deliver if original_mechanic && mechanic != original_mechanic
-        SMSMailer.contact_notification(self).deliver if contact_mobile
+        Weixin.send_pay_order_message(self)
+        SMSMailer.mechanic_pay_order(self).deliver
+
+        if original_mechanic && mechanic != original_mechanic
+          Weixin.send_refund_order_message(self, mechanic)
+          SMSMailer.mechanic_refund_order(self, original_mechanic).deliver
+        end
+
+        SMSMailer.contact_pay_order(self).deliver if contact_mobile
         true
       end
 
@@ -91,9 +96,9 @@ class Order < ApplicationRecord
         user.increase_total_cost!(price)
 
         if mechanic
-          Weixin.send_paid_order_message(self)
-          SMSMailer.mechanic_notification(self).deliver
-          SMSMailer.contact_notification(self).deliver if contact_mobile
+          Weixin.send_pay_order_message(self)
+          SMSMailer.mechanic_pay_order(self).deliver
+          SMSMailer.contact_pay_order(self).deliver if contact_mobile
         end
 
         true
@@ -113,7 +118,12 @@ class Order < ApplicationRecord
         update_attribute(:refund, Order.refunds[reason]) unless refunding?
         update_state(:refunded)
         user.increase_total_cost!(-price)
-        SMSMailer.mechanic_rejection(self, mechanic).deliver if mechanic
+
+        if mechanic
+          Weixin.send_refund_order_message(self, mechanic)
+          SMSMailer.mechanic_refund_order(self, mechanic).deliver
+        end
+
         true
       end
 
