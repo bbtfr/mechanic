@@ -189,6 +189,7 @@ zh-CN:
         appointing: 指派技师
         offline: 线下交易
         offline?: 线下交易
+        refund_at: 退款申请时间
       bid:
         markup_price: 加价
       skill:

@@ -8,6 +8,7 @@
   <%= i.attribute :skill %>
   <%= i.attribute :price %>
   <%= i.attribute :mechanic_nickname %>
+  <%= i.attribute :refund_at, format: :long %>
   <%= i.attribute :state do |order| %>
     <% if order.canceled? %>
       <%= te order, :cancel %>

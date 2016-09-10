@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160806034811) do
+ActiveRecord::Schema.define(version: 20160910081636) do
 
   create_table "administrators", force: :cascade do |t|
     t.string   "mobile"
@@ -231,6 +231,7 @@ ActiveRecord::Schema.define(version: 20160806034811) do
     t.float    "lat"
     t.float    "lng"
     t.boolean  "offline"
+    t.datetime "refund_at"
     t.index ["bid_id"], name: "index_orders_on_bid_id"
     t.index ["cancel_cd"], name: "index_orders_on_cancel_cd"
     t.index ["hosting"], name: "index_orders_on_hosting"

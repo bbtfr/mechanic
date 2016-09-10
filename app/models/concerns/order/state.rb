@@ -108,6 +108,7 @@ class Order < ApplicationRecord
 
       def refunding! reason = :user_cancel
         return false unless paid? || merchant? && (working? || confirming?)
+        update_attribute(:refund_at, Time.now)
         update_attribute(:refund, Order.refunds[reason])
         update_state(:refunding)
         true
