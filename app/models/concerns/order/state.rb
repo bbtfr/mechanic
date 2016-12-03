@@ -73,7 +73,7 @@ class Order < ApplicationRecord
         SMSMailer.mechanic_pay_order(self).deliver
 
         if original_mechanic && mechanic != original_mechanic
-          Weixin.send_refund_order_message(self, mechanic)
+          Weixin.send_refund_order_message(self, original_mechanic)
           SMSMailer.mechanic_refund_order(self, original_mechanic).deliver
         end
 
