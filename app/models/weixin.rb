@@ -11,7 +11,7 @@ module Weixin
 
   Client = WeixinAuthorize::Client.new(Config["app_id"], Config["app_secret"])
 
-  OrderTemplate = Config["order_template_id"]
+  OrderTemplate = Config["templates"]["order"]
   TemplateTopColor = "#FF0000"
   TemplateDataColor = "#173177"
 

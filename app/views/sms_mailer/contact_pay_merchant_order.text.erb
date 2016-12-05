@@ -1,8 +1,0 @@
-携手【<%= @order.store_nickname %>】；
-您好<%= @order.contact_nickname || @order.user_nickname %>：您的<%= @order.skill %>服务订单已安排给如下师傅：
-技师姓名：<%= @order.mechanic.user_nickname %>；
-手机号码：<%= @order.mechanic.user_mobile %>；
-地址：<%= @order.mechanic.user_address %>；
-专业：<%= @order.mechanic.professionality_average %>；
-守时：<%= @order.mechanic.timeliness_average %>；
-施工前先预约技师时间并确认产品无损，到店出示本短信给店家；施工中遇到问题请及时联系卖家或者致电<%= @order.store_hotline %>。

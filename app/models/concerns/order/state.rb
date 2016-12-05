@@ -70,14 +70,13 @@ class Order < ApplicationRecord
         update_state(:paid)
         update_attribute(:mechanic, mechanic)
         Weixin.send_pay_order_message(self)
-        SMSMailer.mechanic_pay_order(self).deliver
+        SMS.send_pay_order_message(self)
 
         if original_mechanic && mechanic != original_mechanic
           Weixin.send_refund_order_message(self, original_mechanic)
-          SMSMailer.mechanic_refund_order(self, original_mechanic).deliver
+          SMS.send_refund_order_message(self, original_mechanic)
         end
 
-        SMSMailer.contact_pay_order(self).deliver if contact_mobile
         true
       end
 
@@ -97,8 +96,7 @@ class Order < ApplicationRecord
 
         if mechanic
           Weixin.send_pay_order_message(self)
-          SMSMailer.mechanic_pay_order(self).deliver
-          SMSMailer.contact_pay_order(self).deliver if contact_mobile
+          SMS.send_pay_order_message(self)
         end
 
         true
@@ -122,7 +120,7 @@ class Order < ApplicationRecord
 
         if mechanic
           Weixin.send_refund_order_message(self, mechanic)
-          SMSMailer.mechanic_refund_order(self, mechanic).deliver
+          SMS.send_refund_order_message(self, mechanic)
         end
 
         true

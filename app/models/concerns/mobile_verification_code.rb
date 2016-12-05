@@ -27,11 +27,11 @@ module MobileVerificationCode
   def send_verification_code
     return unless mobile =~ /\A\d{11}\z/
     return if @skip_send_verification_code
-    result = SMSMailer.confirmation(self).deliver
-    if result[:success]
+    result = SMS.send_confirmation_message(self)
+    if result["result"] == "0"
       self.verification_code_sent = true
     else
-      errors.add :base, result[:error]
+      errors.add :base, SMS::ERROR_MESSAGE_MAPPING[result["result"]]
     end
   end
 

@@ -1,6 +1,12 @@
 default: &default
-  account: <%= ENV["IHUYI_ACCOUNT"] %>
-  password: <%= ENV["IHUYI_PASSWORD"] %>
+  sdk_app_id: <%= ENV["QCLOUD_SMS_SDK_APP_ID"] %>
+  app_key: <%= ENV["QCLOUD_SMS_APP_KEY"] %>
+  templates:
+    confirmation: 5926
+    contact_pay_merchant_order: 5927
+    contact_pay_mobile_order: 5930
+    mechanic_pay_order: 5937
+    mechanic_refund_order: 5933
 
 development:
   <<: *default
