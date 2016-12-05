@@ -217,8 +217,12 @@ class Order < ApplicationRecord
     "汽车堂#{skill}订单"
   end
 
-  def mobile
+  def contact_display_mobile
     contact_mobile || user.mobile
+  end
+
+  def contact_display_name
+    [contact_nickname.presence, contact_mobile.presence].compact.join(" ")
   end
 
   def update_timestamp column, update, force

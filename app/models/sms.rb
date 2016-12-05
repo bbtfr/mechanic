@@ -14,7 +14,7 @@ module SMS
 
     def send_refund_order_message order, mechanic
       send_request mechanic.user_mobile, "mechanic_refund_order", [
-        [order.contact_nickname, order.contact_mobile].compact.join(" "),
+        order.contact_display_name,
         order.address,
         order.skill,
         order.brand,
@@ -27,7 +27,7 @@ module SMS
 
       send_request mechanic.user_mobile, "mechanic_pay_order", [
         order.user_nickname,
-        [order.contact_nickname, order.contact_mobile].compact.join(" "),
+        order.contact_display_name,
         order.address,
         I18n.l(order.appointment, format: :long),
         order.skill,
