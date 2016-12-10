@@ -81,6 +81,18 @@
   </div>
 <% end %>
 
+<% if @order.has_attach? %>
+  <h3 class="page-header">施工凭证 <small>点击施工照片查看原图</small></h3>
+  <div class="images">
+    <%= link_to @order.mechanic_attach_1.url(:original) do %>
+      <%= image_tag @order.mechanic_attach_1.url(:thumb), class: "img-rounded" %>
+    <% end if @order.mechanic_attach_1.present? %>
+    <%= link_to @order.mechanic_attach_2.url(:original) do %>
+      <%= image_tag @order.mechanic_attach_2.url(:thumb), class: "img-rounded" %>
+    <% end if @order.mechanic_attach_2.present? %>
+  </div>
+<% end %>
+
 <% case @order.state %>
 <% when :pended %>
   <div class="pull-right">

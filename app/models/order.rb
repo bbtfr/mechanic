@@ -64,6 +64,10 @@ class Order < ApplicationRecord
   has_attached_file :user_attach_2, styles: { medium: "300x300>", thumb: "100x100#" }
   validates_attachment_content_type :user_attach_1, :content_type => /\Aimage\/.*\z/
 
+  def has_attach?
+    done? && (mechanic_attach_1.present? || mechanic_attach_2.present?)
+  end
+
   weixin_media_loaders :mechanic_attach_1, :mechanic_attach_2, :user_attach_1, :user_attach_2
 
   validates_numericality_of :quoted_price, greater_than_or_equal_to: 0

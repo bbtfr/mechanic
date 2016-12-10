@@ -64,6 +64,18 @@
   </div>
 <% end %>
 
+<% if @order.has_attach? %>
+  <h3 class="page-header">施工凭证 <small>点击施工照片查看原图</small></h3>
+  <div class="images">
+    <%= link_to @order.mechanic_attach_1.url(:original) do %>
+      <%= image_tag @order.mechanic_attach_1.url(:thumb), class: "img-rounded" %>
+    <% end if @order.mechanic_attach_1.present? %>
+    <%= link_to @order.mechanic_attach_2.url(:original) do %>
+      <%= image_tag @order.mechanic_attach_2.url(:thumb), class: "img-rounded" %>
+    <% end if @order.mechanic_attach_2.present? %>
+  </div>
+<% end %>
+
 <% case @order.state %>
 <% when :paid %>
   <div class="pull-right">
@@ -82,17 +94,6 @@
     <%= link_to "申请撤单", revoke_merchants_hosting_order_path(@order), class: "btn btn-danger" %>
   </div>
 <% when :confirming %>
-  <h3 class="page-header">确认完工 <small>点击施工照片查看原图</small></h3>
-  <% if @order.mechanic_attach_1 || @order.mechanic_attach_2 %>
-    <div class="images">
-      <%= link_to @order.mechanic_attach_1.url(:original) do %>
-        <%= image_tag @order.mechanic_attach_1.url(:thumb), class: "img-rounded" %>
-      <% end if @order.mechanic_attach_1.present? %>
-      <%= link_to @order.mechanic_attach_2.url(:original) do %>
-        <%= image_tag @order.mechanic_attach_2.url(:thumb), class: "img-rounded" %>
-      <% end if @order.mechanic_attach_2.present? %>
-    </div>
-  <% end %>
   <div class="pull-right">
     <%= link_to "改派技师", pick_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
     <%= link_to "设置手续费", procedure_price_merchants_hosting_order_path(@order), class: "btn btn-primary" %>

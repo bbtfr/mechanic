@@ -3,7 +3,9 @@
   <h3 class="popover-title"><%= mechanic.user_nickname %></h3>
   <div class="popover-content">
     <dl class="dl-horizontal">
-      <dt>手机号码</dt><dd><%= mechanic.user_mobile %></dd>
+      <% if current_store.host? %>
+        <dt>手机号码</dt><dd><%= mechanic.user_mobile %></dd>
+      <% end %>
       <dt>店铺编号</dt>
       <dd><% if mechanic.unique_id %><%= mechanic.unique_id %><% else %><span class="text-muted">无</span><% end %></dd>
       <dt>地址</dt><dd><%= mechanic.user_address %></dd>

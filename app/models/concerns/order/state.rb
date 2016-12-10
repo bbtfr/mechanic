@@ -6,6 +6,7 @@ class Order < ApplicationRecord
 
       AVAILABLE_GREATER_THAN = 5
       SETTLED_GREATER_THAN = 8
+      DONE_GREATER_THAN  = 7
 
       as_enum :state, pending: 0, paying: 1, pended: 2, canceled: 3, refunding: 4, refunded: 5,
         paid: 6, working: 7, confirming: 8, finished: 9, reviewed: 10, closed: 11
@@ -22,6 +23,11 @@ class Order < ApplicationRecord
       scope :settleds, -> { where('"orders"."state_cd" > ?', SETTLED_GREATER_THAN) }
       def settled?
         state_cd > SETTLED_GREATER_THAN
+      end
+
+      scope :dones, -> { where('"orders"."state_cd" > ?', DONE_GREATER_THAN) }
+      def done?
+        state_cd > DONE_GREATER_THAN
       end
 
       scope :state_scope, -> (state) { where(state_cd: states.value(state)) }
