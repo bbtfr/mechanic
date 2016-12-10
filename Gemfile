@@ -31,6 +31,8 @@ gem 'jbuilder', '~> 2.5'
 
 # Simple, efficient background processing for Ruby
 gem 'sidekiq'
+gem 'sinatra', '>= 2.0.0.beta2', require: false
+
 # Cron jobs in Ruby
 gem 'whenever'
 
