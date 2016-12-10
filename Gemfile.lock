@@ -39,7 +39,7 @@ GIT
       coffee-rails
 
 GEM
-  remote: https://gems.ruby-china.org/
+  remote: https://rubygems.org/
   specs:
     actioncable (5.0.0)
       actionpack (= 5.0.0)
@@ -284,7 +284,7 @@ GEM
       activesupport (>= 4.0.0)
     simple_enum-multiple (0.1.7)
       simple_enum (~> 2.3)
-    simple_enum-persistence (0.2.0)
+    simple_enum-persistence (0.2.1)
       simple_enum (~> 2.2)
     simple_form (3.2.1)
       actionpack (> 4, < 5.1)
