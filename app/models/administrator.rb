@@ -1,4 +1,6 @@
 class Administrator < ApplicationRecord
+  Config = YAML.load(ERB.new(File.read("#{Rails.root}/config/admin.yml")).result)[Rails.env]
+
   include MobileVerificationCode
 
   attr_accessor :current_password

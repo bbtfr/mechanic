@@ -4,7 +4,7 @@ require ::File.expand_path('../config/environment', __FILE__)
 require 'sidekiq/web'
 
 Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-  username == ENV["SIDEKIQ_USERNAME"] && password == ENV["SIDEKIQ_PASSWORD"]
+  username == Administrator::Config['username'] && password == Administrator::Config['password']
 end
 
 run Rack::URLMap.new(
