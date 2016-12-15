@@ -22,6 +22,10 @@ class Merchants::MerchantSessionsController < Merchants::ApplicationController
     end
   end
 
+  def show
+    redirect_to new_merchants_merchant_session_path
+  end
+
   def destroy
     current_merchant_session.destroy
     redirect_to new_merchants_merchant_session_path

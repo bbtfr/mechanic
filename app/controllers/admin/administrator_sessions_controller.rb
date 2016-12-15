@@ -22,6 +22,10 @@ class Admin::AdministratorSessionsController < Admin::ApplicationController
     end
   end
 
+  def show
+    redirect_to new_admin_administrator_session_path
+  end
+
   def destroy
     current_admin_session.destroy
     redirect_to new_admin_administrator_session_path
