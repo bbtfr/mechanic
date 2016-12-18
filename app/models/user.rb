@@ -2,6 +2,7 @@ class User < ApplicationRecord
   include MobileVerificationCode
   include Followable
   include Hidable
+  include Balancable
 
   def update_weixin_openid openid
     return unless openid.present?
@@ -61,21 +62,6 @@ class User < ApplicationRecord
     raise result["message"] unless result["status"] == 0
     self.lng = result["result"]["location"]["lng"]
     self.lat = result["result"]["location"]["lat"]
-  end
-
-  attr_accessor :balance_increase_amount, :balance_increase_description
-
-  def increase_balance! amount, reason = "", source = nil
-    if reason.present?
-      Metric.audit self, source, :balance, reason: reason, amount: amount
-      increment!(:balance, amount)
-      true
-    else
-      errors.add :balance_increase_description, "不能为空"
-      self.balance_increase_amount = amount
-      self.balance_increase_description = reason
-      false
-    end
   end
 
   def increase_total_cost! amount

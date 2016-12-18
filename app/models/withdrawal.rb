@@ -4,7 +4,7 @@ class Withdrawal < ApplicationRecord
   as_enum :state, pending: 0, canceled: 1, paid: 2
 
   after_create do
-    user.increase_balance!(-amount, "申请提现", self)
+    user.decrease_balance!(amount, "申请提现", self)
   end
 
   validates_numericality_of :amount, greater_than_or_equal_to: 1

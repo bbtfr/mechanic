@@ -64,6 +64,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li><a><%= current_merchant.nickname %></a></li>
           <% if current_merchant.admin? %>
+            <li class="<%= "active" if controller_name == "recharges" %>"><%= link_to "充值", new_merchants_admin_recharges_path %></li>
             <li class="<%= "active" if controller_name == "stores" and action_name == "edit" %>"><%= link_to "编辑店铺信息", edit_merchants_admin_store_path %></li>
           <% end %>
           <li class="<%= "active" if controller_name == "merchants" and action_name == "password" %>"><%= link_to "修改密码", password_merchants_merchant_path %></li>

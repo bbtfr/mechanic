@@ -78,10 +78,10 @@ zh-CN:
         gender: 性别
         address: 地址
         mobile: 手机号码
-        balance: 余额
         qq: QQ
-        balance_increase_amount: 余额变动金额
-        balance_increase_description: 余额变动说明
+        balance: 余额
+        balance_update_amount: 余额变动金额
+        balance_update_description: 余额变动说明
       mechanic:
         unique_id: 店铺编号
         user_nickname: 姓名
@@ -129,6 +129,9 @@ zh-CN:
         total_cost: 总支出
         qq: QQ
         hotline: 服务热线
+        balance: 余额
+        balance_update_amount: 余额变动金额
+        balance_update_description: 余额变动说明
       user_group:
         nickname: 分堂昵称
         user_nickname: 堂主
@@ -204,6 +207,13 @@ zh-CN:
         amount: 金额
         created_at: 申请日期
         paid_at: 提现日期
+        state: 状态
+      recharge:
+        user: 用户
+        store: 店铺
+        amount: 充值金额
+        created_at: 申请日期
+        paid_at: 充值日期
         state: 状态
       fellowship:
         remark: 备注

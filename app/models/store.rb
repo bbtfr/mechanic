@@ -1,5 +1,7 @@
 class Store < ApplicationRecord
   include Followable
+  include Balancable
+  attr_accessor :recharge_amount
 
   def settings
     FallbackScopedSettings.for_things self

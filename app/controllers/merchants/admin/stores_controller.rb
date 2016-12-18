@@ -13,5 +13,4 @@ class Merchants::Admin::StoresController < Merchants::Admin::ApplicationControll
     def store_params
       params.require(:store).permit(:nickname, :qq, :hotline, :avatar)
     end
-
 end

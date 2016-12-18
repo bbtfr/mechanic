@@ -1,0 +1,33 @@
+<h3 class="page-header">为店铺充值 <small class="text-danger">当前店铺余额：<%= current_store.balance %>元</small></h3>
+
+<div class="row">
+  <div class="col-md-7">
+    <%= bootstrap_simple_form_for(@recharge, url: merchants_admin_recharges_path(format: :alipay)) do |f| %>
+      <%= f.error_messages %>
+
+      <div class="form-group recharge optional recharge_amount">
+        <label class="recharge optional control-label" for="recharge_amount">充值金额</label>
+        <input type="hidden" name="recharge[amount]" id="recharge_amount">
+        <div class="seperate-btn-group">
+          <% Recharge::AVAILABLE_VALUES.each do |value| %>
+            <a class="btn btn-default" data-amount="<%= value %>"><%= value %>元</a>
+          <% end %>
+        </div>
+      </div>
+
+      <%= f.button :submit, "立即充值", class: "btn-danger pull-right" %>
+    <% end %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  var $recharge_amount_buttons = $(".recharge_amount a[data-amount]");
+  var $recharge_amount_input = $("#recharge_amount");
+
+  $recharge_amount_buttons.click(function() {
+    var $this = $(this);
+    $recharge_amount_input.val($this.data("amount"));
+    $recharge_amount_buttons.removeClass("btn-outline-danger");
+    $this.addClass("btn-outline-danger");
+  });
+</script>

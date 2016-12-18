@@ -5,9 +5,9 @@
     <%= bootstrap_simple_form_for([ :admin, @user ], url: balance_admin_user_path(@user)) do |f| %>
       <%= f.error_messages %>
 
-      <%= f.input :balance_increase_amount, hint: "减少账户余额请填写负数，例如：-100", as: :integer %>
+      <%= f.input :balance_update_amount, hint: "减少账户余额请填写负数，例如：-100", as: :integer %>
 
-      <%= f.input :balance_increase_description, hint: "账户余额变动说明，例如：订单金额错误" %>
+      <%= f.input :balance_update_description, hint: "账户余额变动说明，例如：订单金额错误" %>
 
       <%= f.button :submit, "确定", class: "btn-primary pull-right" %>
     <% end %>

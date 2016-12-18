@@ -8,6 +8,16 @@ module Ali
 
   class << self
 
+    def recharge recharge
+      Alipay::Service.create_direct_pay_by_user_url(
+        subject: recharge.title,
+        out_trade_no: recharge.out_trade_no,
+        total_fee: recharge.amount,
+        return_url: "#{MerchantsURL}/admin/recharges/#{recharge.id}/result",
+        notify_url: "#{MerchantsURL}/admin/recharges/#{recharge.id}/notify.alipay"
+      )
+    end
+
     def payment order
       Alipay::Service.create_direct_pay_by_user_url(
         subject: order.title,

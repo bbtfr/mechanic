@@ -1,0 +1,5 @@
+<% if @order.paid? %>
+  clearInterval(interval);
+  alert("支付成功\r\n点击确认创建新订单");
+  window.location.href = "<%= merchants_root_path %>";
+<% end %>

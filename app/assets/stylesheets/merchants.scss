@@ -4,6 +4,18 @@
 @import "admin";
 @import "tinymce-override";
 
+.form-group.recharge_amount {
+  .seperate-btn-group {
+    margin-top: 10px;
+
+    .btn {
+      min-width: 150px;
+      margin-right: 10px;
+      margin-bottom: 15px;
+    }
+  }
+}
+
 .form-control.datetime {
   max-width: 18%;
   max-width: calc(20% - 8.5px);

@@ -22,8 +22,8 @@ class Admin::UsersController < Admin::ApplicationController
   end
 
   def update_balance
-    amount = params[:user][:balance_increase_amount].to_f
-    description = params[:user][:balance_increase_description]
+    amount = params[:user][:balance_update_amount].to_f
+    description = params[:user][:balance_update_description]
     if @user.increase_balance! amount, description
       flash[:success] = "成功更新账户余额！"
       redirect! :balance, admin_user_path(@user)

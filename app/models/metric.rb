@@ -5,7 +5,7 @@ class Metric < ApplicationRecord
   serialize :data, Hash
 
   def self.audit user, source, method, data
-    create(user: user, source: source, method: method, data: data)
+    create(user_id: user.id, source: source, method: method, data: data)
   end
 
 end

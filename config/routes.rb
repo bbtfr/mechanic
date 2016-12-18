@@ -92,11 +92,13 @@ Rails.application.routes.draw do
         end
       end
       resource :store
+      resource :recharges
     end
 
     namespace :store do
       resources :orders
     end
+    resource :store
 
     root to: "orders#new"
   end

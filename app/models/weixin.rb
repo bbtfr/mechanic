@@ -238,6 +238,24 @@ module Weixin
       response
     end
 
+    def recharge_qrcode recharge
+      params = {
+        body: recharge.title,
+        out_trade_no: recharge.out_trade_no,
+        product_id: recharge.to_global_id.to_s,
+        total_fee: recharge.amount * 100,
+        spbill_create_ip: LocalIP,
+        notify_url: "#{MerchantsURL}/admin/recharges/#{recharge.id}/notify.weixin",
+        trade_type: "NATIVE", # could be "JSAPI", "NATIVE" or "APP",
+      }
+
+      Rails.logger.info("  Requested WxPay API invoke_unifiedorder with params #{params}")
+      response = WxPay::Service.invoke_unifiedorder params
+      Rails.logger.info("  Result: #{response}")
+
+      response
+    end
+
     def refund order
       params = {
         out_trade_no: order.out_trade_no,

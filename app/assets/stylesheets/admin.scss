@@ -190,6 +190,87 @@ table.dataTable thead > tr > th {
   background: white;
 }
 
+// Button Outline
+@mixin button-outline-variant($color, $border) {
+  color: $color;
+  background-color: transparent;
+  background-image: none;
+  border-color: $color;
+
+  &:focus,
+  &.focus {
+    color: $color;
+    background-color: transparent;
+    background-image: none;
+  }
+
+  &:hover {
+    color: $color;
+    background-color: transparent;
+    background-image: none;
+    border-color: $border;
+  }
+
+  &:active,
+  &.active,
+  .open > &.dropdown-toggle {
+    color: $color;
+    background-color: transparent;
+    background-image: none;
+    border-color: $border;
+
+    &:focus,
+    &.focus {
+      color: $color;
+      background-color: transparent;
+      background-image: none;
+      border-color: darken($border, 12.5%);
+    }
+
+    &:hover {
+      color: $color;
+      background-color: transparent;
+      background-image: none;
+      border-color: $border;
+    }
+  }
+
+  &.disabled,
+  &:disabled,
+  fieldset:disabled & {
+    &,
+    &:hover,
+    &:focus,
+    &.focus,
+    &:active,
+    &.active {
+      color: desaturate($color, 25%);
+      background-color: rgba(128, 128, 128, .125);
+      background-image: none;
+      filter: alpha(opacity = 80);
+      border-color: desaturate($border, 25%);
+      opacity: .8;
+    }
+  }
+}
+
+// Remove all backgrounds
+.btn-outline-primary {
+  @include button-outline-variant($btn-primary-bg, $btn-primary-border);
+}
+.btn-outline-info {
+  @include button-outline-variant($btn-info-bg, $btn-info-border);
+}
+.btn-outline-success {
+  @include button-outline-variant($btn-success-bg, $btn-success-border);
+}
+.btn-outline-warning {
+  @include button-outline-variant($btn-warning-bg, $btn-warning-border);
+}
+.btn-outline-danger {
+  @include button-outline-variant($btn-danger-bg, $btn-danger-border);
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {

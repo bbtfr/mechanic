@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160910081636) do
+ActiveRecord::Schema.define(version: 20161218041609) do
 
   create_table "administrators", force: :cascade do |t|
     t.string   "mobile"
@@ -249,6 +249,22 @@ ActiveRecord::Schema.define(version: 20160910081636) do
     t.integer "lbs_id"
     t.index ["fullname"], name: "index_provinces_on_fullname"
     t.index ["lbs_id"], name: "index_provinces_on_lbs_id"
+  end
+
+  create_table "recharges", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "store_id"
+    t.integer  "amount"
+    t.integer  "state_cd",    default: 0
+    t.integer  "pay_type_cd", default: 0
+    t.string   "trade_no"
+    t.datetime "paid_at"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.index ["pay_type_cd"], name: "index_recharges_on_pay_type_cd"
+    t.index ["state_cd"], name: "index_recharges_on_state_cd"
+    t.index ["store_id"], name: "index_recharges_on_store_id"
+    t.index ["user_id"], name: "index_recharges_on_user_id"
   end
 
   create_table "series", force: :cascade do |t|

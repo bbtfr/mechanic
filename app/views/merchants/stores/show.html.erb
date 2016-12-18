@@ -1,0 +1,16 @@
+<h3 class="page-header">店铺信息</h3>
+
+  <div class="row">
+    <div class="col-sm-3 text-right">
+      <%= image_tag(current_store.avatar.url(:thumb)) %>
+    </div>
+
+    <div class="col-sm-9">
+      <%= show_for current_store, class: "dl-horizontal" do |i| %>
+        <%= i.attribute :nickname %>
+        <%= i.attribute :qq %>
+        <%= i.attribute :hotline %>
+        <%= i.attribute :balance %>
+      <% end %>
+    </div>
+  </div>
