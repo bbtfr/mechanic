@@ -54,6 +54,8 @@
           <% if current_merchant.admin? %>
             <li class="<%= "active" if controller_path == "merchants/admin/orders" %>"><%= link_to "订单管理", merchants_admin_orders_path %></li>
             <li class="<%= "active" if controller_path == "merchants/admin/merchants" %>"><%= link_to "员工管理", merchants_admin_merchants_path %></li>
+          <% else %>
+            <li class="<%= "active" if controller_path == "merchants/store/orders" %>"><%= link_to "订单查询", merchants_store_orders_path %></li>
           <% end %>
 
           <li class="<%= "active" if controller_name == "notes" %>"><%= link_to "记事本", merchants_note_path %></li>
