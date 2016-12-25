@@ -64,6 +64,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
   end
 
   def pay
+    set_redirect_referer :payment
     case params[:format]
     when "alipay"
       response = Ali.payment @order
@@ -76,10 +77,9 @@ class Merchants::OrdersController < Merchants::ApplicationController
       else
         @order.pay! :weixin if response["err_code"] == "ORDERPAID"
         flash[:error] = "微信支付：#{response["err_code_des"]}"
-        redirect_to current_order_path
+        redirect! :payment, current_order_path
       end
     when "balance"
-      set_redirect_referer :payment
       if @order.price > current_store.balance
         flash[:error] = "店铺余额不足，请使用其他方式支付"
         redirect! :payment, current_order_path
@@ -88,7 +88,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
       end
     else
       flash[:error] = "未知支付类型"
-      redirect_to current_order_path
+        redirect! :payment, current_order_path
     end
   end
 
@@ -137,7 +137,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
 
       if @order.paid?
         flash[:success] = "成功支付订单！"
-        redirect_to current_order_path
+        redirect! :payment, current_order_path
       else
         flash.now[:notice] = "正在查询订单支付结果..."
       end
@@ -146,7 +146,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
       redirect! :payment, current_order_path
     else
       flash[:error] = "未知支付类型"
-      redirect_to current_order_path
+      redirect! :payment, current_order_path
     end
   end
 
