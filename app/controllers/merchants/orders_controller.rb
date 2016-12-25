@@ -129,7 +129,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
     case params[:format]
     when "js"
       return
-    when "alipay"
+    when "alipay", "weixin"
       notify_params = params.except(*request.path_parameters.keys)
       if Alipay::Notify.verify?(notify_params)
         Order.find(params[:id]).pay! :alipay, notify_params[:trade_no]

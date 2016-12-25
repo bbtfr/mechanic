@@ -1,8 +1,9 @@
 class Merchants::Admin::RechargesController < Merchants::Admin::ApplicationController
   skip_before_action :verify_authenticity_token, :authenticate!, only: [ :notify ]
+  before_action :find_recharge, except: [ :index, :new, :create ]
 
-  def show
-    redirect_to new_merchants_admin_recharges_path
+  def index
+    redirect_to new_merchants_admin_recharge_path
   end
 
   def new
@@ -28,7 +29,7 @@ class Merchants::Admin::RechargesController < Merchants::Admin::ApplicationContr
         end
       else
         flash[:error] = "未知支付类型"
-        redirect_to new_merchants_admin_recharges_path
+        redirect_to new_merchants_admin_recharge_path
       end
     else
       render :new
@@ -36,18 +37,24 @@ class Merchants::Admin::RechargesController < Merchants::Admin::ApplicationContr
   end
 
   def result
-    return if params[:format] == "js"
+    case params[:format]
+    when "js"
+      return
+    when "alipay", "weixin"
+      notify_params = params.except(*request.path_parameters.keys)
+      if Alipay::Notify.verify?(notify_params)
+        @recharge.pay! :alipay, notify_params[:trade_no]
+      end
 
-    notify_params = params.except(*request.path_parameters.keys)
-    if Alipay::Notify.verify?(notify_params)
-      recharge_klass.find(params[:id]).pay! :alipay, notify_params[:trade_no]
-    end
-
-    if @order.paid?
-      flash[:success] = "成功支付订单！"
-      redirect_to merchants_root_path
+      if @recharge.paid?
+        flash[:success] = "成功支付订单！"
+        redirect_to merchants_root_path
+      else
+        flash.now[:notice] = "正在查询订单支付结果..."
+      end
     else
-      flash.now[:notice] = "正在查询订单支付结果..."
+      flash[:error] = "未知支付类型"
+      redirect! :payment, current_order_path
     end
   end
 
@@ -58,10 +65,7 @@ class Merchants::Admin::RechargesController < Merchants::Admin::ApplicationContr
       if Alipay::Notify.verify?(notify_params)
         case notify_params[:notify_type]
         when "trade_status_sync"
-          recharge_klass.find(params[:id]).pay! :alipay, notify_params[:trade_no]
-          render nothing: true
-        when "batch_refund_notify"
-          Order.find(params[:id]).refund!
+          @recharge.pay! :alipay, notify_params[:trade_no]
           render nothing: true
         else
           render text: "未知支付类型", status: 400
@@ -74,7 +78,7 @@ class Merchants::Admin::RechargesController < Merchants::Admin::ApplicationContr
 
       if WxPay::Sign.verify?(notify_params)
         # find your order and process the post-paid logic.
-        recharge_klass.find(params[:id]).pay! :weixin, notify_params[:transaction_id]
+        @recharge.pay! :weixin, notify_params[:transaction_id]
         render :xml => {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
       else
         render :xml => {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)
@@ -85,6 +89,10 @@ class Merchants::Admin::RechargesController < Merchants::Admin::ApplicationContr
   end
 
   private
+
+    def find_recharge
+      @recharge = recharge_klass.find(params[:id])
+    end
 
     def recharge_klass
       Recharge.where(user_id: current_merchant, store_id: current_store)

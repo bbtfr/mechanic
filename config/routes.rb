@@ -92,7 +92,12 @@ Rails.application.routes.draw do
         end
       end
       resource :store
-      resource :recharges
+      resources :recharges do
+        member do
+          match :notify, via: [:get, :post]
+          get :result
+        end
+      end
     end
 
     namespace :store do
