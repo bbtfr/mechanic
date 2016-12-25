@@ -8,9 +8,22 @@ class Admin::RefundsController < Admin::ApplicationController
 
   def confirm
     if @order.refunding?
-      if @order.pay_type_alipay?
+      case @order.pay_type
+      when :alipay
         response = Ali.refund @order
         redirect_to response
+      when :weixin
+        response = Weixin.refund @order
+        if response.success?
+          flash[:notice] = "退款申请已提交，支付款将在3个工作日内退回您的账户..."
+          @order.refund!
+        else
+          flash[:error] = "微信支付：#{response["err_code_des"]}"
+        end
+        redirect_to request.referer
+      when :balance
+        @order.refund!
+        redirect_to request.referer
       else
         flash[:error] = "未知支付类型"
         redirect_to request.referer

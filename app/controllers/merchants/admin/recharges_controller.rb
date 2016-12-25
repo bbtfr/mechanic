@@ -1,6 +1,6 @@
 class Merchants::Admin::RechargesController < Merchants::Admin::ApplicationController
   skip_before_action :verify_authenticity_token, :authenticate!, only: [ :notify ]
-  before_action :find_recharge, except: [ :index, :new, :create ]
+  before_action :find_recharge, except: [ :index, :new, :create, :notify ]
 
   def index
     redirect_to new_merchants_admin_recharge_path
@@ -65,7 +65,7 @@ class Merchants::Admin::RechargesController < Merchants::Admin::ApplicationContr
       if Alipay::Notify.verify?(notify_params)
         case notify_params[:notify_type]
         when "trade_status_sync"
-          @recharge.pay! :alipay, notify_params[:trade_no]
+          Recharge.find(params[:id]).pay! :alipay, notify_params[:trade_no]
           render nothing: true
         else
           render text: "未知支付类型", status: 400
@@ -78,7 +78,7 @@ class Merchants::Admin::RechargesController < Merchants::Admin::ApplicationContr
 
       if WxPay::Sign.verify?(notify_params)
         # find your order and process the post-paid logic.
-        @recharge.pay! :weixin, notify_params[:transaction_id]
+        Recharge.find(params[:id]).pay! :weixin, notify_params[:transaction_id]
         render :xml => {return_code: "SUCCESS"}.to_xml(root: 'xml', dasherize: false)
       else
         render :xml => {return_code: "FAIL", return_msg: "签名失败"}.to_xml(root: 'xml', dasherize: false)

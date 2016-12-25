@@ -130,6 +130,11 @@ class Order < ApplicationRecord
 
       def refund! reason = :user_cancel
         return false unless refunding? || paid? || merchant? && (working? || confirming?)
+
+        if pay_type == :balance
+          store.increase_balance! price, "订单退款", self
+        end
+
         update_attribute(:refund, Order.refunds[reason]) unless refunding?
         update_state(:refunded)
         user.increase_total_cost!(-price)

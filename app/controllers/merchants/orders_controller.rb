@@ -132,7 +132,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
     when "alipay", "weixin"
       notify_params = params.except(*request.path_parameters.keys)
       if Alipay::Notify.verify?(notify_params)
-        Order.find(params[:id]).pay! :alipay, notify_params[:trade_no]
+        @order.pay! :alipay, notify_params[:trade_no]
       end
 
       if @order.paid?
@@ -142,7 +142,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
         flash.now[:notice] = "正在查询订单支付结果..."
       end
     when "balance"
-      Order.find(params[:id]).pay! :balance
+      @order.pay! :balance
       redirect! :payment, current_order_path
     else
       flash[:error] = "未知支付类型"
@@ -159,17 +159,9 @@ class Merchants::OrdersController < Merchants::ApplicationController
         @order.update_attributes(review_order_params)
       end
 
-      if @order.pay_type_alipay?
+      if [ :alipay, :weixin, :balance ].include? @order.pay_type
         flash[:notice] = "退款申请已提交，等待管理员审核..."
         @order.refunding! reason
-      elsif @order.pay_type_weixin?
-        response = Weixin.refund @order
-        if response.success?
-          flash[:notice] = "退款申请已提交，支付款将在3个工作日内退回您的账户..."
-          @order.refund! reason
-        else
-          flash[:error] = "微信支付：#{response["err_code_des"]}"
-        end
       elsif @order.offline?
         @order.refund! reason
       else
