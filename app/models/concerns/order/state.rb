@@ -13,7 +13,7 @@ class Order < ApplicationRecord
       as_enum :cancel, pending_timeout: 0, paying_timeout: 1, user_abstain: 2, user_cancel: 3
       as_enum :refund, user_cancel: 0, merchant_revoke: 1
 
-      as_enum :pay_type, { weixin: 0, alipay: 1, skip: 2 }, prefix: true
+      as_enum :pay_type, { weixin: 0, alipay: 1, skip: 2, balance: 3 }, prefix: true
 
       scope :availables, -> { where('"orders"."state_cd" > ?', AVAILABLE_GREATER_THAN) }
       def available?
@@ -95,6 +95,16 @@ class Order < ApplicationRecord
 
       def pay! pay_type = :weixin, trade_no = nil
         return false unless paying? || pended? || canceled?
+
+        if pay_type == :balance
+          if price > store.balance
+            errors.add(:base, "店铺余额不足")
+            return false
+          else
+            store.decrease_balance! price, "订单支付", self
+          end
+        end
+
         update_attribute(:pay_type, Order.pay_types[pay_type])
         update_attribute(:trade_no, trade_no) if trade_no
         update_state(:paid)

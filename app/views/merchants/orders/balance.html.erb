@@ -1,0 +1,36 @@
+<h3 class="page-header">支付订单 <small class="text-danger">当前店铺余额：<%= current_store.balance %>元</small></h3>
+
+<div class="row">
+  <div class="col-sm-offset-3 col-sm-9">
+    <%= show_for @order, class: "dl-horizontal" do |i| %>
+      <%= i.attribute :merchant_nickname %>
+      <%= i.attribute :merchant_mobile %>
+      <%= i.attribute :contact_nickname %>
+      <%= i.attribute :contact_mobile %>
+      <%= i.attribute :state do |order| %>
+        <% if order.canceled? %>
+          <%= te order, :cancel %>
+        <% elsif order.refunded? %>
+          <%= te order, :refund %>
+        <% else %>
+          <%= te order, :state %>
+        <% end %>
+      <% end %>
+
+      <%= i.attribute :address %>
+      <%= i.attribute :appointment, format: :long %>
+      <%= i.attribute :skill %>
+      <%= i.attribute :brand %>
+      <%= i.attribute :series %>
+      <%= i.attribute :price %>
+      <%= i.attribute :offline? %>
+      <%= i.attribute :remark %>
+      <%= i.attribute :merchant_remark %>
+    <% end %>
+  </div>
+</div>
+
+<div class="pull-right">
+  <%= link_to "余额支付", result_merchants_order_path(@order, format: :balance), class: 'btn btn-danger' %>
+</div>
+<h4 class="text-danger">支付订单后剩余余额：<%= current_store.balance - @order.price %></h4>

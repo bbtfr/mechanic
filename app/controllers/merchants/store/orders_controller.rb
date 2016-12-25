@@ -12,6 +12,10 @@ class Merchants::Store::OrdersController < Merchants::ApplicationController
 
   private
 
+    def current_order_path
+      merchants_store_order_path(@order)
+    end
+
     def find_order
       @order = order_klass.find(params[:id])
     end

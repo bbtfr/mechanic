@@ -13,7 +13,7 @@ module Ali
         subject: recharge.title,
         out_trade_no: recharge.out_trade_no,
         total_fee: recharge.amount,
-        return_url: "#{MerchantsURL}/admin/recharges/#{recharge.id}/result",
+        return_url: "#{MerchantsURL}/admin/recharges/#{recharge.id}/result.alipay",
         notify_url: "#{MerchantsURL}/admin/recharges/#{recharge.id}/notify.alipay"
       )
     end
@@ -23,7 +23,7 @@ module Ali
         subject: order.title,
         out_trade_no: order.out_trade_no,
         total_fee: order.price,
-        return_url: "#{MerchantsURL}/orders/#{order.id}/result",
+        return_url: "#{MerchantsURL}/orders/#{order.id}/result.alipay",
         notify_url: "#{MerchantsURL}/orders/#{order.id}/notify.alipay"
       )
     end

@@ -87,6 +87,7 @@
   </div>
 <% when :paying %>
   <div class="pull-right">
+    <%= link_to "余额支付", pay_merchants_orders_path(@order, format: :balance), class: "btn btn-primary" %>
     <%#= link_to "微信支付", pay_merchants_orders_path(@order, format: :weixin), class: "btn btn-primary" %>
     <%= link_to "支付宝支付", pay_merchants_orders_path(@order, format: :alipay), class: "btn btn-primary" %>
     <%= link_to "延后付款", pend_merchants_order_path(@order), method: :post, class: "btn btn-danger" %>
@@ -94,6 +95,7 @@
   </div>
 <% when :pended %>
   <div class="pull-right">
+    <%= link_to "余额支付", pay_merchants_orders_path(@order, format: :balance), class: "btn btn-primary" %>
     <%#= link_to "微信支付", pay_merchants_orders_path(@order, format: :weixin), class: "btn btn-primary" %>
     <%= link_to "支付宝支付", pay_merchants_orders_path(@order, format: :alipay), class: "btn btn-primary" %>
     <%= link_to "取消订单", cancel_merchants_order_path(@order), method: :post, class: "btn btn-danger" %>

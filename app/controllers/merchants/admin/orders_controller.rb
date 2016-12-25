@@ -13,10 +13,14 @@ class Merchants::Admin::OrdersController < Merchants::Admin::ApplicationControll
   def close
     @order.close!
     flash[:notice] = "订单标记为已结算！"
-    redirect_to merchants_admin_order_path(@order)
+    redirect_to current_order_path
   end
 
   private
+
+    def current_order_path
+      merchants_admin_order_path(@order)
+    end
 
     def find_order
       @order = order_klass.find(params[:id])

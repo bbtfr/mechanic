@@ -3,7 +3,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
   before_action :find_order, except: [ :index, :new, :create, :notify ]
   before_action :redirect_pending, only: [ :new, :index ]
 
-  helper_method :fetch_redirect
+  helper_method :fetch_redirect, :current_order_path
 
   def index
     @state = if %w(pendeds paids workings finisheds).include? params[:state]
@@ -54,13 +54,13 @@ class Merchants::OrdersController < Merchants::ApplicationController
   def cancel
     @order.cancel!
     flash[:notice] = "订单已取消！"
-    redirect_to merchants_root_path
+    redirect_to current_order_path
   end
 
   def pend
     @order.pend!
     flash[:notice] = "订单延后付款！"
-    redirect_to merchants_root_path
+    redirect_to current_order_path
   end
 
   def pay
@@ -76,7 +76,15 @@ class Merchants::OrdersController < Merchants::ApplicationController
       else
         @order.pay! :weixin if response["err_code"] == "ORDERPAID"
         flash[:error] = "微信支付：#{response["err_code_des"]}"
-        redirect_to merchants_root_path
+        redirect_to current_order_path
+      end
+    when "balance"
+      set_redirect_referer :payment
+      if @order.price > current_store.balance
+        flash[:error] = "店铺余额不足，请使用其他方式支付"
+        redirect! :payment, current_order_path
+      else
+        render :balance
       end
     else
       flash[:error] = "未知支付类型"
@@ -118,18 +126,27 @@ class Merchants::OrdersController < Merchants::ApplicationController
   end
 
   def result
-    return if params[:format] == "js"
+    case params[:format]
+    when "js"
+      return
+    when "alipay"
+      notify_params = params.except(*request.path_parameters.keys)
+      if Alipay::Notify.verify?(notify_params)
+        Order.find(params[:id]).pay! :alipay, notify_params[:trade_no]
+      end
 
-    notify_params = params.except(*request.path_parameters.keys)
-    if Alipay::Notify.verify?(notify_params)
-      Order.find(params[:id]).pay! :alipay, notify_params[:trade_no]
-    end
-
-    if @order.paid?
-      flash[:success] = "成功支付订单！"
-      redirect_to merchants_root_path
+      if @order.paid?
+        flash[:success] = "成功支付订单！"
+        redirect_to current_order_path
+      else
+        flash.now[:notice] = "正在查询订单支付结果..."
+      end
+    when "balance"
+      Order.find(params[:id]).pay! :balance
+      redirect! :payment, current_order_path
     else
-      flash.now[:notice] = "正在查询订单支付结果..."
+      flash[:error] = "未知支付类型"
+      redirect_to current_order_path
     end
   end
 
