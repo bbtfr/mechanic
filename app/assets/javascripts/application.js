@@ -31,7 +31,12 @@ var appendOptions = function(parent, values) {
 };
 
 var closeWindow = function() {
-  if (window.wx) wx.closeWindow();
+  if (window.WeixinJSBridge) {
+    WeixinJSBridge.invoke('closeWindow', {}, function(res) {
+      // alert(res.err_msg);
+    });
+  }
+  else if (window.wx) wx.closeWindow();
   else window.close();
 };
 
