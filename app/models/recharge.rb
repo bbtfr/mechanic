@@ -1,5 +1,5 @@
 class Recharge < ApplicationRecord
-  AVAILABLE_VALUES = [ 50, 100, 200, 500, 1000 ]
+  AVAILABLE_VALUES = [ 1, 50, 100, 200, 500, 1000 ]
 
   belongs_to :user
   belongs_to :store
