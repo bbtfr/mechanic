@@ -1,6 +1,7 @@
 class Merchants::OrdersController < Merchants::ApplicationController
   skip_before_action :verify_authenticity_token, :authenticate!, only: [ :notify ]
-  before_action :find_order, except: [ :index, :new, :create, :notify ]
+  before_action :find_order, except: [ :index, :new, :create, :notify, :remark, :update_remark ]
+  before_action :find_store_order, only: [ :remark, :update_remark ]
   before_action :redirect_pending, only: [ :new, :index ]
 
   helper_method :fetch_redirect, :current_order_path
@@ -236,6 +237,10 @@ class Merchants::OrdersController < Merchants::ApplicationController
         else
           order_klass.find(params[:id])
         end
+    end
+
+    def find_store_order
+      @order = admin_order_klass.find(params[:id])
     end
 
     def admin_order_klass
