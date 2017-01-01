@@ -13,7 +13,7 @@
 
 <% if @withdrawal.pending? %>
   <div class="pull-right">
-    <%= link_to "批准申请", confirm_admin_withdrawal_path(@withdrawal), class: "btn btn-primary", method: :post, confirm: "你确定要通过这条申请？" %>
-    <%= link_to "拒绝申请", cancel_admin_withdrawal_path(@withdrawal), class: "btn btn-danger", method: :post, confirm: "你确定要拒绝这条申请？" %>
+    <%= link_to "批准申请", confirm_admin_withdrawal_path(@withdrawal), class: "btn btn-primary", method: :post, confirm: "你确定要通过这条申请？" if @withdrawal.pending? %>
+    <%= link_to "拒绝申请", cancel_admin_withdrawal_path(@withdrawal), class: "btn btn-danger", method: :post, confirm: "你确定要拒绝这条申请？" if @withdrawal.pending? %>
   </div>
 <% end %>

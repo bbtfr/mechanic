@@ -64,5 +64,5 @@
 <% end %>
 
 <div class="pull-right">
-  <%= link_to "批准申请", confirm_admin_refund_path(@order), class: "btn btn-primary", method: :post, confirm: "你确定要通过这条申请？" %>
+  <%= link_to "批准申请", confirm_admin_refund_path(@order), class: "btn btn-primary", method: :post, confirm: "你确定要通过这条申请？" if @order.refunding? %>
 </div>
