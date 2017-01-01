@@ -54,6 +54,8 @@ class Merchants::Hosting::OrdersController < Merchants::OrdersController
       @order = order_klass.find(params[:id])
     end
 
+    alias_method :find_store_order, :find_order
+
     def redirect_user
       unless current_store.host?
         flash[:error] = "无法访问此页面！"
@@ -61,8 +63,11 @@ class Merchants::Hosting::OrdersController < Merchants::OrdersController
       end
     end
 
+    def remark_order_params
+      params.require(:order).permit(:hosting_remark)
+    end
+
     def procedure_price_order_params
       params.require(:order).permit(:procedure_price)
     end
-
 end

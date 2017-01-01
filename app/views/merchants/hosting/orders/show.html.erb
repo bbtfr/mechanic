@@ -38,8 +38,13 @@
       <%= i.attribute :procedure_price %>
       <%= i.attribute :remark %>
       <%= i.attribute :merchant_remark %>
+      <%= i.attribute :hosting_remark %>
     <% end %>
   </div>
+</div>
+
+<div class="pull-right">
+  <%= link_to "修改商户备注", remark_merchants_hosting_order_path(@order), class: "btn btn-primary" %>
 </div>
 
 <% if @order.assigned? %>

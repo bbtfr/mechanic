@@ -176,6 +176,7 @@ zh-CN:
         procedure_price: 手续费
         remark: 备注
         merchant_remark: 商户备注
+        hosting_remark: 派单备注
         price: 价格
         professionality: 专业
         timeliness: 守时

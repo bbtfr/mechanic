@@ -41,11 +41,11 @@
   </div>
 </div>
 
-<% if @order.assigned? %>
-  <div class="pull-right">
-    <%= link_to "修改商户备注", remark_merchants_order_path(@order), class: "btn btn-primary" %>
-  </div>
+<div class="pull-right">
+  <%= link_to "修改商户备注", remark_merchants_order_path(@order), class: "btn btn-primary" %>
+</div>
 
+<% if @order.assigned? %>
   <h3 class="page-header">技师信息</h3>
 
   <div class="row">

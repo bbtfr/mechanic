@@ -10,6 +10,7 @@ module Balancable
       update_balance!(amount, reason, source)
     else
       errors.add :balance_update_amount, :invalid
+      false
     end
   end
 
@@ -18,6 +19,7 @@ module Balancable
       update_balance!(-amount, reason, source)
     else
       errors.add :balance_update_amount, :invalid
+      false
     end
   end
 

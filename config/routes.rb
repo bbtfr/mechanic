@@ -61,6 +61,8 @@ Rails.application.routes.draw do
           post :confirm
           post :rework
           get :revoke
+          get :remark
+          patch :remark, action: :update_remark
           get :procedure_price
           patch :procedure_price, action: :update_procedure_price
         end
