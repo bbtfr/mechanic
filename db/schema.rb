@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161218041609) do
+ActiveRecord::Schema.define(version: 20170105134121) do
 
   create_table "administrators", force: :cascade do |t|
     t.string   "mobile"
@@ -232,6 +232,7 @@ ActiveRecord::Schema.define(version: 20161218041609) do
     t.float    "lng"
     t.boolean  "offline"
     t.datetime "refund_at"
+    t.text     "hosting_remark"
     t.index ["bid_id"], name: "index_orders_on_bid_id"
     t.index ["cancel_cd"], name: "index_orders_on_cancel_cd"
     t.index ["hosting"], name: "index_orders_on_hosting"
@@ -252,7 +253,7 @@ ActiveRecord::Schema.define(version: 20161218041609) do
   end
 
   create_table "recharges", force: :cascade do |t|
-    t.integer  "user_id"
+    t.integer  "merchant_id"
     t.integer  "store_id"
     t.integer  "amount"
     t.integer  "state_cd",    default: 0
@@ -261,10 +262,10 @@ ActiveRecord::Schema.define(version: 20161218041609) do
     t.datetime "paid_at"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.index ["merchant_id"], name: "index_recharges_on_merchant_id"
     t.index ["pay_type_cd"], name: "index_recharges_on_pay_type_cd"
     t.index ["state_cd"], name: "index_recharges_on_state_cd"
     t.index ["store_id"], name: "index_recharges_on_store_id"
-    t.index ["user_id"], name: "index_recharges_on_user_id"
   end
 
   create_table "series", force: :cascade do |t|

@@ -95,7 +95,7 @@ class Merchants::Admin::RechargesController < Merchants::Admin::ApplicationContr
     end
 
     def recharge_klass
-      Recharge.where(user_id: current_merchant, store_id: current_store)
+      Recharge.where(merchant_id: current_merchant, store_id: current_store)
     end
 
     def recharge_params

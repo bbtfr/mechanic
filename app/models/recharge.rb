@@ -1,7 +1,7 @@
 class Recharge < ApplicationRecord
   AVAILABLE_VALUES = [ 1, 50, 100, 200, 500, 1000 ]
 
-  belongs_to :user
+  belongs_to :merchant
   belongs_to :store
 
   as_enum :state, pending: 0, canceled: 1, paid: 2
@@ -27,7 +27,7 @@ class Recharge < ApplicationRecord
   end
 
   def title
-    "#{user.nickname} 为 #{store.nickname} 充值 #{amount} 元"
+    "为 #{store.nickname} 充值 #{amount} 元"
   end
 
   def update_timestamp column, update, force
