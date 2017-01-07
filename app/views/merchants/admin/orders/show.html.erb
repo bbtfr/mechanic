@@ -94,14 +94,67 @@
 <% end %>
 
 <% case @order.state %>
+<% when :pending %>
+  <div class="pull-right">
+    <%= link_to "指派技师", pick_merchants_order_path(@order), class: "btn btn-primary" %>
+    <%= link_to "取消订单", cancel_merchants_order_path(@order), method: :post, class: "btn btn-danger" %>
+  </div>
+<% when :paying %>
+  <div class="pull-right">
+    <%= link_to "余额支付", pay_merchants_orders_path(@order, format: :balance), class: "btn btn-primary" %>
+    <%#= link_to "微信支付", pay_merchants_orders_path(@order, format: :weixin), class: "btn btn-primary" %>
+    <%= link_to "支付宝支付", pay_merchants_orders_path(@order, format: :alipay), class: "btn btn-primary" %>
+    <%= link_to "延后付款", pend_merchants_order_path(@order), method: :post, class: "btn btn-danger" %>
+    <%= link_to "取消订单", cancel_merchants_order_path(@order), method: :post, class: "btn btn-danger" %>
+  </div>
 <% when :pended %>
   <div class="pull-right">
     <%= link_to "余额支付", pay_merchants_orders_path(@order, format: :balance), class: "btn btn-primary" %>
     <%#= link_to "微信支付", pay_merchants_orders_path(@order, format: :weixin), class: "btn btn-primary" %>
     <%= link_to "支付宝支付", pay_merchants_orders_path(@order, format: :alipay), class: "btn btn-primary" %>
+    <%= link_to "取消订单", cancel_merchants_order_path(@order), method: :post, class: "btn btn-danger" %>
+  </div>
+<% when :paid %>
+  <div class="pull-right">
+    <% unless @order.hosting? %>
+      <%= link_to "改派技师", pick_merchants_order_path(@order), class: "btn btn-primary" %>
+    <% end %>
+    <%= link_to "申请退款", refund_merchants_order_path(@order), class: "btn btn-danger", data: {confirm: "您确定要申请退款？" } %>
+  </div>
+<% when :working %>
+  <div class="pull-right">
+    <% unless @order.hosting? %>
+      <%= link_to "改派技师", pick_merchants_order_path(@order), class: "btn btn-primary" %>
+    <% end %>
+    <%= link_to "申请撤单", revoke_merchants_order_path(@order), class: "btn btn-danger" %>
+  </div>
+<% when :confirming %>
+  <div class="pull-right">
+    <% unless @order.hosting? %>
+      <%= link_to "改派技师", pick_merchants_order_path(@order), class: "btn btn-primary" %>
+      <%= link_to "确认完工", confirm_merchants_order_path(@order), method: :post, class: "btn btn-primary" %>
+      <%= link_to "申请返工", rework_merchants_order_path(@order), method: :post, class: "btn btn-primary" %>
+    <% end %>
+    <%= link_to "申请撤单", revoke_merchants_order_path(@order), class: "btn btn-danger" %>
+  </div>
+<% when :finished %>
+  <div class="pull-right">
+    <% if current_store.follow? @order.mechanic %>
+      <%= link_to "取消收藏技师", unfollow_merchants_mechanic_path(@order.mechanic), method: :post, class: "btn btn-danger" %>
+    <% else %>
+      <%= link_to "收藏技师", follow_merchants_mechanic_path(@order.mechanic), method: :post, class: "btn btn-primary" %>
+    <% end %>
+    <% unless @order.hosting? %>
+      <%= link_to "点评技师", review_merchants_order_path(@order), class: "btn btn-primary" %>
+    <% end %>
   </div>
 <% when :reviewed %>
   <div class="pull-right">
+    <% if current_store.follow? @order.mechanic %>
+      <%= link_to "取消收藏技师", unfollow_merchants_mechanic_path(@order.mechanic), method: :post, class: "btn btn-danger" %>
+    <% else %>
+      <%= link_to "收藏技师", follow_merchants_mechanic_path(@order.mechanic), method: :post, class: "btn btn-primary" %>
+    <% end %>
     <%= link_to "完成结算", close_merchants_admin_order_path(@order), method: :post, class: "btn btn-primary" %>
   </div>
 <% end %>

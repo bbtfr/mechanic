@@ -29,12 +29,12 @@ class Merchants::Admin::MerchantsController < Merchants::Admin::ApplicationContr
 
   def active
     @merchant.active!
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   def inactive
     @merchant.inactive!
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   private

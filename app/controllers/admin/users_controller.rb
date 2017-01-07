@@ -13,7 +13,7 @@ class Admin::UsersController < Admin::ApplicationController
       redirect_to admin_mechanic_path(@user)
     else
       flash[:error] = "帐号信息不完整，无法转换"
-      redirect_to request.referer
+      redirect_to_referer!
     end
   end
 

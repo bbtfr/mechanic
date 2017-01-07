@@ -9,12 +9,12 @@ class Merchants::MechanicsController < Merchants::ApplicationController
 
   def follow
     current_store.follow!(params[:id])
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   def unfollow
     current_store.unfollow!(params[:id])
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   def reviews

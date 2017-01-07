@@ -13,22 +13,22 @@ class Admin::MerchantsController < Admin::ApplicationController
 
   def confirm
     @merchant.confirm!
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   def active
     @merchant.active!
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   def inactive
     @merchant.inactive!
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   def destroy
     @merchant.destroy
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   def update_settings

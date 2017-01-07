@@ -12,12 +12,12 @@ class Admin::UserGroupsController < Admin::ApplicationController
 
   def confirm
     @user_group.confirm!
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   def destroy
     @user_group.destroy
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   private

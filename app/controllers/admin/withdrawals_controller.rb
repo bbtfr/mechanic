@@ -17,7 +17,7 @@ class Admin::WithdrawalsController < Admin::ApplicationController
     else
       flash[:error] = "订单状态错误！"
     end
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   def cancel
@@ -26,7 +26,7 @@ class Admin::WithdrawalsController < Admin::ApplicationController
     else
       flash[:error] = "订单状态错误！"
     end
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   def update_settings

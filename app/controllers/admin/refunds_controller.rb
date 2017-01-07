@@ -20,17 +20,17 @@ class Admin::RefundsController < Admin::ApplicationController
         else
           flash[:error] = "微信支付：#{response["err_code_des"]}"
         end
-        redirect_to request.referer
+        redirect_to_referer!
       when :balance
         @order.refund!
-        redirect_to request.referer
+        redirect_to_referer!
       else
         flash[:error] = "未知支付类型"
-        redirect_to request.referer
+        redirect_to_referer!
       end
     else
       flash[:error] = "订单状态错误！"
-      redirect_to request.referer
+      redirect_to_referer!
     end
   end
 

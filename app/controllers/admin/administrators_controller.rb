@@ -23,12 +23,12 @@ class Admin::AdministratorsController < Admin::ApplicationController
 
   def active
     @admin.active!
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   def inactive
     @admin.inactive!
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   def forget_password

@@ -34,6 +34,10 @@ class Merchants::OrdersController < Merchants::ApplicationController
     end
   end
 
+  def pick
+    set_redirect_referer :pick_mechanic
+  end
+
   def update_pick
     if mechanic_id = params[:order][:mechanic_id]
       remark = params[:order][:remark]
@@ -44,7 +48,7 @@ class Merchants::OrdersController < Merchants::ApplicationController
       else
         @order.pick! mechanic
       end
-      redirect_to current_order_path
+      redirect! :pick_mechanic, current_order_path
     else
       @order.remark = params[:order][:remark]
       @order.errors.add :base, "请选择一个技师"
@@ -55,13 +59,13 @@ class Merchants::OrdersController < Merchants::ApplicationController
   def cancel
     @order.cancel!
     flash[:notice] = "订单已取消！"
-    redirect_to current_order_path
+    redirect_to_referer!
   end
 
   def pend
     @order.pend!
     flash[:notice] = "订单延后付款！"
-    redirect_to current_order_path
+    redirect_to_referer!
   end
 
   def pay
@@ -171,16 +175,16 @@ class Merchants::OrdersController < Merchants::ApplicationController
     else
       flash[:error] = "订单状态错误！"
     end
-    redirect_to current_order_path
+    redirect! :revoke_order, request.referer
   end
 
   def remark
-    set_redirect_referer :remark
+    set_redirect_referer :remark_order
   end
 
   def update_remark
     if @order.update_attributes(remark_order_params)
-      redirect! :remark, current_order_path
+      redirect! :remark_order, current_order_path
     else
       render :remark
     end
@@ -189,19 +193,27 @@ class Merchants::OrdersController < Merchants::ApplicationController
   def rework
     @order.rework!
     flash[:notice] = "订单申请返工！"
-    redirect_to current_order_path
+    redirect_to_referer!
   end
 
   def confirm
     @order.confirm!
     flash[:notice] = "订单确认完工！"
-    redirect_to current_order_path
+    redirect_to_referer!
+  end
+
+  def revoke
+    set_redirect_referer :revoke_order
+  end
+
+  def review
+    set_redirect_referer :review_order
   end
 
   def update_review
     if @order.update_attributes(review_order_params)
       @order.review!
-      redirect_to current_order_path
+      redirect! :review_order, current_order_path
     else
       render :review
     end

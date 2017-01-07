@@ -16,7 +16,7 @@ class Admin::MechanicsController < Admin::ApplicationController
       redirect_to admin_user_path(@mechanic)
     else
       flash[:error] = "帐号信息不完整，无法转换"
-      redirect_to request.referer
+      redirect_to_referer!
     end
   end
 
@@ -45,12 +45,12 @@ class Admin::MechanicsController < Admin::ApplicationController
 
   def hide
     @mechanic.hide!
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   def unhide
     @mechanic.unhide!
-    redirect_to request.referer
+    redirect_to_referer!
   end
 
   def create_import
