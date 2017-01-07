@@ -8,13 +8,7 @@
       <%= i.attribute :contact_nickname %>
       <%= i.attribute :contact_mobile %>
       <%= i.attribute :state do |order| %>
-        <% if order.canceled? %>
-          <%= te order, :cancel %>
-        <% elsif order.refunded? %>
-          <%= te order, :refund %>
-        <% else %>
-          <%= te order, :state %>
-        <% end %>
+        <%= te order, :state %>
       <% end %>
 
       <%= i.attribute :address %>

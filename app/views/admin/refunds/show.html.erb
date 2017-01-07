@@ -65,4 +65,5 @@
 
 <div class="pull-right">
   <%= link_to "批准申请", confirm_admin_refund_path(@order), class: "btn btn-primary", method: :post, confirm: "你确定要通过这条申请？" if @order.refunding? %>
+  <%= link_to "冻结订单", freeze_admin_refund_path(@order), class: "btn btn-danger", method: :post, confirm: "你确定要通过这条申请？" if @order.refunding? %>
 </div>

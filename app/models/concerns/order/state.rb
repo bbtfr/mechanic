@@ -11,7 +11,7 @@ class Order < ApplicationRecord
       as_enum :state, pending: 0, paying: 1, pended: 2, canceled: 3, refunding: 4, refunded: 5,
         paid: 6, working: 7, confirming: 8, finished: 9, reviewed: 10, closed: 11
       as_enum :cancel, pending_timeout: 0, paying_timeout: 1, user_abstain: 2, user_cancel: 3
-      as_enum :refund, user_cancel: 0, merchant_revoke: 1
+      as_enum :refund, user_cancel: 0, merchant_revoke: 1, admin_freeze: 2
 
       as_enum :pay_type, { weixin: 0, alipay: 1, skip: 2, balance: 3 }, prefix: true
 
@@ -125,11 +125,18 @@ class Order < ApplicationRecord
         update_attribute(:refund_at, Time.now)
         update_attribute(:refund, Order.refunds[reason])
         update_state(:refunding)
+
+        if mechanic
+          Weixin.send_refund_order_message(self, mechanic)
+          SMS.send_refund_order_message(self, mechanic)
+        end
+
         true
       end
 
       def refund! reason = :user_cancel
         return false unless refunding? || paid? || merchant? && (working? || confirming?)
+        not_yet_send_refund_order_message = !refunding?
 
         if pay_type == :balance
           store.increase_balance! price, "订单退款", self
@@ -139,10 +146,19 @@ class Order < ApplicationRecord
         update_state(:refunded)
         user.increase_total_cost!(-price)
 
-        if mechanic
+        if mechanic && not_yet_send_refund_order_message
           Weixin.send_refund_order_message(self, mechanic)
           SMS.send_refund_order_message(self, mechanic)
         end
+
+        true
+      end
+
+      def freeze!
+        return false unless refunding?
+
+        update_attribute(:refund, Order.refunds[:admin_freeze])
+        update_state(:refunded)
 
         true
       end

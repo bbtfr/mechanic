@@ -2,9 +2,9 @@
   订单详情 #<%= @order.id %>
   <small>
     <% if @order.canceled? %>
-      <%= te @order, :cancel %>
+      <%= te @order, :state %> - <%= te @order, :cancel %>
     <% elsif @order.refunded? %>
-      <%= te @order, :refund %>
+      <%= te @order, :state %> - <%= te @order, :refund %>
     <% else %>
       <%= te @order, :state %>
     <% end %>
@@ -20,9 +20,9 @@
       <%= i.attribute :contact_mobile %>
       <%= i.attribute :state do |order| %>
         <% if order.canceled? %>
-          <%= te order, :cancel %>
+          <%= te order, :state %> - <%= te order, :cancel %>
         <% elsif order.refunded? %>
-          <%= te order, :refund %>
+          <%= te order, :state %> - <%= te order, :refund %>
         <% else %>
           <%= te order, :state %>
         <% end %>

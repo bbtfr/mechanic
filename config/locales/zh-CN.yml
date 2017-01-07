@@ -58,7 +58,7 @@ zh-CN:
     refund:
       user_cancel: 用户退款
       merchant_revoke: 商户撤单
-
+      admin_freeze: 管理员冻结
   simple_form:
     labels:
       defaults:

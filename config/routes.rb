@@ -178,6 +178,14 @@ Rails.application.routes.draw do
         post :unhide
       end
     end
+    concern :freeze do
+      collection do
+        get :frozen
+      end
+      member do
+        post :freeze
+      end
+    end
 
     resource :administrator_session, path: "session"
     resource :administrator, only: [] do
@@ -228,7 +236,7 @@ Rails.application.routes.draw do
       end
     end
     resources :orders
-    resources :refunds, concerns: [:confirm]
+    resources :refunds, concerns: [:confirm, :freeze]
     resources :withdrawals, concerns: [:confirm, :cancel] do
       collection do
         get :settings

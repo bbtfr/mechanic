@@ -34,6 +34,11 @@ class Admin::RefundsController < Admin::ApplicationController
     end
   end
 
+  def freeze
+    @order.freeze!
+    redirect_to_referer!
+  end
+
   private
 
     def find_order
