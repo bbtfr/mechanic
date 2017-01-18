@@ -34,7 +34,7 @@ module SMS
         order.brand,
         order.series,
         order.mechanic_income,
-        order.offline? && "【线下交易】",
+        order.offline? && "（线下交易）",
         order.remark.presence || "无",
       ]
 
@@ -55,7 +55,7 @@ module SMS
       else
         template = "contact_pay_merchant_order"
         params = [
-          "【#{order.store_nickname}】",
+          "（#{order.store_nickname}）",
           *common_params,
           order.store_hotline
         ]
