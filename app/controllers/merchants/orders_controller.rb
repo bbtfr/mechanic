@@ -1,5 +1,5 @@
 class Merchants::OrdersController < Merchants::ApplicationController
-  skip_before_action :verify_authenticity_token, :authenticate!, only: [ :notify ]
+  skip_before_action :verify_authenticity_token, :authenticate!, :redirect_user , only: [ :notify ]
   before_action :find_order, except: [ :index, :new, :create, :notify, :remark, :update_remark ]
   before_action :find_store_order, only: [ :remark, :update_remark ]
   before_action :redirect_pending, only: [ :new, :index ]
