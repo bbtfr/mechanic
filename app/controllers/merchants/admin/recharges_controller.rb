@@ -1,5 +1,5 @@
 class Merchants::Admin::RechargesController < Merchants::Admin::ApplicationController
-  skip_before_action :verify_authenticity_token, :authenticate!, only: [ :notify ]
+  skip_before_action :verify_authenticity_token, :authenticate!, :redirect_user, only: [ :notify ]
   before_action :find_recharge, except: [ :index, :new, :create, :notify ]
 
   def index
