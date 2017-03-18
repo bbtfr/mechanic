@@ -4,7 +4,7 @@ source 'https://gems.ruby-china.org'
 gem 'dotenv-rails'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.0'
+gem 'rails', '~> 5.0.2'
 # gem 'rails-i18n'
 
 # Use Puma as the app server
