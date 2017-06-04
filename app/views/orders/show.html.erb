@@ -86,7 +86,7 @@
       <script type="text/javascript">
         <% if weixin? %>
           wx.config(<%= raw Weixin.get_jssign_package(request.url).merge(jsApiList: %w(chooseImage uploadImage)).to_json %>);
-          wx.error(function(res) { alert(res) });
+          wx.error(function(res) { alert(JSON.stringify(res)) });
           function fakeFileInput(fileInput, fakeInput, mediaIdInput) {
             fakeInput.addEventListener("click", function() {
               wx.chooseImage({
